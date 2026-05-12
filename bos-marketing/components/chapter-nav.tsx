@@ -102,7 +102,7 @@ export function ChapterNav() {
               className={`max-w-[7rem] font-[family-name:var(--font-ui)] text-[9px] font-semibold uppercase tracking-[0.18em] transition-all duration-300 ${
                 isOn
                   ? "text-white opacity-100"
-                  : "text-white/35 opacity-0 group-hover:opacity-70"
+                  : "text-white/50 opacity-75 group-hover:opacity-100"
               }`}
             >
               {c.label}

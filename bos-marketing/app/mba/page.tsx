@@ -13,7 +13,7 @@ export default function MbaPage() {
   return (
     <>
       <SiteNav alwaysSolid />
-      <main className="bg-[var(--background)] px-6 pb-24 pt-28 md:px-14">
+      <main className="bg-[var(--background)] px-6 pb-24 pt-28 text-[var(--foreground)] md:px-14">
         <div className="mx-auto max-w-3xl">
           <p className="font-[family-name:var(--font-sans)] text-[11px] font-bold uppercase tracking-[0.22em] text-white/45">
             MBA Program

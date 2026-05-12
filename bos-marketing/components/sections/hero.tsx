@@ -10,14 +10,14 @@ export function HeroSection() {
     >
       <HeroVideo />
       <p
-        className="animate-fade-up relative z-[2] mb-10 inline-flex items-center gap-2.5 font-[family-name:var(--font-sans)] text-[11px] font-bold uppercase tracking-[0.22em] text-white/65 opacity-0"
+        className="animate-fade-up relative z-[2] mb-10 inline-flex items-center gap-2.5 font-[family-name:var(--font-sans)] text-[11px] font-bold uppercase tracking-[0.22em] text-white/65"
         style={{ animationDelay: "0.3s" }}
       >
         <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--cyan)]" />
         Business Orchestration System
       </p>
       <div
-        className="animate-fade-up relative z-[2] opacity-0"
+        className="animate-fade-up relative z-[2]"
         style={{ animationDelay: "0.45s" }}
       >
         <div className="flex items-center justify-center overflow-hidden">
@@ -28,7 +28,7 @@ export function HeroSection() {
         </span>
       </div>
       <div
-        className="animate-fade-up relative z-[2] mx-auto mt-9 max-w-2xl px-2 opacity-0"
+        className="animate-fade-up relative z-[2] mx-auto mt-9 max-w-2xl px-2"
         style={{ animationDelay: "0.75s" }}
       >
         <span className="font-[family-name:var(--font-sans)] block text-[clamp(1.05rem,2.5vw,1.35rem)] font-semibold leading-[1.4] tracking-tight text-white/90">
@@ -36,7 +36,7 @@ export function HeroSection() {
         </span>
       </div>
       <div
-        className="animate-fade-up relative z-[2] mx-auto mt-7 flex max-w-xl flex-wrap justify-center gap-2.5 px-2 opacity-0"
+        className="animate-fade-up relative z-[2] mx-auto mt-7 flex max-w-xl flex-wrap justify-center gap-2.5 px-2"
         style={{ animationDelay: "0.9s" }}
       >
         {["No dashboards", "No workflow builders", "No tool sprawl"].map((t) => (
@@ -52,7 +52,7 @@ export function HeroSection() {
         ))}
       </div>
       <div
-        className="animate-fade-up relative z-[2] mt-12 flex flex-wrap items-center justify-center gap-5 opacity-0"
+        className="animate-fade-up relative z-[2] mt-12 flex flex-wrap items-center justify-center gap-5"
         style={{ animationDelay: "1.05s" }}
       >
         <Link

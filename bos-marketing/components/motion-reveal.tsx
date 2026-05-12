@@ -25,7 +25,7 @@ export function MotionReveal({
       className={className}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+      viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.6, delay, ease: EASE }}
     >
       {children}
@@ -51,7 +51,7 @@ export function MotionStagger({
       className={className}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: "-12% 0px -8% 0px" }}
+      viewport={{ once: true, amount: 0.12 }}
       variants={{
         hidden: {},
         show: {
@@ -122,7 +122,7 @@ export function MotionClipReveal({
         className="block"
         initial={{ y: "105%" }}
         whileInView={{ y: "0%" }}
-        viewport={{ once: true, margin: "-5% 0px -5% 0px" }}
+        viewport={{ once: true, amount: 0.12 }}
         transition={{ duration: 0.72, delay, ease: EASE }}
       >
         {children}

@@ -15,7 +15,7 @@ export default function HomePage() {
     <>
       <SiteNav />
       <ChapterNav />
-      <main>
+      <main className="text-[var(--foreground)]">
         <HeroSection />
         <ChapterTensionSection />
         <ChapterSystemSection />

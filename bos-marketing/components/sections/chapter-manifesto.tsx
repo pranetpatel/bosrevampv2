@@ -27,7 +27,7 @@ export function ChapterManifestoSection() {
           {tenets.map((t) => (
             <MotionStaggerItem key={t.n}>
               <article className="group flex h-full flex-col rounded-2xl border border-white/8 bg-white/[0.03] p-10 transition duration-300 hover:border-[var(--orchid)]/30 hover:bg-[var(--orchid)]/[0.05] hover:shadow-[0_8px_40px_rgba(26,83,253,0.12)]">
-                <span className="font-[family-name:var(--font-display)] text-sm font-semibold text-white/25 transition duration-300 group-hover:text-white/40">
+                <span className="font-[family-name:var(--font-display)] text-sm font-semibold text-white/50 transition duration-300 group-hover:text-white/75">
                   {t.n}
                 </span>
                 <h3 className="mt-6 font-[family-name:var(--font-display)] text-[1.55rem] font-semibold leading-[1.1] text-white md:text-[1.75rem]">

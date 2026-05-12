@@ -11,7 +11,7 @@ export function FinalCtaSection() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(26,83,253,0.12),transparent_60%)]" />
 
       <MotionReveal className="relative mx-auto max-w-3xl text-center">
-        <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-white/35">
+        <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-white/55">
           The future isn&apos;t more software
         </p>
         <h2 className="mt-8 font-[family-name:var(--font-display)] text-[clamp(2.5rem,6vw,5.5rem)] font-semibold leading-[1.04] tracking-tight text-white">

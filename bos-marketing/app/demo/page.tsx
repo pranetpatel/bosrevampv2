@@ -12,7 +12,7 @@ export default function DemoPage() {
   return (
     <>
       <SiteNav alwaysSolid />
-      <main className="bg-[var(--background)] px-6 pb-24 pt-28 text-white md:px-14">
+      <main className="bg-[var(--background)] px-6 pb-24 pt-28 text-[var(--foreground)] md:px-14">
         <div className="mx-auto max-w-4xl text-center">
           <h1 className="font-[family-name:var(--font-display)] text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.4] tracking-tight">
             Watch BOS

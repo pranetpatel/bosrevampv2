@@ -58,6 +58,7 @@ body {
   font-family: var(--sans);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  color-scheme: dark;
 }
 
 body:not(.custom-cursor-root) {
@@ -106,7 +107,7 @@ body.custom-cursor-root .bos-cursor-dot.bos-cursor-big {
 }
 
 .animate-fade-up {
-  animation: fade-up 0.9s var(--ease) forwards;
+  animation: fade-up 0.9s var(--ease) both forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {

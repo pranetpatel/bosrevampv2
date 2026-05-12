@@ -23,13 +23,13 @@ export function ChapterConvictionSection() {
         </MotionReveal>
         <div className="mt-16 grid gap-12 md:grid-cols-2 md:gap-20">
           <MotionReveal delay={0.06}>
-            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/35">
+            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/55">
               Less
             </p>
             <ul className="mt-6 space-y-5 font-[family-name:var(--font-display)] text-xl font-semibold leading-[1.1] text-white/70 md:text-2xl">
               {noMore.map((x) => (
                 <li key={x} className="flex gap-3">
-                  <span className="mt-1 shrink-0 text-white/25" aria-hidden>—</span>
+                  <span className="mt-1 shrink-0 text-white/50" aria-hidden>—</span>
                   {x}
                 </li>
               ))}

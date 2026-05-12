@@ -45,7 +45,7 @@ export function ChapterSystemSection() {
             {pillars.map((p) => (
               <MotionStaggerItem key={p.title}>
                 <div className="group flex h-full flex-col rounded-2xl border border-white/8 bg-white/[0.03] px-7 py-9 transition duration-300 hover:border-[var(--orchid)]/40 hover:bg-[var(--orchid)]/[0.06]">
-                  <span className="font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] tracking-wide text-white/20 transition duration-300 group-hover:text-white/35 md:text-5xl">
+                  <span className="font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] tracking-wide text-white/45 transition duration-300 group-hover:text-white/70 md:text-5xl">
                     {p.title}
                   </span>
                   <span className="mt-5 font-[family-name:var(--font-ui)] text-xs font-semibold uppercase tracking-[0.14em] text-white/40 transition duration-300 group-hover:text-white/60">

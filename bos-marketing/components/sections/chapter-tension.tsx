@@ -40,7 +40,7 @@ export function ChapterTensionSection() {
               <div className="mt-14 grid gap-5 md:grid-cols-2 md:gap-8">
                 <MotionReveal delay={0.14}>
                   <div className="rounded-2xl border border-white/8 bg-white/[0.04] px-7 py-8 backdrop-blur-sm">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/35">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">
                       Old world
                     </p>
                     <p className="mt-3 font-[family-name:var(--font-display)] text-2xl font-semibold leading-[1.12] text-white/85 md:text-3xl">
