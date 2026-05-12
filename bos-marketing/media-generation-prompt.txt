@@ -1,0 +1,36 @@
+NANO BANANA / image gen — BOS marketing (official brand)
+
+--------------------------------------------------------------------------------
+PROJECT: BOS (Business Orchestration System). Premium B2B narrative site: cinematic, glass morphism, volumetric light. Abstract but readable orchestration metaphor. NO UI dashboards, NO stock office handshake, NO sci-fi clichés, NO neon rainbow chaos.
+
+OFFICIAL COLORS (analogous gradients only: purple-pink → orchid blue → cyan):
+- Orchid Blue #1A53FD (primary accent)
+- Purple Pink #DA34F1 (secondary, restrained neon)
+- Cyan #04D1E0 (dynamic accent)
+- Hot Pink #FE375E (rare accent only)
+- Background dark #0A0A0A, cream #F7F7F5 for light sections
+
+TYPOGRAPHY ON SITE: Jura 600 for headlines; Plus Jakarta for UI/body.
+
+IMAGERY DIRECTION (people-forward):
+- Show operators: rim-lit silhouettes, hands at work, small team huddle in shadow, single founder at window light — always graded with the palette above (no random gold, no yellow complements).
+- Optional: subtle glass/light overlay on human subjects to keep “orchestration” metaphor.
+- Leave clear negative space for headline overlay (safe zone ~40% frame).
+
+GENERATE:
+
+1) HERO POSTER — 1920×1080, save as hero-poster.png. People + atmosphere OR human silhouette + volumetric cyan/magenta beams; grade with orchid/cyan.
+
+2) CHAPTER “GAP” — 2400×1350 → save as **`chapter-gap-fragmentation-unity.png`** in `public/media/`. Friction: fragmentation resolving (shards, bridges) OR stressed operator moment (abstract, not cheesy).
+
+3) CHAPTER “SYSTEM” — 2400×1350 → **`chapter-system-coordination.png`**. Orchestration: glass blocks, conductor path, network clarity — analogous gradient only.
+
+4) CHAPTER “VELOCITY” — 2400×1350 → **`chapter-velocity-momentum.png`**. Forward execution: motion blur light, depth, no rockets.
+
+5) OG — 1200×630 → **`og-social-human-ai-network.png`**. Duotone mesh orchid→magenta→cyan; thin cyan accent line (not gold); 80px safe margins.
+
+NEGATIVE PROMPTS: gold, mustard, yellow-purple complementary schemes, watermark, logo collage, messy UI screenshots, cartoon mascot, low-res.
+
+DELIVERY: PNG or WebP; place files in website `public/media/` using the filenames above (see `lib/site-media.ts`).
+
+--------------------------------------------------------------------------------
