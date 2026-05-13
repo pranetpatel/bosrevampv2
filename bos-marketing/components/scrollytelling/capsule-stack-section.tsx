@@ -48,7 +48,8 @@ export function CapsuleStackSection() {
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: "+=240%",
+          // Shorter scrub range than 240% — the card timeline is short; excess scroll read as empty space before START.
+          end: "+=125%",
           pin: true,
           scrub: 1,
           anticipatePin: 1,
@@ -114,7 +115,6 @@ export function CapsuleStackSection() {
       ref={rootRef}
       id="stack"
       className="chapter-rule-top section-grain relative bg-[var(--surface-dark)]"
-      style={{ height: "240vh" }}
     >
       {/* Avoid position:sticky inside a ScrollTrigger-pinned parent — it collapses layout. */}
       <div className="flex min-h-[100dvh] w-full flex-col justify-center px-5 py-16 md:px-10">
