@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export function SiteFooter() {
@@ -5,12 +6,13 @@ export function SiteFooter() {
     <footer className="relative z-[1] border-t border-white/10 bg-[var(--surface-dark)] px-6 py-16 md:px-14">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 md:flex-row md:justify-between">
         <div>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight text-white"
-          >
-            <span className="inline-block h-2 w-2 rounded-full bg-[var(--orchid)]" />
-            BOS
+          <Link href="/" className="inline-flex items-center">
+            <Image
+              src="/BOS Branding/FullLogoNoBackground.svg"
+              alt="BOS"
+              width={96}
+              height={31}
+            />
           </Link>
           <p className="mt-4 max-w-sm font-[family-name:var(--font-sans)] text-sm text-white/60">
             Business Orchestration System — one intelligent layer for work, data,

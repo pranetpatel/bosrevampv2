@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -44,11 +45,14 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <Link
-        href="/"
-        className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight text-white drop-shadow-[0_1px_12px_rgba(0,0,0,0.5)]"
-      >
-        BOS
+      <Link href="/" className="flex items-center drop-shadow-[0_1px_12px_rgba(0,0,0,0.5)]">
+        <Image
+          src="/BOS Branding/FullLogoNoBackground.svg"
+          alt="BOS"
+          width={80}
+          height={26}
+          priority
+        />
       </Link>
       <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
         {links.map((l) => (
