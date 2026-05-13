@@ -2,6 +2,8 @@
 
 import {
   BosOrbitalExperience,
+  ClientDeliveryBackdropGraph,
+  WorkflowRunningFooter,
   type LegacyOrbitalModuleId,
 } from '@/components/bos-orbital-experiences';
 import { useEffect, useRef, useState } from 'react';
@@ -333,16 +335,54 @@ export function BosOrbital({ paused = false }: { paused?: boolean }) {
               animation: 'bos-info-in 0.35s cubic-bezier(0.16,1,0.3,1) both',
             }}
           >
-            <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-[#c9a227]">
-              {selected.eyebrow}
-            </p>
-            <p className="mt-3 font-[family-name:var(--font-display)] text-xl font-semibold leading-snug text-white/95 md:text-2xl">
-              {selected.headline}
-            </p>
-            <p className="mt-3 font-[family-name:var(--font-sans)] text-sm leading-relaxed text-white/60">
-              {selected.desc}
-            </p>
-            <BosOrbitalExperience moduleId={selected.id} accentColor={selected.color} />
+            {selected.id === 'workflow' ? (
+              <>
+                <BosOrbitalExperience moduleId="workflow" accentColor={selected.color} />
+                <div className="mt-5">
+                  <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-[#c9a227]">
+                    {selected.eyebrow}
+                  </p>
+                  <p className="mt-3 font-[family-name:var(--font-display)] text-xl font-semibold leading-snug text-white/95 md:text-2xl">
+                    {selected.headline}
+                  </p>
+                  <p className="mt-3 font-[family-name:var(--font-sans)] text-sm leading-relaxed text-white/60">
+                    {selected.desc}
+                  </p>
+                </div>
+                <WorkflowRunningFooter />
+              </>
+            ) : selected.id === 'client-delivery' ? (
+              <div className="relative">
+                <ClientDeliveryBackdropGraph className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[10.75rem] w-full max-w-none select-none sm:h-[11.5rem]" />
+                <div className="relative z-[1]">
+                  <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-[#c9a227]">
+                    {selected.eyebrow}
+                  </p>
+                  <p className="mt-3 font-[family-name:var(--font-display)] text-xl font-semibold leading-snug text-white/95 md:text-2xl">
+                    {selected.headline}
+                  </p>
+                  <p className="mt-3 font-[family-name:var(--font-sans)] text-sm leading-relaxed text-white/60">
+                    {selected.desc}
+                  </p>
+                </div>
+                <div className="relative z-[1]">
+                  <BosOrbitalExperience moduleId={selected.id} accentColor={selected.color} />
+                </div>
+              </div>
+            ) : (
+              <>
+                <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-[#c9a227]">
+                  {selected.eyebrow}
+                </p>
+                <p className="mt-3 font-[family-name:var(--font-display)] text-xl font-semibold leading-snug text-white/95 md:text-2xl">
+                  {selected.headline}
+                </p>
+                <p className="mt-3 font-[family-name:var(--font-sans)] text-sm leading-relaxed text-white/60">
+                  {selected.desc}
+                </p>
+                <BosOrbitalExperience moduleId={selected.id} accentColor={selected.color} />
+              </>
+            )}
           </div>
         )}
       </div>

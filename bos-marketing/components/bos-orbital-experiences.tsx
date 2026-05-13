@@ -77,7 +77,20 @@ function VizPanel({ children, className = "" }: { children: ReactNode; className
   );
 }
 
-function MiniTerm({ lines }: { lines: { prompt: string; out: string }[] }) {
+function intelChartPathD(pts: readonly [number, number][]) {
+  return pts.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x} ${y}`).join(" ");
+}
+
+function MiniTerm({
+  lines,
+}: {
+  lines: {
+    prompt: string;
+    out: string;
+    promptStyle?: "gold" | "white";
+    outStyle?: "muted" | "white";
+  }[];
+}) {
   return (
     <div
       className="rounded-lg border px-4 py-3.5 font-mono text-[12px] leading-[1.9]"
@@ -89,15 +102,35 @@ function MiniTerm({ lines }: { lines: { prompt: string; out: string }[] }) {
     >
       {lines.map((line) => (
         <div key={line.out} className="mini-term-line">
-          <span className="mr-1.5" style={{ color: LEGACY.goldLight }}>
+          <span
+            className="mr-1.5"
+            style={{
+              color: line.promptStyle === "white" ? "rgba(240,238,232,0.95)" : LEGACY.goldLight,
+            }}
+          >
             {line.prompt}
           </span>
-          <span style={{ color: LEGACY.textSoft }}>{line.out}</span>
+          <span
+            style={{
+              color: line.outStyle === "white" ? LEGACY.cream : LEGACY.textSoft,
+            }}
+          >
+            {line.out}
+          </span>
         </div>
       ))}
     </div>
   );
 }
+
+/** AI Execution “number line” — five jewel orbs + dust + constellation (legacy card 1). */
+const AI_ORBS = [
+  { hex: "#B47AEA", glow: "rgba(180,122,234,0.55)" }, // purple
+  { hex: "#5B9CF8", glow: "rgba(91,156,248,0.5)" }, // blue
+  { hex: "#E8C66D", glow: "rgba(232,198,109,0.62)" }, // gold
+  { hex: "#4ADE80", glow: "rgba(74,222,128,0.48)" }, // green
+  { hex: "#2DD4BF", glow: "rgba(45,212,191,0.52)" }, // teal
+] as const;
 
 function ExperienceAiExecution({ reduced }: { reduced: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -112,7 +145,56 @@ function ExperienceAiExecution({ reduced }: { reduced: boolean }) {
     let t = 0;
     let cancelled = false;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const n = 36;
+
+    // Seeded pseudo-random for stable layout
+    const rnd = (() => {
+      let s = 901237;
+      return () => {
+        s = (s * 16807) % 2147483647;
+        return (s - 1) / 2147483646;
+      };
+    })();
+
+    type Pt = { x: number; y: number };
+    let bgPts: Pt[] = [];
+    let bgEdges: [number, number][] = [];
+    let dust: { x: number; y: number; vx: number; vy: number; r: number; phase: number; nearCenter: number }[] = [];
+    let layoutW = 0;
+    let layoutH = 0;
+
+    function rebuildLayout(w: number, h: number) {
+      if (w === layoutW && h === layoutH && bgPts.length) return;
+      layoutW = w;
+      layoutH = h;
+      bgPts = [];
+      for (let i = 0; i < 22; i++) {
+        bgPts.push({ x: rnd() * w, y: rnd() * h * 0.92 });
+      }
+      bgEdges = [];
+      for (let i = 0; i < bgPts.length; i++) {
+        for (let j = i + 1; j < bgPts.length; j++) {
+          const dx = bgPts[i].x - bgPts[j].x;
+          const dy = bgPts[i].y - bgPts[j].y;
+          if (dx * dx + dy * dy < 110 * 110) bgEdges.push([i, j]);
+        }
+      }
+      dust = [];
+      const midY = h * 0.52;
+      for (let i = 0; i < 42; i++) {
+        const nearCenter = rnd() < 0.45 ? 0.35 + rnd() * 0.35 : rnd() * 0.92;
+        const x = w * (0.06 + nearCenter * 0.88);
+        const y = midY + (rnd() - 0.5) * 26 * (0.4 + rnd());
+        dust.push({
+          x,
+          y,
+          vx: (rnd() - 0.5) * 4,
+          vy: (rnd() - 0.5) * 3,
+          r: 0.6 + rnd() * 1.4,
+          phase: rnd() * Math.PI * 2,
+          nearCenter: Math.abs(x / w - 0.52) < 0.18 ? 1 : 0,
+        });
+      }
+    }
 
     const draw = () => {
       if (cancelled) return;
@@ -122,56 +204,112 @@ function ExperienceAiExecution({ reduced }: { reduced: boolean }) {
         raf = requestAnimationFrame(draw);
         return;
       }
+      rebuildLayout(w, h);
+
       c.width = w * dpr;
       c.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      t += 0.028;
-      const x0 = w * 0.06;
-      const x1 = w * 0.94;
-      const midY = h * 0.48;
-      const travel = (t * 1.1) % 1;
+      t += 0.022;
 
-      // faint baseline
-      ctx.strokeStyle = "rgba(4,209,224,0.12)";
+      const x0 = w * 0.08;
+      const x1 = w * 0.92;
+      const midY = h * 0.55;
+      const pulseU = (t * 0.38) % 1;
+
+      // Constellation (very faint)
+      for (const [a, b] of bgEdges) {
+        const p = bgPts[a];
+        const q = bgPts[b];
+        ctx.strokeStyle = `rgba(80,80,95,${0.04 + 0.03 * Math.sin(t * 0.4 + a)})`;
+        ctx.lineWidth = 0.55;
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(q.x, q.y);
+        ctx.stroke();
+      }
+
+      // Baseline
+      ctx.strokeStyle = "rgba(55,55,62,0.55)";
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(x0, midY);
       ctx.lineTo(x1, midY);
       ctx.stroke();
 
-      for (let i = 0; i < n; i++) {
-        const u = i / (n - 1);
-        const x = x0 + (x1 - x0) * u;
-        const wave = Math.sin(t * 0.9 + u * 5) * (h * 0.06);
-        const y = midY + wave * (0.35 + 0.65 * Math.sin(u * Math.PI));
-        const dist = Math.abs(u - travel);
-        const hot = Math.exp(-dist * dist * 90);
-        const r = 1.4 + hot * 2.8 + 0.35 * Math.sin(t * 2 + i * 0.4);
+      // Main five orbs — evenly spaced
+      const orbU = [0.1, 0.3, 0.5, 0.7, 0.9] as const;
+      const orbX = orbU.map((u) => x0 + (x1 - x0) * u);
 
+      // Dust motes (gold), stronger near center gold orb
+      for (const d of dust) {
+        d.x += d.vx * 0.012 + Math.sin(t * 0.7 + d.phase) * 0.15;
+        d.y += d.vy * 0.012 + Math.cos(t * 0.55 + d.phase) * 0.12;
+        if (d.x < x0 - 4) d.x = x1 + 4;
+        if (d.x > x1 + 4) d.x = x0 - 4;
+        if (d.y < 4) d.y = h - 8;
+        if (d.y > h - 4) d.y = 8;
+        const du = Math.abs(d.x / w - 0.5);
+        const goldBoost = d.nearCenter ? 0.35 : 0.12;
+        const tw = 0.35 + 0.35 * Math.sin(t * 2.2 + d.phase);
         ctx.beginPath();
-        ctx.arc(x, y, r + hot * 1.2, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(4,209,224,${0.08 + hot * 0.35})`;
+        ctx.arc(d.x, d.y, d.r * (0.85 + tw * 0.25), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(232,198,109,${0.08 + goldBoost * tw * (1 - du)})`;
         ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(x, y, r * 0.45, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(240,238,232,${0.15 + hot * 0.75})`;
-        ctx.fill();
-
-        if (i > 0) {
-          const u0 = (i - 1) / (n - 1);
-          const xPrev = x0 + (x1 - x0) * u0;
-          const wave0 = Math.sin(t * 0.9 + u0 * 5) * (h * 0.06);
-          const yPrev = midY + wave0 * (0.35 + 0.65 * Math.sin(u0 * Math.PI));
-          ctx.strokeStyle = `rgba(4,209,224,${0.04 + 0.06 * (1 - dist)})`;
-          ctx.lineWidth = 0.85;
-          ctx.beginPath();
-          ctx.moveTo(xPrev, yPrev);
-          ctx.lineTo(x, y);
-          ctx.stroke();
-        }
       }
+
+      // Traveling pulse along the axis (affects main orbs)
+      for (let k = 0; k < AI_ORBS.length; k++) {
+        const u = orbU[k];
+        let du = Math.abs(u - pulseU);
+        du = Math.min(du, 1 - du);
+        const pulse = Math.exp(-du * du * 55);
+        const x = orbX[k];
+        const bob = Math.sin(t * 1.1 + k * 0.6) * 2.2 * (0.4 + pulse);
+        const y = midY + bob;
+        const baseR = 5 + pulse * 5.5;
+        const { hex, glow } = AI_ORBS[k];
+
+        const g = ctx.createRadialGradient(x, y, 0, x, y, baseR * 3.2);
+        g.addColorStop(0, hex + "EE");
+        g.addColorStop(0.35, glow);
+        g.addColorStop(1, "transparent");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x, y, baseR * 3.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(x, y, baseR * 0.55, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255,255,255,0.22)";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x, y, baseR * 0.35, 0, Math.PI * 2);
+        ctx.fillStyle = hex;
+        ctx.fill();
+      }
+
+      // Faint connectors between adjacent main orbs
+      ctx.strokeStyle = "rgba(100,100,120,0.12)";
+      ctx.lineWidth = 0.75;
+      for (let k = 0; k < AI_ORBS.length - 1; k++) {
+        ctx.beginPath();
+        ctx.moveTo(orbX[k], midY);
+        ctx.lineTo(orbX[k + 1], midY);
+        ctx.stroke();
+      }
+
+      // Floating white dot — above line, right of center
+      const fx = x0 + (x1 - x0) * 0.68;
+      const fy = midY - h * 0.26 + Math.sin(t * 1.4) * 3;
+      ctx.shadowColor = "rgba(255,255,255,0.9)";
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(fx, fy, 3.2, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255,255,255,0.95)";
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
       raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw);
@@ -183,49 +321,46 @@ function ExperienceAiExecution({ reduced }: { reduced: boolean }) {
 
   return (
     <div className="mt-5 space-y-4">
-      <VizPanel className="h-[88px]">
+      <VizPanel className="h-[104px]">
         {reduced ? (
-          <div className="flex h-[88px] items-center justify-center gap-1" aria-hidden>
-            {Array.from({ length: 20 }).map((_, i) => (
+          <div className="flex h-[104px] items-center justify-center gap-5 px-4" aria-hidden>
+            {AI_ORBS.map((o) => (
               <span
-                key={i}
-                className="h-1 w-1 rounded-full"
-                style={{
-                  background: LEGACY.cyan,
-                  opacity: 0.15 + (i % 6) * 0.08,
-                  transform: `translateY(${Math.sin(i * 0.5) * 3}px)`,
-                }}
+                key={o.hex}
+                className="h-2.5 w-2.5 rounded-full shadow-lg"
+                style={{ background: o.hex, boxShadow: `0 0 14px ${o.glow}` }}
               />
             ))}
           </div>
         ) : (
-          <canvas ref={ref} className="h-[88px] w-full" aria-hidden />
+          <canvas ref={ref} className="block h-[104px] w-full" aria-hidden />
         )}
       </VizPanel>
       <MiniTerm
         lines={[
           { prompt: ">", out: '"Launch the Q3 campaign."' },
-          { prompt: "→", out: "Briefing created · Team notified · Timeline set · Assets queued" },
+          { prompt: "→", out: "Briefing created · Team notified · Timeline set · Assets queued", promptStyle: "white" },
         ]}
       />
     </div>
   );
 }
 
-function roundRectPath(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
-  const rr = Math.min(r, w / 2, h / 2);
-  ctx.beginPath();
-  ctx.moveTo(x + rr, y);
-  ctx.lineTo(x + w - rr, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + rr);
-  ctx.lineTo(x + w, y + h - rr);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - rr, y + h);
-  ctx.lineTo(x + rr, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - rr);
-  ctx.lineTo(x, y + rr);
-  ctx.quadraticCurveTo(x, y, x + rr, y);
-  ctx.closePath();
+export function WorkflowRunningFooter() {
+  return (
+    <p
+      className="mt-4 font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.2em]"
+      style={{ color: LEGACY.goldLight }}
+    >
+      · 3 workflows running
+    </p>
+  );
 }
+
+/** Single-stream droplets: irregular phase (pairs / gaps) + per-droplet speed. */
+const WF_WATERFALL_PHASE = [0.0, 0.02, 0.04, 0.21, 0.23, 0.25, 0.44, 0.46, 0.62, 0.64, 0.66, 0.83, 0.85, 0.87] as const;
+const WF_WATERFALL_SPEED = [0.52, 0.56, 0.54, 0.68, 0.65, 0.7, 0.58, 0.62, 0.48, 0.52, 0.5, 0.64, 0.6, 0.57] as const;
+const WF_WATERFALL_LEAD = 8;
 
 function ExperienceWorkflow({ reduced }: { reduced: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -240,141 +375,9 @@ function ExperienceWorkflow({ reduced }: { reduced: boolean }) {
     let t = 0;
     let cancelled = false;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const steps = 4;
-    const boxW = 96;
-    const boxH = 34;
-    const gap = 22;
-
-    const draw = () => {
-      if (cancelled) return;
-      const w = c.clientWidth;
-      const h = c.clientHeight;
-      if (w < 8) {
-        raf = requestAnimationFrame(draw);
-        return;
-      }
-      c.width = w * dpr;
-      c.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, w, h);
-      t += 0.022;
-      const cx = w * 0.5;
-      const totalH = steps * boxH + (steps - 1) * gap;
-      let y0 = (h - totalH) * 0.5;
-
-      const centers: { x: number; y: number }[] = [];
-      for (let s = 0; s < steps; s++) {
-        const x = cx - boxW / 2;
-        const y = y0 + s * (boxH + gap);
-        centers.push({ x: cx, y: y + boxH / 2 });
-        ctx.strokeStyle = "rgba(240,238,232,0.1)";
-        ctx.lineWidth = 1;
-        roundRectPath(ctx, x, y, boxW, boxH, 6);
-        ctx.stroke();
-        const pulse = 0.5 + 0.5 * Math.sin(t * 1.8 + s * 0.9);
-        ctx.fillStyle = `rgba(218,52,241,${0.03 + pulse * 0.06})`;
-        roundRectPath(ctx, x + 1, y + 1, boxW - 2, boxH - 2, 5);
-        ctx.fill();
-        const nodePulse = 0.55 + 0.45 * Math.sin(t * 2.2 + s * 1.1);
-        ctx.beginPath();
-        ctx.arc(cx, y + boxH / 2, 4 + nodePulse * 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(218,52,241,${0.25 + nodePulse * 0.45})`;
-        ctx.shadowColor = LEGACY.purple;
-        ctx.shadowBlur = 12 * nodePulse;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        if (s < steps - 1) {
-          ctx.strokeStyle = "rgba(218,52,241,0.18)";
-          ctx.setLineDash([3, 5]);
-          ctx.beginPath();
-          ctx.moveTo(cx, y + boxH);
-          ctx.lineTo(cx, y + boxH + gap);
-          ctx.stroke();
-          ctx.setLineDash([]);
-        }
-      }
-
-      // traveling packet along spine
-      const prog = (t * 0.22) % 1;
-      const seg = prog * (steps - 1);
-      const i0 = Math.floor(seg);
-      const f = seg - i0;
-      if (i0 < steps - 1) {
-        const a = centers[i0];
-        const b = centers[i0 + 1];
-        const ox = a.x;
-        const oy = a.y + f * (b.y - a.y);
-        ctx.beginPath();
-        ctx.arc(ox, oy, 5.5, 0, Math.PI * 2);
-        const g = ctx.createRadialGradient(ox, oy, 0, ox, oy, 14);
-        g.addColorStop(0, "rgba(255,255,255,0.95)");
-        g.addColorStop(0.35, "rgba(218,52,241,0.55)");
-        g.addColorStop(1, "transparent");
-        ctx.fillStyle = g;
-        ctx.fill();
-      }
-
-      raf = requestAnimationFrame(draw);
-    };
-    raf = requestAnimationFrame(draw);
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf);
-    };
-  }, [reduced]);
-
-  return (
-    <div className="mt-5">
-      <VizPanel className="h-[220px]">
-        {reduced ? (
-          <div className="flex h-[220px] flex-col items-center justify-center gap-3 py-6" aria-hidden>
-            {[0, 1, 2, 3].map((s) => (
-              <div key={s} className="flex flex-col items-center">
-                <div
-                  className="h-8 w-24 rounded-md border"
-                  style={{ borderColor: LEGACY.borderGold, background: LEGACY.surface }}
-                />
-                {s < 3 ? <div className="h-4 w-px bg-white/15" /> : null}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <canvas ref={ref} className="h-[220px] w-full" aria-hidden />
-        )}
-      </VizPanel>
-      <p
-        className="mt-3 font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.2em]"
-        style={{ color: LEGACY.goldLight }}
-      >
-        · 3 workflows running
-      </p>
-    </div>
-  );
-}
-
-function ExperienceTeamOps({ reduced }: { reduced: boolean }) {
-  const ref = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (reduced) return;
-    const c = ref.current;
-    if (!c) return;
-    const ctx = c.getContext("2d");
-    if (!ctx) return;
-    let raf = 0;
-    let t = 0;
-    let cancelled = false;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const palette = ["#10D988", "#FF8C42", "#E2C47A", "#04D1E0"];
-    const orbs = Array.from({ length: 16 }, (_, i) => ({
-      x: 0.15 + Math.random() * 0.7,
-      y: 0.15 + Math.random() * 0.7,
-      vx: (Math.random() - 0.5) * 0.12,
-      vy: (Math.random() - 0.5) * 0.12,
-      c: palette[i % palette.length],
-      rBase: 2.5 + Math.random() * 3,
-      phase: Math.random() * Math.PI * 2,
-    }));
+    const nDrops = WF_WATERFALL_PHASE.length;
+    const baseBallR = 4.6;
+    const cyan = LEGACY.cyan;
 
     const draw = () => {
       if (cancelled) return;
@@ -389,24 +392,99 @@ function ExperienceTeamOps({ reduced }: { reduced: boolean }) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
       t += 0.018;
-      for (const o of orbs) {
-        o.x += o.vx * 0.01;
-        o.y += o.vy * 0.01;
-        if (o.x < 0.08 || o.x > 0.92) o.vx *= -1;
-        if (o.y < 0.08 || o.y > 0.92) o.vy *= -1;
-        const px = o.x * w;
-        const py = o.y * h;
-        const pulse = 0.5 + 0.5 * Math.sin(t * 1.6 + o.phase);
-        const rad = o.rBase * (0.75 + pulse * 0.55);
-        const g = ctx.createRadialGradient(px, py, 0, px, py, rad * 3);
-        g.addColorStop(0, `${o.c}${Math.floor(180 + pulse * 75).toString(16).padStart(2, "0")}`);
-        g.addColorStop(0.4, `${o.c}55`);
-        g.addColorStop(1, "transparent");
-        ctx.fillStyle = g;
+      const mx = 22;
+      const my = 18;
+      const uw = Math.max(8, w - 2 * mx);
+      const uh = Math.max(8, h - 2 * my);
+      const p0 = { x: mx + uw * 0.06, y: my + uh * 0.06 };
+      const p1 = { x: mx + uw * 0.34, y: my + uh * 0.44 };
+      const p2 = { x: mx + uw * 0.76, y: my + uh * 0.44 };
+      const p3 = { x: mx + uw * 0.94, y: my + uh * 0.92 };
+      const path = [p0, p1, p2, p3];
+
+      const segLen = [0, 1, 2].map((i) => Math.hypot(path[i + 1].x - path[i].x, path[i + 1].y - path[i].y));
+      const totalLen = segLen[0] + segLen[1] + segLen[2];
+
+      const atUWithTangent = (uRaw: number) => {
+        const u = ((uRaw % 1) + 1) % 1;
+        let d = u * totalLen;
+        for (let i = 0; i < 3; i++) {
+          const sl = segLen[i];
+          const sdx = path[i + 1].x - path[i].x;
+          const sdy = path[i + 1].y - path[i].y;
+          const sL = Math.hypot(sdx, sdy) || 1;
+          if (d <= sl + 1e-9) {
+            const tt = sl < 1e-9 ? 1 : Math.min(1, d / sl);
+            return {
+              x: path[i].x + tt * sdx,
+              y: path[i].y + tt * sdy,
+              tx: sdx / sL,
+              ty: sdy / sL,
+            };
+          }
+          d -= sl;
+        }
+        const sdx = p3.x - p2.x;
+        const sdy = p3.y - p2.y;
+        const sL = Math.hypot(sdx, sdy) || 1;
+        return { x: p3.x, y: p3.y, tx: sdx / sL, ty: sdy / sL };
+      };
+
+      ctx.save();
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(p0.x, p0.y);
+      ctx.lineTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.lineTo(p3.x, p3.y);
+      ctx.strokeStyle = "rgba(255,255,255,0.06)";
+      ctx.lineWidth = 5;
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(255,255,255,0.11)";
+      ctx.lineWidth = 1.75;
+      ctx.stroke();
+      ctx.restore();
+
+      const flow = t * 0.19;
+      for (let i = 0; i < nDrops; i++) {
+        const u = (flow * WF_WATERFALL_SPEED[i] + WF_WATERFALL_PHASE[i]) % 1;
+        const spine = atUWithTangent(u);
+        const nx = -spine.ty;
+        const ny = spine.tx;
+        // Soft water meander: slow drift across the spine, sometimes nearly flat (calm sheet)
+        const calm = 0.42 + 0.58 * Math.pow(0.5 + 0.5 * Math.sin(t * 0.27 + i * 0.19 + u * 2.8), 1.8);
+        const w1 = Math.sin(t * 0.58 + u * 4.6 + i * 0.51);
+        const w2 = Math.sin(t * 0.33 - u * 3.1 + i * 0.73) * 0.55;
+        const w3 = Math.sin(t * 0.91 + u * 9 + i * 1.1) * 0.28;
+        const lateral = (2.15 * w1 + 1.05 * w2 + 0.6 * w3) * calm * (0.85 + (i % 5) * 0.06);
+        const x = spine.x + nx * lateral;
+        const y = spine.y + ny * lateral;
+        const pulse = 0.55 + 0.45 * Math.sin(t * 1.85 + i * 0.71);
+        const rad = baseBallR * (0.92 + (i % 4) * 0.035 + pulse * 0.05);
+        const isLead = i === WF_WATERFALL_LEAD;
         ctx.beginPath();
-        ctx.arc(px, py, rad * 3, 0, Math.PI * 2);
+        ctx.arc(x, y, rad, 0, Math.PI * 2);
+        const g = ctx.createRadialGradient(x, y, 0, x, y, rad * 2.35);
+        if (isLead) {
+          g.addColorStop(0, "rgba(230, 252, 255, 0.98)");
+          g.addColorStop(0.35, "rgba(120, 220, 255, 0.92)");
+          g.addColorStop(0.65, "rgba(4, 209, 224, 0.55)");
+          g.addColorStop(1, "rgba(4, 120, 200, 0.08)");
+        } else {
+          g.addColorStop(0, "rgba(200, 245, 255, 0.96)");
+          g.addColorStop(0.32, "rgba(80, 200, 255, 0.9)");
+          g.addColorStop(0.58, "rgba(4, 209, 224, 0.72)");
+          g.addColorStop(0.82, "rgba(4, 140, 210, 0.35)");
+          g.addColorStop(1, "rgba(4, 100, 180, 0.06)");
+        }
+        ctx.fillStyle = g;
+        ctx.shadowColor = cyan;
+        ctx.shadowBlur = isLead ? 16 * pulse : 12 * pulse;
         ctx.fill();
+        ctx.shadowBlur = 0;
       }
+
       raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw);
@@ -417,16 +495,253 @@ function ExperienceTeamOps({ reduced }: { reduced: boolean }) {
   }, [reduced]);
 
   return (
-    <div className="mt-5">
-      <VizPanel className="h-[130px]">
+    <div className="w-full">
+      <VizPanel className="h-[220px]">
         {reduced ? (
-          <div className="flex h-[130px] flex-wrap content-center justify-center gap-4 p-4 opacity-60" aria-hidden>
-            {["#10D988", "#FF8C42", "#E2C47A"].map((col) => (
-              <span key={col} className="h-3 w-3 rounded-full blur-[1px]" style={{ background: col, boxShadow: `0 0 14px ${col}` }} />
-            ))}
+          <div className="relative flex h-[220px] items-center justify-center" aria-hidden>
+            <svg
+              className="pointer-events-none absolute inset-6 w-[calc(100%-3rem)] h-[calc(100%-3rem)] opacity-[0.22]"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              <polyline
+                fill="none"
+                stroke="rgba(255,255,255,0.45)"
+                strokeWidth="0.85"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                points="6,6 34,44 76,44 94,92"
+              />
+            </svg>
+            <div className="relative flex flex-wrap justify-center gap-1.5 px-8">
+              {WF_WATERFALL_PHASE.map((_, i) => (
+                <div
+                  key={i}
+                  className="h-2.5 w-2.5 shrink-0 rounded-full"
+                  style={{
+                    background: i === WF_WATERFALL_LEAD ? "rgba(200,245,255,0.95)" : "rgba(80,200,255,0.88)",
+                    opacity: i === WF_WATERFALL_LEAD ? 1 : 0.55 + (i % 5) * 0.07,
+                    boxShadow: `0 0 10px ${LEGACY.cyan}99`,
+                  }}
+                />
+              ))}
+            </div>
           </div>
         ) : (
-          <canvas ref={ref} className="h-[130px] w-full" aria-hidden />
+          <canvas ref={ref} className="block h-[220px] w-full" aria-hidden />
+        )}
+      </VizPanel>
+    </div>
+  );
+}
+
+// ─── Team OPS — tilted elliptical orbit, z-sorted moons, calm central hub ──────
+const TEAM_ORBIT_OMEGA = 0.52;
+const TEAM_ORBIT_ROT = 0.4;
+const TEAM_ORBIT_A_FR = 0.33;
+const TEAM_ORBIT_B_FR = 0.14;
+
+const TEAM_ORBIT_MOONS: ReadonlyArray<{
+  phase: number;
+  col: string;
+  glow: string;
+  r: number;
+}> = [
+  { phase: 0, col: "#F472B6", glow: "rgba(244,114,182,0.48)", r: 2.35 },
+  { phase: 0.82, col: "#60A5FA", glow: "rgba(96,165,250,0.45)", r: 2.15 },
+  { phase: 1.58, col: "#4ADE80", glow: "rgba(74,222,128,0.42)", r: 2.35 },
+  { phase: 2.4, col: "#E2C47A", glow: "rgba(226,196,122,0.48)", r: 2.05 },
+  { phase: 3.18, col: "#FB923C", glow: "rgba(251,146,60,0.42)", r: 2.15 },
+  { phase: 3.95, col: "#22D3EE", glow: "rgba(34,211,238,0.4)", r: 1.95 },
+  { phase: 4.75, col: "#A78BFA", glow: "rgba(167,139,250,0.4)", r: 2.05 },
+  { phase: 5.55, col: "#34D399", glow: "rgba(52,211,153,0.42)", r: 2.0 },
+];
+
+function teamOrbitPos(theta: number, cx: number, cy: number, a: number, b: number, rot: number) {
+  const x = cx + a * Math.cos(theta) * Math.cos(rot) - b * Math.sin(theta) * Math.sin(rot);
+  const y = cy + a * Math.cos(theta) * Math.sin(rot) + b * Math.sin(theta) * Math.cos(rot);
+  return { x, y };
+}
+
+function ExperienceTeamOps({ reduced }: { reduced: boolean }) {
+  const ref = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (reduced) return;
+    const c = ref.current;
+    if (!c) return;
+    const ctx = c.getContext("2d");
+    if (!ctx) return;
+    let raf = 0;
+    let cancelled = false;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const t0 = performance.now();
+    const n = TEAM_ORBIT_MOONS.length;
+
+    const draw = (ts: number) => {
+      if (cancelled) return;
+      const w = c.clientWidth;
+      const h = c.clientHeight;
+      if (w < 8) {
+        raf = requestAnimationFrame(draw);
+        return;
+      }
+      c.width = w * dpr;
+      c.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const t = (ts - t0) / 1000;
+
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+      const m = Math.min(w, h);
+      const a = m * TEAM_ORBIT_A_FR;
+      const b = m * TEAM_ORBIT_B_FR;
+      const rot = TEAM_ORBIT_ROT;
+
+      const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.55);
+      bg.addColorStop(0, "rgba(22,21,20,0.98)");
+      bg.addColorStop(0.55, "#0a0a0a");
+      bg.addColorStop(1, "#050505");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, w, h);
+
+      // Foreshortened orbit rail (ellipse in space, viewed at an angle)
+      ctx.beginPath();
+      for (let k = 0; k <= 96; k++) {
+        const th = (k / 96) * Math.PI * 2;
+        const p = teamOrbitPos(th, cx, cy, a, b, rot);
+        if (k === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = "rgba(201,168,76,0.14)";
+      ctx.lineWidth = 1.1;
+      ctx.stroke();
+
+      const theta: number[] = [];
+      const px: number[] = [];
+      const py: number[] = [];
+      const zd: number[] = [];
+      for (let i = 0; i < n; i++) {
+        const th = TEAM_ORBIT_OMEGA * t + TEAM_ORBIT_MOONS[i].phase;
+        theta.push(th);
+        const p = teamOrbitPos(th, cx, cy, a, b, rot);
+        px.push(p.x);
+        py.push(p.y);
+        zd.push(Math.sin(th));
+      }
+
+      // Ring chords (follow orbit order — morphs as bodies move)
+      ctx.lineWidth = 0.7;
+      for (let i = 0; i < n; i++) {
+        const j = (i + 1) % n;
+        const vis = 0.35 + 0.35 * (zd[i] + zd[j] + 2) * 0.25;
+        ctx.beginPath();
+        ctx.moveTo(px[i], py[i]);
+        ctx.lineTo(px[j], py[j]);
+        ctx.strokeStyle = `rgba(88,86,84,${0.1 + vis * 0.22})`;
+        ctx.stroke();
+      }
+
+      // Depth sort: “far” side of the orbit draws first so near moons pass over
+      const order = Array.from({ length: n }, (_, i) => i).sort((ia, ib) => zd[ia] - zd[ib]);
+
+      for (const i of order) {
+        const o = TEAM_ORBIT_MOONS[i];
+        const z = zd[i];
+        const depth = 0.5 + 0.5 * z;
+        const scale = 0.68 + 0.32 * depth;
+        const alpha = 0.38 + 0.52 * depth;
+        const pulse = 0.92 + 0.08 * Math.sin(t * 1.2 + o.phase);
+        const rad = o.r * scale * pulse;
+        const x = px[i];
+        const y = py[i];
+        const g = ctx.createRadialGradient(x, y, 0, x, y, rad * 3.2);
+        g.addColorStop(0, o.col + Math.floor(140 + depth * 115).toString(16).padStart(2, "0"));
+        g.addColorStop(0.38, o.col + "55");
+        g.addColorStop(0.62, o.glow);
+        g.addColorStop(1, "transparent");
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x, y, rad * 3.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x, y, rad * 0.48, 0, Math.PI * 2);
+        ctx.fillStyle = o.col + "E6";
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // Calm central hub (fixed — team anchor)
+      const hg = ctx.createRadialGradient(cx, cy, 0, cx, cy, 26);
+      hg.addColorStop(0, "rgba(255,255,255,0.95)");
+      hg.addColorStop(0.2, "rgba(255,255,255,0.45)");
+      hg.addColorStop(0.5, "rgba(240,238,232,0.08)");
+      hg.addColorStop(1, "transparent");
+      ctx.fillStyle = hg;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 26, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(cx, cy, 3.2, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255,255,255,0.98)";
+      ctx.fill();
+
+      raf = requestAnimationFrame(draw);
+    };
+
+    raf = requestAnimationFrame(draw);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+    };
+  }, [reduced]);
+
+  return (
+    <div className="mt-5">
+      <VizPanel className="h-[200px]">
+        {reduced ? (
+          <div
+            className="relative flex h-[200px] w-full items-center justify-center"
+            style={{
+              background:
+                "radial-gradient(ellipse 65% 65% at 50% 50%, rgba(28,26,24,0.95), #0a0a0a 58%, #050505 100%)",
+            }}
+            aria-hidden
+          >
+            <svg className="h-full w-full max-w-[420px]" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid meet">
+              <ellipse
+                cx="160"
+                cy="100"
+                rx="105"
+                ry="44"
+                fill="none"
+                stroke="rgba(201,168,76,0.14)"
+                strokeWidth="1.1"
+                transform="rotate(23 160 100)"
+              />
+              {[
+                [246, 118],
+                [214, 72],
+                [160, 58],
+                [106, 72],
+                [74, 118],
+                [92, 152],
+                [160, 168],
+                [228, 152],
+              ].map(([x, y], i) => (
+                <g key={i}>
+                  <circle cx={x} cy={y} r="9" fill={TEAM_ORBIT_MOONS[i].col} opacity="0.32" />
+                  <circle cx={x} cy={y} r="2.2" fill={TEAM_ORBIT_MOONS[i].col} opacity="0.9" />
+                </g>
+              ))}
+              <circle cx="160" cy="100" r="18" fill="rgba(255,255,255,0.12)" />
+              <circle cx="160" cy="100" r="3.2" fill="rgba(255,255,255,0.95)" />
+            </svg>
+          </div>
+        ) : (
+          <canvas ref={ref} className="block h-[200px] w-full" aria-hidden />
         )}
       </VizPanel>
       <div className="mt-4 flex flex-wrap gap-10">
@@ -451,70 +766,152 @@ function ExperienceTeamOps({ reduced }: { reduced: boolean }) {
   );
 }
 
+/** Faint teal line + nodes behind Client Delivery copy (orbital detail panel). */
+const CLIENT_DELIVERY_BACKDROP_POINTS: readonly [number, number][] = [
+  [6, 72],
+  [46, 50],
+  [86, 66],
+  [126, 44],
+  [166, 58],
+  [206, 42],
+  [246, 56],
+  [286, 48],
+];
+
+const CLIENT_DELIVERY_BACKDROP_PATH_STATIC = intelChartPathD(CLIENT_DELIVERY_BACKDROP_POINTS);
+
+export function ClientDeliveryBackdropGraph({ className = "" }: { className?: string }) {
+  const reduced = usePrefersReducedMotion();
+  const uid = useId().replace(/:/g, "");
+  const gradId = `cd-backdrop-${uid}`;
+  const pathRef = useRef<SVGPathElement>(null);
+  const circleRefs = useRef<(SVGCircleElement | null)[]>([]);
+
+  useEffect(() => {
+    if (reduced) return;
+    const path = pathRef.current;
+    let raf = 0;
+
+    const resetToBase = () => {
+      path?.setAttribute("d", CLIENT_DELIVERY_BACKDROP_PATH_STATIC);
+      CLIENT_DELIVERY_BACKDROP_POINTS.forEach(([x, y], i) => {
+        const c = circleRefs.current[i];
+        if (!c) return;
+        c.setAttribute("cx", String(x));
+        c.setAttribute("cy", String(y));
+      });
+    };
+
+    const tick = (now: number) => {
+      const t = now / 1000;
+      const pts: [number, number][] = CLIENT_DELIVERY_BACKDROP_POINTS.map(([x, y], i) => {
+        if (i === 0 || i === CLIENT_DELIVERY_BACKDROP_POINTS.length - 1) return [x, y];
+        const amp = 1.85 + (i % 2) * 0.3;
+        const dy = Math.sin(t * 1.85 + i * 0.88) * amp;
+        return [x, y + dy];
+      });
+      path?.setAttribute("d", intelChartPathD(pts));
+      pts.forEach(([x, y], i) => {
+        const c = circleRefs.current[i];
+        if (!c) return;
+        c.setAttribute("cx", String(x));
+        c.setAttribute("cy", String(y));
+      });
+      raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(raf);
+      resetToBase();
+    };
+  }, [reduced]);
+
+  return (
+    <div className={className} aria-hidden>
+      <svg className="h-full w-full" viewBox="0 0 300 92" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id={gradId} x1="0%" y1="50%" x2="100%" y2="50%">
+            <stop offset="0%" stopColor={LEGACY.cyan} stopOpacity="0.12" />
+            <stop offset="45%" stopColor={LEGACY.cyan} stopOpacity="0.42" />
+            <stop offset="100%" stopColor={LEGACY.cyan} stopOpacity="0.18" />
+          </linearGradient>
+          <filter id={`cd-glow-${uid}`} x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="1.8" result="b" />
+            <feMerge>
+              <feMergeNode in="b" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <path
+          ref={pathRef}
+          d={CLIENT_DELIVERY_BACKDROP_PATH_STATIC}
+          fill="none"
+          stroke={`url(#${gradId})`}
+          strokeWidth="1.15"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          opacity="0.55"
+        />
+        {CLIENT_DELIVERY_BACKDROP_POINTS.map(([cx, cy], i) => (
+          <circle
+            key={i}
+            ref={(el) => {
+              circleRefs.current[i] = el;
+            }}
+            cx={cx}
+            cy={cy}
+            r="2.35"
+            fill={LEGACY.cyan}
+            opacity="0.35"
+            filter={`url(#cd-glow-${uid})`}
+          >
+            {!reduced ? (
+              <animate attributeName="opacity" values="0.22;0.5;0.22" dur="2.8s" repeatCount="indefinite" begin={`${i * 0.18}s`} />
+            ) : null}
+          </circle>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
 function ExperienceClientDelivery({ reduced }: { reduced: boolean }) {
   const uid = useId().replace(/:/g, "");
-  const arcId = `arc-teal-${uid}`;
 
   return (
     <div className="mt-5 space-y-4">
-      <VizPanel className="h-[100px]">
-        <svg className="h-[100px] w-full" viewBox="0 0 280 80" preserveAspectRatio="xMidYMid meet" aria-hidden>
-          <defs>
-            <linearGradient id={arcId} x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor={LEGACY.cyan} stopOpacity="0.15" />
-              <stop offset="50%" stopColor={LEGACY.cyan} stopOpacity="0.85" />
-              <stop offset="100%" stopColor={LEGACY.cyan} stopOpacity="0.2" />
-            </linearGradient>
-          </defs>
-          {Array.from({ length: 14 }).map((_, i) => {
-            const a = Math.PI * 0.85 + (i / 13) * Math.PI * 0.3;
-            const r = 108;
-            const cx = 140;
-            const cy = 118;
-            const x = cx + Math.cos(a) * r;
-            const y = cy + Math.sin(a) * r * 0.42;
-            return (
-              <circle key={i} cx={x} cy={y} r={1.8} fill={`url(#${arcId})`} opacity={0.25 + (i / 13) * 0.55}>
-                {!reduced ? (
-                  <animate attributeName="opacity" values="0.2;1;0.2" dur="2.8s" repeatCount="indefinite" begin={`${i * 0.12}s`} />
-                ) : null}
-              </circle>
-            );
-          })}
-        </svg>
-      </VizPanel>
-      <div className="space-y-4">
-        <div>
-          <div className="mb-2 flex justify-between font-[family-name:var(--font-sans)] text-[11px] font-semibold" style={{ color: LEGACY.textMuted }}>
-            <span>Campaign launch</span>
-            <span style={{ color: LEGACY.goldLight }}>82%</span>
-          </div>
-          <div className="h-[3px] overflow-hidden rounded-sm" style={{ background: "rgba(240,238,232,0.1)" }}>
-            <div
-              className="h-full rounded-sm"
-              style={{
-                width: reduced ? "82%" : undefined,
-                background: `linear-gradient(90deg,${LEGACY.gold},${LEGACY.goldLight})`,
-                animation: reduced ? undefined : `fillBarClientA-${uid} 2s cubic-bezier(0.16,1,0.3,1) forwards`,
-              }}
-            />
-          </div>
+      <div>
+        <div className="mb-2 flex justify-between font-[family-name:var(--font-sans)] text-[11px] font-semibold" style={{ color: LEGACY.textMuted }}>
+          <span>Campaign launch</span>
+          <span style={{ color: LEGACY.goldLight }}>82%</span>
         </div>
-        <div>
-          <div className="mb-2 flex justify-between font-[family-name:var(--font-sans)] text-[11px] font-semibold" style={{ color: LEGACY.textMuted }}>
-            <span>Brand refresh</span>
-            <span style={{ color: LEGACY.goldLight }}>54%</span>
-          </div>
-          <div className="h-[3px] overflow-hidden rounded-sm" style={{ background: "rgba(240,238,232,0.1)" }}>
-            <div
-              className="h-full rounded-sm"
-              style={{
-                width: reduced ? "54%" : undefined,
-                background: `linear-gradient(90deg,#5B3800,${LEGACY.goldLight})`,
-                animation: reduced ? undefined : `fillBarClientB-${uid} 2s cubic-bezier(0.16,1,0.3,1) 0.15s forwards`,
-              }}
-            />
-          </div>
+        <div className="h-[3px] overflow-hidden rounded-sm" style={{ background: "rgba(240,238,232,0.1)" }}>
+          <div
+            className="h-full rounded-sm"
+            style={{
+              width: reduced ? "82%" : undefined,
+              background: `linear-gradient(90deg,${LEGACY.gold},${LEGACY.goldLight})`,
+              animation: reduced ? undefined : `fillBarClientA-${uid} 2s cubic-bezier(0.16,1,0.3,1) forwards`,
+            }}
+          />
+        </div>
+      </div>
+      <div>
+        <div className="mb-2 flex justify-between font-[family-name:var(--font-sans)] text-[11px] font-semibold" style={{ color: LEGACY.textMuted }}>
+          <span>Brand refresh</span>
+          <span style={{ color: LEGACY.goldLight }}>54%</span>
+        </div>
+        <div className="h-[3px] overflow-hidden rounded-sm" style={{ background: "rgba(240,238,232,0.1)" }}>
+          <div
+            className="h-full rounded-sm"
+            style={{
+              width: reduced ? "54%" : undefined,
+              background: `linear-gradient(90deg,#5B3800,${LEGACY.goldLight})`,
+              animation: reduced ? undefined : `fillBarClientB-${uid} 2s cubic-bezier(0.16,1,0.3,1) 0.15s forwards`,
+            }}
+          />
         </div>
       </div>
       <style>{`
@@ -525,10 +922,65 @@ function ExperienceClientDelivery({ reduced }: { reduced: boolean }) {
   );
 }
 
+/** Intelligence mini-chart: endpoints fixed; middle control points oscillate on Y. */
+const INTEL_CHART_POINTS: readonly [number, number][] = [
+  [10, 86],
+  [48, 68],
+  [92, 52],
+  [128, 36],
+  [168, 22],
+  [210, 12],
+  [252, 6],
+];
+
+const INTEL_PATH_STATIC = intelChartPathD(INTEL_CHART_POINTS);
+
 function ExperienceIntelligence({ reduced }: { reduced: boolean }) {
   const uid = useId().replace(/:/g, "");
   const gradId = `intel-${uid}`;
-  const pathD = "M 10 86 L 48 68 L 92 52 L 128 36 L 168 22 L 210 12 L 252 6";
+  const pathRef = useRef<SVGPathElement>(null);
+  const circleRefs = useRef<(SVGCircleElement | null)[]>([]);
+
+  useEffect(() => {
+    if (reduced) return;
+    const path = pathRef.current;
+    let raf = 0;
+
+    const resetToBase = () => {
+      path?.setAttribute("d", INTEL_PATH_STATIC);
+      INTEL_CHART_POINTS.forEach(([x, y], i) => {
+        const c = circleRefs.current[i];
+        if (!c) return;
+        c.setAttribute("cx", String(x));
+        c.setAttribute("cy", String(y));
+      });
+    };
+
+    const tick = (now: number) => {
+      const t = now / 1000;
+      const pts: [number, number][] = INTEL_CHART_POINTS.map(([x, y], i) => {
+        if (i === 0 || i === INTEL_CHART_POINTS.length - 1) return [x, y];
+        const amp = 2.4 + (i % 2) * 0.35;
+        const dy = Math.sin(t * 1.85 + i * 0.9) * amp;
+        return [x, y + dy];
+      });
+      const d = intelChartPathD(pts);
+      path?.setAttribute("d", d);
+      pts.forEach(([x, y], i) => {
+        const c = circleRefs.current[i];
+        if (!c) return;
+        c.setAttribute("cx", String(x));
+        c.setAttribute("cy", String(y));
+      });
+      raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(raf);
+      resetToBase();
+    };
+  }, [reduced]);
 
   return (
     <div className="mt-5">
@@ -548,7 +1000,8 @@ function ExperienceIntelligence({ reduced }: { reduced: boolean }) {
             </filter>
           </defs>
           <path
-            d={pathD}
+            ref={pathRef}
+            d={INTEL_PATH_STATIC}
             fill="none"
             stroke={`url(#${gradId})`}
             strokeWidth="1.75"
@@ -559,16 +1012,19 @@ function ExperienceIntelligence({ reduced }: { reduced: boolean }) {
             strokeDashoffset={reduced ? "0" : "340"}
             className={reduced ? undefined : `bos-intel-line-${uid}`}
           />
-          {[
-            [10, 86],
-            [48, 68],
-            [92, 52],
-            [128, 36],
-            [168, 22],
-            [210, 12],
-            [252, 6],
-          ].map(([cx, cy], i) => (
-            <circle key={i} cx={cx} cy={cy} r="3.2" fill={LEGACY.goldLight} opacity="0.85" filter={`url(#glow-${uid})`}>
+          {INTEL_CHART_POINTS.map(([cx, cy], i) => (
+            <circle
+              key={i}
+              ref={(el) => {
+                circleRefs.current[i] = el;
+              }}
+              cx={cx}
+              cy={cy}
+              r="3.2"
+              fill={LEGACY.goldLight}
+              opacity="0.85"
+              filter={`url(#glow-${uid})`}
+            >
               {!reduced ? (
                 <animate attributeName="opacity" values="0.35;1;0.35" dur="2.6s" repeatCount="indefinite" begin={`${i * 0.22}s`} />
               ) : null}
@@ -706,23 +1162,47 @@ function ExperienceCommunication({ reduced }: { reduced: boolean }) {
   );
 }
 
-// ─── Command View tuning knobs ───────────────────────────────────────────────
-const CV_SWEEP_RPM = 6;
-const CV_WEDGE_DEG = 45;
-const CV_BLIP_HIT_DEG = 8;
-const CV_GRID_STEP = 18;
-const CV_ARC_COUNT = 5;
-const CV_SPOKE_COUNT = 11;
-// Stable blip layout [normRadius 0–1, normAngle 0–1 across PI span]
-const CV_BLIPS: ReadonlyArray<readonly [number, number]> = [
-  [0.25, 0.12], [0.45, 0.08], [0.55, 0.22], [0.38, 0.35],
-  [0.50, 0.15], [0.30, 0.52], [0.58, 0.60], [0.42, 0.75],
-  [0.68, 0.42], [0.22, 0.65], [0.62, 0.70], [0.44, 0.88],
-  [0.56, 0.48], [0.28, 0.80], [0.58, 0.85],
+// ─── Command View — centered orbital + sonar-style blips on gold sweep ───────
+const CV_RING_COUNT = 5;
+/** Faster sweep (full rotations per minute). */
+const CV_SWEEP_RPM = 6.2;
+const CV_WEDGE_DEG = 42;
+/** Angular window (rad) where the sweep “lights” a blip. */
+const CV_BLIP_HIT_RAD = (12 * Math.PI) / 180;
+const CV_BLIP_DECAY = 3.4;
+
+/** ring 1..CV_RING_COUNT, angle rad, dot radius px */
+const CV_ORBITALS: ReadonlyArray<{
+  ring: number;
+  ang: number;
+  rpx: number;
+  col: string;
+  ph: number;
+}> = [
+  { ring: 2, ang: 1.15, rpx: 2.1, col: "#2DD4BF", ph: 0.2 },
+  { ring: 2, ang: 4.35, rpx: 1.9, col: "#5B9CF8", ph: 1.4 },
+  { ring: 3, ang: 2.65, rpx: 2.2, col: "#E24A5A", ph: 0.9 },
+  { ring: 3, ang: 5.55, rpx: 2.0, col: "#B47AEA", ph: 2.1 },
+  { ring: 3, ang: 0.05, rpx: 1.7, col: "#6B7280", ph: 2.6 },
+  { ring: 4, ang: 0.55, rpx: 2.1, col: "#2DD4BF", ph: 0.5 },
+  { ring: 4, ang: 3.25, rpx: 2.0, col: "#5B9CF8", ph: 1.7 },
+  { ring: 4, ang: 1.95, rpx: 1.85, col: "#DA34F1", ph: 2.3 },
+  { ring: 4, ang: 4.85, rpx: 1.75, col: "#E24A5A", ph: 0.1 },
+];
+
+/** Constellation edges (indices into orbitals) */
+const CV_CONST_EDGES: ReadonlyArray<readonly [number, number]> = [
+  [0, 1],
+  [0, 2],
+  [2, 3],
+  [3, 7],
+  [5, 6],
+  [6, 8],
+  [2, 5],
+  [4, 7],
 ];
 
 function ExperienceCommandView({
-  // accentColor ignored per spec – sweep locked to #2E5BFF
   reduced,
 }: {
   accentColor: string;
@@ -738,225 +1218,243 @@ function ExperienceCommandView({
     let raf = 0;
     let cancelled = false;
     let lastTs = 0;
-    // Start sweep midway so it's immediately visible
-    let sweepAngle = Math.PI * 1.3;
+    let sweepAngle = Math.PI * 0.35;
     const WEDGE_RAD = (CV_WEDGE_DEG * Math.PI) / 180;
-    const HIT_RAD = (CV_BLIP_HIT_DEG * Math.PI) / 180;
-    // rad/s constant rotation
     const SWEEP_SPEED = (CV_SWEEP_RPM / 60) * Math.PI * 2;
-    const blipDecay = new Float32Array(CV_BLIPS.length);
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const t0 = performance.now();
+    const blipHit = new Float32Array(CV_ORBITALS.length);
 
     const draw = (ts: number) => {
       if (cancelled) return;
       const dt = reduced ? 0 : Math.min((ts - (lastTs || ts)) / 1000, 0.05);
       lastTs = ts;
+      const t = (ts - t0) / 1000;
 
       const w = c.clientWidth;
       const h = c.clientHeight;
-      if (w < 8) { raf = requestAnimationFrame(draw); return; }
+      if (w < 8) {
+        raf = requestAnimationFrame(draw);
+        return;
+      }
       c.width = w * dpr;
       c.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, w, h);
 
-      if (!reduced) {
-        sweepAngle += SWEEP_SPEED * dt;
-        // Stay on upper semicircle [PI, 2PI): after 2PI wrap to PI + remainder
-        while (sweepAngle >= Math.PI * 2) sweepAngle -= Math.PI;
-        while (sweepAngle < Math.PI) sweepAngle += Math.PI;
-      }
+      const cx = w * 0.48;
+      const cy = h * 0.5;
+      const R = Math.min(w, h) * 0.4;
 
-      // Origin bottom-center inside the canvas so the full sweep reads in-frame
-      const cx = w * 0.5;
-      const cy = h - 6;
-      const R = Math.min(w * 0.48, cy - 10);
+      // Atmosphere — slightly lighter at center (legacy card)
+      const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.25);
+      bg.addColorStop(0, "rgba(28,26,24,0.95)");
+      bg.addColorStop(0.45, "#0e0e0e");
+      bg.addColorStop(1, "#050505");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, w, h);
 
-      // 1 ── Background grid (very subtle, instrument-panel feel)
-      ctx.strokeStyle = "#141414";
-      ctx.lineWidth = 0.75;
-      for (let gx = 0; gx < w; gx += CV_GRID_STEP) {
-        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke();
-      }
-      for (let gy = 0; gy < h; gy += CV_GRID_STEP) {
-        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke();
-      }
-
-      // 2 ── Concentric semicircular arcs (PI → 2*PI, opening upward)
-      ctx.lineWidth = 0.75;
-      for (let ri = 1; ri <= CV_ARC_COUNT; ri++) {
-        const r = (R * ri) / CV_ARC_COUNT;
+      // Full concentric orbits
+      ctx.lineWidth = 0.65;
+      for (let ri = 1; ri <= CV_RING_COUNT; ri++) {
+        const rr = (R * ri) / CV_RING_COUNT;
         ctx.beginPath();
-        ctx.arc(cx, cy, r, Math.PI, Math.PI * 2, false);
-        ctx.strokeStyle = ri === CV_ARC_COUNT ? "#252525" : "#1C1C1C";
+        ctx.arc(cx, cy, rr, 0, Math.PI * 2);
+        ctx.strokeStyle = ri === CV_RING_COUNT ? "rgba(55,52,48,0.55)" : "rgba(38,36,34,0.42)";
         ctx.stroke();
       }
 
-      // 3 ── Radial spokes from origin
-      ctx.strokeStyle = "#1A1A1A";
-      ctx.lineWidth = 0.75;
-      for (let k = 0; k <= CV_SPOKE_COUNT; k++) {
-        const ang = Math.PI + (k / CV_SPOKE_COUNT) * Math.PI;
+      if (!reduced) sweepAngle += SWEEP_SPEED * dt;
+      while (sweepAngle > Math.PI * 2) sweepAngle -= Math.PI * 2;
+      while (sweepAngle < 0) sweepAngle += Math.PI * 2;
+
+      // Soft gold radar wedge (full rotation)
+      const steps = 12;
+      for (let s = 0; s < steps; s++) {
+        const f0 = s / steps;
+        const f1 = (s + 1) / steps;
+        const a0 = sweepAngle - f1 * WEDGE_RAD;
+        const a1 = sweepAngle - f0 * WEDGE_RAD;
         ctx.beginPath();
         ctx.moveTo(cx, cy);
-        ctx.lineTo(cx + Math.cos(ang) * R, cy + Math.sin(ang) * R);
-        ctx.stroke();
-      }
-
-      // 4 ── Precompute blip canvas positions
-      const blipX = new Float32Array(CV_BLIPS.length);
-      const blipY = new Float32Array(CV_BLIPS.length);
-      const blipAng = new Float32Array(CV_BLIPS.length);
-      for (let i = 0; i < CV_BLIPS.length; i++) {
-        const [nr, na] = CV_BLIPS[i];
-        const ang = Math.PI + na * Math.PI;
-        const r = nr * R;
-        blipX[i] = cx + Math.cos(ang) * r;
-        blipY[i] = cy + Math.sin(ang) * r;
-        blipAng[i] = ang;
-      }
-
-      // 5 ── Sweep (animated only)
-      if (!reduced) {
-        // Trailing wedge: multi-slice for soft atmospheric fade
-        const steps = 14;
-        for (let i = 0; i < steps; i++) {
-          const f0 = i / steps;
-          const f1 = (i + 1) / steps;
-          const a0 = Math.max(sweepAngle - f1 * WEDGE_RAD, Math.PI);
-          const a1 = Math.min(sweepAngle - f0 * WEDGE_RAD, Math.PI * 2);
-          if (a0 >= a1) continue;
-          ctx.beginPath();
-          ctx.moveTo(cx, cy);
-          ctx.arc(cx, cy, R, a0, a1, false);
-          ctx.closePath();
-          ctx.fillStyle = `rgba(46,91,255,${(1 - f0) * 0.2})`;
-          ctx.fill();
-        }
-
-        // Optional secondary echo wedge
-        const echoOff = WEDGE_RAD * 0.55;
-        const ea0 = Math.max(sweepAngle - WEDGE_RAD - echoOff, Math.PI);
-        const ea1 = Math.min(sweepAngle - echoOff, Math.PI * 2);
-        if (ea0 < ea1) {
-          ctx.beginPath();
-          ctx.moveTo(cx, cy);
-          ctx.arc(cx, cy, R * 0.88, ea0, ea1, false);
-          ctx.closePath();
-          ctx.fillStyle = "rgba(46,91,255,0.04)";
-          ctx.fill();
-        }
-
-        // Sweep arm – bright blue line
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.lineTo(cx + Math.cos(sweepAngle) * R, cy + Math.sin(sweepAngle) * R);
-        ctx.strokeStyle = "rgba(46,91,255,0.92)";
-        ctx.lineWidth = 1.5;
-        ctx.shadowColor = "#2E5BFF";
-        ctx.shadowBlur = 10;
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-
-        // Blip hit-test + decay: retrigger every sweep pass; shortest angular gap
-        for (let i = 0; i < CV_BLIPS.length; i++) {
-          let ad = Math.abs(sweepAngle - blipAng[i]);
-          if (ad > Math.PI) ad = 2 * Math.PI - ad;
-          if (ad < HIT_RAD) blipDecay[i] = 1;
-          blipDecay[i] = Math.max(0, blipDecay[i] - dt * 2.2);
-        }
-      }
-
-      // 6 ── Blips
-      for (let i = 0; i < CV_BLIPS.length; i++) {
-        const d = reduced ? 0 : blipDecay[i];
-        const bx = blipX[i];
-        const by = blipY[i];
-
-        if (d > 0.01 && !reduced) {
-          // Radial glow halo on hit
-          const g = ctx.createRadialGradient(bx, by, 0, bx, by, 14);
-          g.addColorStop(0, `rgba(46,91,255,${d * 0.5})`);
-          g.addColorStop(1, "transparent");
-          ctx.fillStyle = g;
-          ctx.beginPath();
-          ctx.arc(bx, by, 14, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        ctx.beginPath();
-        ctx.arc(bx, by, 1.8 + d * 1.6, 0, Math.PI * 2);
-        ctx.fillStyle = d > 0.05 && !reduced
-          ? `rgba(220,230,255,${0.35 + d * 0.6})`
-          : "rgba(68,68,68,0.75)";
+        ctx.arc(cx, cy, R * 1.02, a0, a1, false);
+        ctx.closePath();
+        const alpha = (1 - f0) * 0.07;
+        ctx.fillStyle = `rgba(201,168,76,${alpha})`;
         ctx.fill();
       }
+
+      // Positions with gentle drift
+      const xs: number[] = [];
+      const ys: number[] = [];
+      for (let i = 0; i < CV_ORBITALS.length; i++) {
+        const o = CV_ORBITALS[i];
+        const ringR = (R * o.ring) / CV_RING_COUNT;
+        const bobA = reduced ? 0 : Math.sin(t * 0.55 + o.ph) * 0.045;
+        const bobR = reduced ? 0 : Math.sin(t * 0.4 + o.ph * 1.3) * 2.2;
+        const ang = o.ang + bobA;
+        const rad = ringR + bobR;
+        xs.push(cx + Math.cos(ang) * rad);
+        ys.push(cy + Math.sin(ang) * rad);
+      }
+
+      // Sonar: coloured blips peak when sweep passes, fade out otherwise
+      if (!reduced && dt > 0) {
+        for (let i = 0; i < CV_ORBITALS.length; i++) {
+          let ang = Math.atan2(ys[i] - cy, xs[i] - cx);
+          if (ang < 0) ang += Math.PI * 2;
+          let ad = Math.abs(sweepAngle - ang);
+          if (ad > Math.PI) ad = Math.PI * 2 - ad;
+          if (ad < CV_BLIP_HIT_RAD) blipHit[i] = 1;
+          blipHit[i] = Math.max(0, blipHit[i] - dt * CV_BLIP_DECAY);
+        }
+      }
+
+      // Constellation — only visible while endpoints are “lit”
+      ctx.lineWidth = 0.65;
+      for (const [ia, ib] of CV_CONST_EDGES) {
+        const edgeVis = Math.min(blipHit[ia], blipHit[ib]);
+        if (edgeVis < 0.04) continue;
+        ctx.strokeStyle = `rgba(120,118,115,${0.08 + edgeVis * 0.22})`;
+        ctx.beginPath();
+        ctx.moveTo(xs[ia], ys[ia]);
+        ctx.lineTo(xs[ib], ys[ib]);
+        ctx.stroke();
+      }
+
+      // Coloured blips — skip when fully faded
+      for (let i = 0; i < CV_ORBITALS.length; i++) {
+        const o = CV_ORBITALS[i];
+        const x = xs[i];
+        const y = ys[i];
+        const vis = reduced ? 0.55 : blipHit[i];
+        if (vis < 0.03) continue;
+        const scale = 0.72 + vis * 0.55;
+        const rGlow = o.rpx * 3.5 * scale;
+        const g = ctx.createRadialGradient(x, y, 0, x, y, rGlow);
+        g.addColorStop(0, o.col);
+        g.addColorStop(0.4, `${o.col}CC`);
+        g.addColorStop(1, "transparent");
+        ctx.globalAlpha = vis * 0.94;
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x, y, rGlow, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x, y, o.rpx * 0.55 * scale, 0, Math.PI * 2);
+        ctx.fillStyle = o.col;
+        ctx.globalAlpha = Math.min(1, vis * 1.05);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // Sweep arm on top of blips
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(sweepAngle) * R * 1.02, cy + Math.sin(sweepAngle) * R * 1.02);
+      ctx.strokeStyle = "rgba(226,196,120,0.55)";
+      ctx.lineWidth = 1.15;
+      ctx.stroke();
 
       raf = requestAnimationFrame(draw);
     };
 
     raf = requestAnimationFrame(draw);
-    return () => { cancelled = true; cancelAnimationFrame(raf); };
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+    };
   }, [reduced]);
 
   return (
-    <div className="mt-5">
-      <div
-        className="relative overflow-hidden rounded-[18px]"
-        style={{ background: "#0a0a0a", border: "1px solid #1f1f1f" }}
-      >
+    <div className="space-y-4">
+      <VizPanel className="h-[210px]">
         {reduced ? (
           <div
-            className="flex h-[210px] items-end justify-center"
+            className="flex h-[210px] w-full items-center justify-center"
             style={{
               background:
-                "radial-gradient(ellipse 80% 55% at 50% 100%, rgba(46,91,255,0.12), transparent 60%)",
+                "radial-gradient(ellipse 70% 70% at 48% 50%, rgba(38,36,34,0.9), #0a0908 72%)",
             }}
             aria-hidden
-          />
+          >
+            <div
+              className="relative h-28 w-28 rounded-full"
+              style={{ border: "1px solid rgba(55,52,48,0.5)" }}
+            />
+          </div>
         ) : (
           <canvas ref={ref} className="block h-[210px] w-full" aria-hidden />
         )}
-      </div>
+      </VizPanel>
+      <MiniTerm
+        lines={[
+          { prompt: ">", out: '"What needs my attention today?"' },
+          {
+            prompt: "→",
+            out: "2 approvals · 1 blocker · Q3 at risk · 4 wins this week",
+            outStyle: "white",
+          },
+        ]}
+      />
     </div>
   );
 }
 
-// ─── Integrations tuning knobs ───────────────────────────────────────────────
-const INT_NODE_COUNT = 24;
-const INT_SPRING_K = 140;
-const INT_DAMPING = 7.5;
-const INT_NOISE_AMP = 10;
-const INT_REPULSION = 320;
-const INT_LINE_ALPHA = 0.34;
-const INT_HUB_BREATHE = 0.035; // ±3.5% scale pulse
+// ─── Integrations — hub & spokes + outward pulses (legacy card 1) ─────────────
+const INT_NODE_COUNT = 18;
+/** Normalized ring radius (× scale): one shared circle so spokes read as a wheel, not a starburst. */
+const INT_RING_NORM = 0.74;
+const INT_SPRING_K = 118;
+const INT_DAMPING = 8.2;
+/** Small in/out shimmer only; big values break the circular silhouette. */
+const INT_NOISE_AMP = 3.5;
+const INT_REPULSION = 120;
+const INT_LINE_BASE = 0.22;
+const INT_LINE_SHIMMER = 0.07;
+const INT_PULSE_SPEED = 0.44;
+const INT_HUB_BREATHE = 0.04;
 
-// Jewel-tone palette (saturated, not neon)
 const INT_COLORS = [
-  "#00BCD4", "#26C6DA", "#FF7043", "#FF8F00",
-  "#AB47BC", "#7B1FA2", "#E91E63", "#F06292",
-  "#4CAF50", "#66BB6A", "#5C6BC0", "#3F51B5",
-  "#00E5FF", "#FF4081", "#FFCA28", "#FF6D00",
+  "#E040FB", "#AB47BC", "#7C4DFF",
+  "#00BCD4", "#26C6DA", "#448AFF",
+  "#FF7043", "#FF9100",
+  "#69F0AE", "#00E676",
+  "#FF4081", "#F50057",
+  "#40C4FF", "#18FFFF",
 ] as const;
 
 type IntNode = {
-  baseAng: number; baseRad: number; phase: number; driftRate: number;
-  col: string; size: number; x: number; y: number; vx: number; vy: number;
+  baseAng: number;
+  baseRad: number;
+  phase: number;
+  driftRate: number;
+  col: string;
+  size: number;
+  depth: number;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
 };
 
 function makeIntNodes(): IntNode[] {
   return Array.from({ length: INT_NODE_COUNT }, (_, i) => {
-    // Golden-angle distribution for even angular spread
-    const baseAng = (i * 2.399963) % (Math.PI * 2);
-    const baseRad = Math.min(0.35 + ((i * 7) % 13) * 0.05, 0.82);
+    // Even spacing on one circle (avoids “spokes everywhere” look).
+    const baseAng = ((i + 0.5) / INT_NODE_COUNT) * Math.PI * 2;
+    const baseRad = INT_RING_NORM;
+    const depth = 0.32 + ((i * 3) % 7) * 0.09;
     return {
       baseAng,
       baseRad,
       phase: (i * 1.618) % (Math.PI * 2),
-      driftRate: 0.15 + (i % 5) * 0.06,
+      driftRate: 0.09 + (i % 4) * 0.028,
       col: INT_COLORS[i % INT_COLORS.length],
-      size: 2.2 + (i % 3) * 0.7,
-      x: 0, y: 0, vx: 0, vy: 0,
+      size: 2 + (i % 4) * 0.55 + depth * 0.9,
+      depth,
+      x: 0,
+      y: 0,
+      vx: 0,
+      vy: 0,
     };
   });
 }
@@ -985,17 +1483,20 @@ function ExperienceIntegrations({ reduced }: { reduced: boolean }) {
 
       const w = c.clientWidth;
       const h = c.clientHeight;
-      if (w < 8) { raf = requestAnimationFrame(draw); return; }
+      if (w < 8) {
+        raf = requestAnimationFrame(draw);
+        return;
+      }
       c.width = w * dpr;
       c.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "#0D0D0D";
+      ctx.fillRect(0, 0, w, h);
 
       const hubX = w * 0.5;
       const hubY = h * 0.5;
-      const scale = Math.min(w, h) * 0.38;
+      const scale = Math.min(w, h) * 0.4;
 
-      // Place nodes at base positions on first frame
       if (!initialized) {
         initialized = true;
         for (const n of nodes) {
@@ -1005,36 +1506,34 @@ function ExperienceIntegrations({ reduced }: { reduced: boolean }) {
         }
       }
 
-      // Spring physics (skip in reduced mode)
       if (!reduced && dt > 0) {
         for (let i = 0; i < nodes.length; i++) {
           const n = nodes[i];
-          // Slowly drifting target position
-          const tAng = n.baseAng + Math.sin(simTime * n.driftRate + n.phase) * 0.25;
-          const tRad = n.baseRad * scale + Math.sin(simTime * n.driftRate * 0.7 + n.phase + 1) * INT_NOISE_AMP;
+          // Mostly tangential drift: stays on ~one ring.
+          const tAng = n.baseAng + Math.sin(simTime * n.driftRate + n.phase) * 0.09;
+          const tRad =
+            INT_RING_NORM * scale +
+            Math.sin(simTime * n.driftRate * 0.55 + n.phase + 1) * INT_NOISE_AMP;
           const tx = hubX + Math.cos(tAng) * tRad;
           const ty = hubY + Math.sin(tAng) * tRad;
-
-          // Spring toward target
           n.vx += (INT_SPRING_K * (tx - n.x) - INT_DAMPING * n.vx) * dt;
           n.vy += (INT_SPRING_K * (ty - n.y) - INT_DAMPING * n.vy) * dt;
-
-          // Weak repulsion against nearby nodes only (trivial reject: d² check)
           for (let j = i + 1; j < nodes.length; j++) {
             const m = nodes[j];
             const dx = n.x - m.x;
             const dy = n.y - m.y;
             const d2 = dx * dx + dy * dy;
-            const minD = 20;
+            const minD = 14;
             if (d2 < minD * minD && d2 > 0.01) {
               const inv = INT_REPULSION / (d2 * Math.sqrt(d2)) * dt;
-              n.vx += dx * inv; n.vy += dy * inv;
-              m.vx -= dx * inv; m.vy -= dy * inv;
+              n.vx += dx * inv;
+              n.vy += dy * inv;
+              m.vx -= dx * inv;
+              m.vy -= dy * inv;
             }
           }
         }
-
-        const MAX_V = 80;
+        const MAX_V = 72;
         for (const n of nodes) {
           n.x += n.vx * dt;
           n.y += n.vy * dt;
@@ -1045,10 +1544,9 @@ function ExperienceIntegrations({ reduced }: { reduced: boolean }) {
             n.vy *= inv;
           }
         }
-
-        // Keep nodes in an annulus around hub (stable “orbit” without drifting off-canvas)
-        const minR = scale * 0.22;
-        const maxR = scale * 0.88;
+        // Narrow annulus → consistent circular orbit.
+        const minR = scale * (INT_RING_NORM - 0.045);
+        const maxR = scale * (INT_RING_NORM + 0.055);
         for (const n of nodes) {
           const dx = n.x - hubX;
           const dy = n.y - hubY;
@@ -1057,78 +1555,118 @@ function ExperienceIntegrations({ reduced }: { reduced: boolean }) {
             const k = minR / dist;
             n.x = hubX + dx * k;
             n.y = hubY + dy * k;
-            n.vx *= 0.3;
-            n.vy *= 0.3;
+            n.vx *= 0.35;
+            n.vy *= 0.35;
           } else if (dist > maxR) {
             const k = maxR / dist;
             n.x = hubX + dx * k;
             n.y = hubY + dy * k;
-            n.vx *= 0.4;
-            n.vy *= 0.4;
+            n.vx *= 0.42;
+            n.vy *= 0.42;
           }
         }
       }
 
-      // Hub-to-node lines with line shimmer
+      const lineAlpha =
+        INT_LINE_BASE +
+        INT_LINE_SHIMMER * Math.sin(simTime * 1.25) +
+        (reduced ? 0 : 0);
+
+      // Hub → node only (no peer edges)
       for (let i = 0; i < nodes.length; i++) {
         const n = nodes[i];
-        const shimmer = reduced
-          ? INT_LINE_ALPHA
-          : INT_LINE_ALPHA + 0.08 * Math.sin(simTime * 1.2 + i * 0.7);
+        const a = lineAlpha + 0.05 * Math.sin(simTime * 1.1 + i * 0.62);
         ctx.beginPath();
         ctx.moveTo(hubX, hubY);
         ctx.lineTo(n.x, n.y);
-        ctx.strokeStyle = `rgba(50,50,50,${shimmer})`;
-        ctx.lineWidth = 0.7;
+        ctx.strokeStyle = `rgba(82,82,88,${Math.min(0.38, a)})`;
+        ctx.lineWidth = 0.65;
         ctx.stroke();
       }
 
-      // Peripheral nodes
+      // Outward light packets along spokes
+      if (!reduced) {
+        for (let i = 0; i < nodes.length; i++) {
+          const n = nodes[i];
+          let u = (simTime * INT_PULSE_SPEED + i * 0.21) % 1;
+          u = u * u * (3 - 2 * u);
+          const px = hubX + (n.x - hubX) * u;
+          const py = hubY + (n.y - hubY) * u;
+          const envelope = Math.sin(Math.PI * u);
+          const br = 2.2 + envelope * 2.8;
+          const g = ctx.createRadialGradient(px, py, 0, px, py, br * 2.2);
+          g.addColorStop(0, `rgba(255,255,255,${0.22 + envelope * 0.45})`);
+          g.addColorStop(0.35, `rgba(200,220,255,${0.08 + envelope * 0.12})`);
+          g.addColorStop(1, "transparent");
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(px, py, br * 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // Peripheral nodes (depth = size / opacity)
       for (let i = 0; i < nodes.length; i++) {
         const n = nodes[i];
-        const pulse = reduced ? 0.7 : 0.6 + 0.4 * Math.sin(simTime * 1.8 + i * 0.6);
+        const tw = reduced ? 0.75 : 0.55 + 0.45 * Math.sin(simTime * 1.65 + i * 0.5);
+        const r = n.size * (0.85 + n.depth * 0.35) * (0.92 + tw * 0.12);
+        const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 2.4);
+        g.addColorStop(0, n.col);
+        g.addColorStop(0.55, n.col + "99");
+        g.addColorStop(1, "transparent");
+        ctx.fillStyle = g;
+        ctx.globalAlpha = (0.42 + n.depth * 0.48) * (reduced ? 0.85 : 0.75 + tw * 0.25);
         ctx.beginPath();
-        ctx.arc(n.x, n.y, n.size * pulse, 0, Math.PI * 2);
+        ctx.arc(n.x, n.y, r * 2.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, r * 0.55, 0, Math.PI * 2);
         ctx.fillStyle = n.col;
-        ctx.globalAlpha = 0.72 + pulse * 0.2;
+        ctx.globalAlpha = 0.88 * (0.5 + n.depth * 0.5);
         ctx.fill();
         ctx.globalAlpha = 1;
       }
 
-      // Central hub with breathing glow
-      const breath = reduced ? 1 : 1 + INT_HUB_BREATHE * Math.sin(simTime * 0.9);
-      const hubR = 5 * breath;
-      const hg = ctx.createRadialGradient(hubX, hubY, 0, hubX, hubY, hubR * 3.5);
-      hg.addColorStop(0, "rgba(255,255,255,0.9)");
-      hg.addColorStop(0.4, "rgba(200,210,255,0.18)");
+      // Bright white hub + soft bloom (very slight warm rim)
+      const breath = reduced ? 1 : 1 + INT_HUB_BREATHE * Math.sin(simTime * 0.85);
+      const hubGlowR = 22 * breath;
+      const hg = ctx.createRadialGradient(hubX, hubY, 0, hubX, hubY, hubGlowR);
+      hg.addColorStop(0, "rgba(255,255,255,0.98)");
+      hg.addColorStop(0.12, "rgba(255,255,255,0.55)");
+      hg.addColorStop(0.45, "rgba(197,160,89,0.12)");
       hg.addColorStop(1, "transparent");
       ctx.fillStyle = hg;
       ctx.beginPath();
-      ctx.arc(hubX, hubY, hubR * 3.5, 0, Math.PI * 2);
+      ctx.arc(hubX, hubY, hubGlowR, 0, Math.PI * 2);
       ctx.fill();
-      // Bright core dot
+      ctx.shadowColor = "rgba(255,255,255,0.55)";
+      ctx.shadowBlur = 14 * breath;
       ctx.beginPath();
-      ctx.arc(hubX, hubY, 3, 0, Math.PI * 2);
+      ctx.arc(hubX, hubY, 3.2 * breath, 0, Math.PI * 2);
       ctx.fillStyle = "#FFFFFF";
       ctx.fill();
+      ctx.shadowBlur = 0;
 
       raf = requestAnimationFrame(draw);
     };
 
     raf = requestAnimationFrame(draw);
-    return () => { cancelled = true; cancelAnimationFrame(raf); };
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+    };
   }, [reduced]);
 
   return (
     <div className="mt-5">
       <div
         className="relative overflow-hidden rounded-[18px]"
-        style={{ background: "#020202", border: `1px solid ${LEGACY.borderGold}` }}
+        style={{ background: "#0D0D0D", border: `1px solid ${LEGACY.borderGold}` }}
       >
         {reduced ? (
           <div className="flex h-[220px] items-center justify-center opacity-55" aria-hidden>
             <div className="relative h-24 w-24 rounded-full" style={{ border: `1px solid ${LEGACY.borderGold}` }}>
-              <span className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
+              <span className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_16px_rgba(255,255,255,0.5)]" />
             </div>
           </div>
         ) : (
@@ -1147,7 +1685,7 @@ function ExperienceIntegrations({ reduced }: { reduced: boolean }) {
             className="mt-1.5 font-[family-name:var(--font-sans)] text-[10px] font-bold uppercase tracking-[0.2em]"
             style={{ color: LEGACY.textMuted }}
           >
-            Integrations
+            INTEGRATIONS
           </p>
         </div>
         <div>
@@ -1161,7 +1699,7 @@ function ExperienceIntegrations({ reduced }: { reduced: boolean }) {
             className="mt-1.5 font-[family-name:var(--font-sans)] text-[10px] font-bold uppercase tracking-[0.18em]"
             style={{ color: LEGACY.textMuted }}
           >
-            Time to Value
+            TIME TO VALUE
           </p>
         </div>
       </div>
