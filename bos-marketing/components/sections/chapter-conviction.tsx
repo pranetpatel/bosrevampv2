@@ -13,7 +13,7 @@ export function ChapterConvictionSection() {
     >
       <div className="mx-auto max-w-6xl">
         <MotionReveal>
-          <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-white/40">
+          <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-white/52">
             Why it matters
           </p>
           <h2 className="mt-5 max-w-3xl font-[family-name:var(--font-display)] text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.06] tracking-tight text-white">
@@ -59,7 +59,7 @@ export function ChapterConvictionSection() {
         </MotionReveal>
         <MotionReveal delay={0.14}>
           <div className="mx-auto mt-20 max-w-3xl border-t border-white/8 pt-14 text-center">
-            <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-white/40">
+            <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-white/52">
               Built for
             </p>
             <p className="mt-6 font-[family-name:var(--font-display)] text-[clamp(1.5rem,3.5vw,2.5rem)] font-semibold leading-[1.1] tracking-tight text-white">

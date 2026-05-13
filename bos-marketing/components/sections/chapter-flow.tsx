@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FlowShowcaseVideo } from "@/components/flow-showcase-video";
 import { MotionClipReveal, MotionReveal, MotionStagger, MotionStaggerItem } from "@/components/motion-reveal";
 
 const steps = [
@@ -16,7 +17,7 @@ export function ChapterFlowSection() {
       <div className="mx-auto max-w-6xl">
         <MotionReveal className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <div>
-            <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-white/40">
+            <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-white/52">
               How it works
             </p>
             <h2 className="mt-5 font-[family-name:var(--font-display)] text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.06] tracking-tight text-white">
@@ -31,6 +32,9 @@ export function ChapterFlowSection() {
             Full flow →
           </Link>
         </MotionReveal>
+        <MotionReveal delay={0.1} className="mt-16">
+          <FlowShowcaseVideo />
+        </MotionReveal>
         <MotionStagger className="mt-16 grid gap-8 md:grid-cols-3">
           {steps.map((s, idx) => (
             <MotionStaggerItem key={s.title}>
@@ -41,7 +45,7 @@ export function ChapterFlowSection() {
                 <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold leading-[1.1] text-white md:text-2xl">
                   {s.title}
                 </h3>
-                <p className="mt-2.5 font-[family-name:var(--font-ui)] text-sm leading-relaxed text-white/50">
+                <p className="mt-2.5 font-[family-name:var(--font-ui)] text-sm leading-relaxed text-white/72">
                   {s.line}
                 </p>
               </div>

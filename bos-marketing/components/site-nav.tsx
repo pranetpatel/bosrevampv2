@@ -55,7 +55,7 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
           <Link
             key={l.href}
             href={l.href}
-            className="font-[family-name:var(--font-ui)] text-[11px] font-semibold uppercase tracking-[0.14em] text-white/85 transition-opacity hover:opacity-80"
+            className="font-[family-name:var(--font-ui)] text-[11px] font-semibold uppercase tracking-[0.14em] text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] md:text-[12px]"
           >
             {l.label}
           </Link>

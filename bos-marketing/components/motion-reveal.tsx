@@ -23,9 +23,9 @@ export function MotionReveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={{ once: true, amount: 0.01, margin: "0px 0px -5% 0px" }}
       transition={{ duration: 0.6, delay, ease: EASE }}
     >
       {children}
@@ -51,7 +51,7 @@ export function MotionStagger({
       className={className}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.12 }}
+      viewport={{ once: true, amount: 0.01, margin: "0px 0px -5% 0px" }}
       variants={{
         hidden: {},
         show: {
@@ -94,11 +94,6 @@ export function MotionStaggerItem({
   );
 }
 
-/**
- * Curtain-rise reveal for display headlines.
- * Wrap each visual line in its own <MotionClipReveal> with increasing delay.
- * The parent <h2> retains its display/font classes; this handles the animation only.
- */
 export function MotionClipReveal({
   children,
   delay = 0,
@@ -117,12 +112,12 @@ export function MotionClipReveal({
   }
 
   return (
-    <Tag className={`block overflow-hidden ${className}`}>
+    <Tag className={`block ${className}`}>
       <motion.span
         className="block"
-        initial={{ y: "105%" }}
-        whileInView={{ y: "0%" }}
-        viewport={{ once: true, amount: 0.12 }}
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.01, margin: "0px 0px -5% 0px" }}
         transition={{ duration: 0.72, delay, ease: EASE }}
       >
         {children}

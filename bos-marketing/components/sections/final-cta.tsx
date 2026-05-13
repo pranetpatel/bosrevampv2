@@ -18,7 +18,7 @@ export function FinalCtaSection() {
           <MotionClipReveal delay={0.1} as="span">One system that</MotionClipReveal>
           <MotionClipReveal delay={0.22} as="span">runs everything.</MotionClipReveal>
         </h2>
-        <p className="mx-auto mt-8 max-w-lg font-[family-name:var(--font-display)] text-xl font-semibold leading-[1.15] text-white/60 md:text-2xl">
+        <p className="mx-auto mt-8 max-w-lg font-[family-name:var(--font-display)] text-xl font-semibold leading-[1.15] text-white/78 md:text-2xl">
           Run your business on BOS
         </p>
         <div className="mt-12 flex flex-wrap justify-center gap-4">

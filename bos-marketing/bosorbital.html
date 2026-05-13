@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENIE AI — BOS Orbital</title>
+<style>
+@font-face { font-family:"Jura"; src:url("../../fonts/Jura-SemiBold.ttf") format("truetype"); font-weight:600; font-display:swap; }
+@font-face { font-family:"Jura"; src:url("../../fonts/Jura-Regular.ttf") format("truetype"); font-weight:400; font-display:swap; }
+@font-face { font-family:"Jura"; src:url("../../fonts/Jura-Bold.ttf") format("truetype"); font-weight:700; font-display:swap; }
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap");
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html,body { height:100%; }
+body { background:#080808; font-family:"Plus Jakarta Sans",sans-serif; color:white; overflow-x:hidden; }
+
+/* ── Section ── */
+.bos-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 80px 40px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Deep bg gradient */
+.bos-section::before {
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(26,10,46,0.95) 0%, #080808 70%);
+  pointer-events:none;
+}
+
+/* ── Header ── */
+.bos-header { position:relative; z-index:10; text-align:center; margin-bottom:60px; }
+.bos-eyebrow {
+  display:inline-flex; align-items:center; gap:10px; margin-bottom:16px;
+}
+.bos-eyebrow-line { width:28px; height:1px; background:#DA34F1; }
+.bos-eyebrow-text { font-family:"Jura",sans-serif; font-size:11px; font-weight:600; letter-spacing:0.24em; text-transform:uppercase; color:#DA34F1; }
+.bos-title { font-family:"Jura",sans-serif; font-size:52px; font-weight:600; line-height:1.1; letter-spacing:-0.02em; color:white; margin-bottom:14px; }
+.bos-title .cyan { color:#04D1E0; }
+.bos-title .purple { color:#DA34F1; }
+.bos-subtitle { font-family:"Plus Jakarta Sans",sans-serif; font-size:16px; color:rgba(255,255,255,0.4); }
+
+/* ── Two-column layout ── */
+.bos-body { position:relative; z-index:10; display:flex; gap:0; width:100%; max-width:1200px; align-items:center; }
+
+/* ── Orbital canvas side ── */
+.orbital-side { flex:0 0 580px; display:flex; align-items:center; justify-content:center; }
+.orbital-wrap {
+  position:relative; width:520px; height:520px; cursor:default;
+  user-select:none;
+}
+
+/* SVG behind nodes */
+.orbital-svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
+
+/* Center hub */
+.center-hub {
+  position:absolute;
+  left:260px; top:260px;
+  transform:translate(-50%,-50%);
+  width:72px; height:72px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(218,52,241,0.25) 0%, rgba(26,83,253,0.15) 60%, transparent 100%);
+  border:1.5px solid rgba(218,52,241,0.5);
+  box-shadow:0 0 32px rgba(218,52,241,0.35), 0 0 64px rgba(218,52,241,0.12), inset 0 0 20px rgba(218,52,241,0.1);
+  display:flex; align-items:center; justify-content:center;
+  z-index:20;
+  animation: hub-pulse 3s ease-in-out infinite;
+}
+@keyframes hub-pulse {
+  0%,100% { box-shadow:0 0 32px rgba(218,52,241,0.35), 0 0 64px rgba(218,52,241,0.12); }
+  50%      { box-shadow:0 0 48px rgba(218,52,241,0.55), 0 0 96px rgba(218,52,241,0.2); }
+}
+.center-hub svg { width:28px; height:28px; }
+
+/* Satellite node */
+.sat-node {
+  position:absolute;
+  left:260px; top:260px;
+  width:56px; height:56px;
+  transform:translate(-50%,-50%);
+  cursor:pointer;
+  will-change:transform,opacity;
+  transition:none; /* we animate via JS */
+  z-index:15;
+}
+.sat-node-inner {
+  width:56px; height:56px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+  transition:box-shadow 0.3s, border-color 0.3s, transform 0.2s;
+  transform:translate(-50%,-50%);
+}
+.sat-node:hover .sat-node-inner { transform:translate(-50%,-50%) scale(1.15); }
+.sat-node.selected .sat-node-inner { transform:translate(-50%,-50%) scale(1.2); }
+.sat-node-label {
+  position:absolute; top:calc(100% + 6px); left:50%; transform:translateX(-50%);
+  font-family:"Jura",sans-serif; font-size:10px; font-weight:600; letter-spacing:0.12em;
+  text-transform:uppercase; white-space:nowrap; color:rgba(255,255,255,0.6);
+  text-shadow:0 0 8px rgba(0,0,0,0.8);
+  pointer-events:none;
+  transition:color 0.3s;
+}
+.sat-node.selected .sat-node-label { color:white; }
+
+/* ── Info Panel side ── */
+.info-side { flex:1; padding-left:40px; min-height:420px; display:flex; align-items:center; }
+.info-empty {
+  width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:16px; text-align:center; opacity:0.4;
+}
+.info-empty-icon {
+  width:56px; height:56px; border-radius:50%;
+  background:rgba(218,52,241,0.08); border:1px solid rgba(218,52,241,0.2);
+  display:flex; align-items:center; justify-content:center;
+  animation:hub-pulse 3s ease-in-out infinite;
+}
+.info-empty p { font-family:"Plus Jakarta Sans",sans-serif; font-size:13px; color:rgba(255,255,255,0.4); max-width:180px; line-height:1.6; }
+
+.info-card {
+  width:100%; border-radius:20px; padding:32px;
+  background:rgba(255,255,255,0.035);
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  border:1px solid transparent;
+  position:relative; overflow:hidden;
+  animation:info-in 0.35s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes info-in { from{opacity:0;transform:translateY(12px) scale(0.97)} to{opacity:1;transform:none} }
+
+.info-icon-wrap {
+  width:60px; height:60px; border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:20px;
+  animation:hub-pulse 3s ease-in-out infinite;
+}
+.info-name { font-family:"Jura",sans-serif; font-size:22px; font-weight:600; color:rgba(255,255,255,0.95); margin-bottom:4px; }
+.info-tagline { font-size:13px; margin-bottom:16px; }
+.info-divider { height:1px; margin-bottom:16px; }
+.info-desc { font-size:14px; line-height:1.72; color:rgba(255,255,255,0.5); margin-bottom:20px; }
+.info-features { list-style:none; display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+.info-features li { display:flex; align-items:center; gap:10px; }
+.info-feat-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.info-features span { font-size:13px; color:rgba(255,255,255,0.65); }
+.info-cta {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 20px; border-radius:9999px;
+  font-family:"Plus Jakarta Sans",sans-serif; font-size:13px; font-weight:600;
+  cursor:pointer; text-decoration:none;
+  transition:transform 0.2s, box-shadow 0.2s;
+}
+.info-cta:hover { transform:scale(1.04); }
+
+/* ── Hint ── */
+.bos-hint {
+  position:relative; z-index:10; margin-top:28px;
+  font-family:"Jura",sans-serif; font-size:9px; font-weight:600;
+  letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.18);
+  display:flex; align-items:center; gap:12px;
+}
+.bos-hint::before,.bos-hint::after { content:""; flex:1; max-width:60px; height:1px; background:rgba(255,255,255,0.1); }
+</style>
+</head>
+<body>
+<section class="bos-section">
+  <!-- Header -->
+  <div class="bos-header">
+    <div class="bos-eyebrow">
+      <div class="bos-eyebrow-line"></div>
+      <span class="bos-eyebrow-text">Interactive BOS</span>
+      <div class="bos-eyebrow-line"></div>
+    </div>
+    <h2 class="bos-title">One Platform. <span class="purple">Four</span> <span class="cyan">Systems.</span></h2>
+    <p class="bos-subtitle">Click any element in the orbital to explore what it does.</p>
+  </div>
+
+  <!-- Body -->
+  <div class="bos-body">
+    <!-- Orbital -->
+    <div class="orbital-side">
+      <div class="orbital-wrap" id="orbital">
+
+        <!-- SVG: orbit ellipse + connection lines -->
+        <svg class="orbital-svg" id="orbital-svg" viewBox="0 0 520 520">
+          <defs>
+            <radialGradient id="hub-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#DA34F1" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#DA34F1" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <!-- Soft ambient glow behind center -->
+          <circle cx="260" cy="260" r="160" fill="url(#hub-glow)"/>
+          <!-- Orbit ellipse — ry updated via JS -->
+          <ellipse id="orbit-ellipse" cx="260" cy="260" rx="190" ry="109"
+            stroke="rgba(218,52,241,0.2)" stroke-width="1" stroke-dasharray="6 10" fill="none"/>
+          <!-- Connection lines — updated via JS -->
+          <line id="line-0" x1="260" y1="260" x2="450" y2="260" stroke="#04D1E0" stroke-width="1" stroke-dasharray="4 7" opacity="0.25"/>
+          <line id="line-1" x1="260" y1="260" x2="260" y2="150" stroke="#DA34F1" stroke-width="1" stroke-dasharray="4 7" opacity="0.25"/>
+          <line id="line-2" x1="260" y1="260" x2="70"  y2="260" stroke="#3CD3FE" stroke-width="1" stroke-dasharray="4 7" opacity="0.25"/>
+          <line id="line-3" x1="260" y1="260" x2="260" y2="370" stroke="#6B5EFF" stroke-width="1" stroke-dasharray="4 7" opacity="0.25"/>
+        </svg>
+
+        <!-- Center hub -->
+        <div class="center-hub">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <defs><radialGradient id="chg" cx="35%" cy="35%" r="65%"><stop offset="0%" stop-color="#DA34F1"/><stop offset="100%" stop-color="#1A53FD"/></radialGradient></defs>
+            <circle cx="14" cy="14" r="11" stroke="url(#chg)" stroke-width="1.5" fill="none"/>
+            <circle cx="14" cy="14" r="4" fill="url(#chg)" opacity="0.9"/>
+            <circle cx="14" cy="14" r="1.5" fill="white" opacity="0.8"/>
+          </svg>
+        </div>
+
+        <!-- Satellite nodes — positioned via JS -->
+        <!-- Node 0: BOS Chat (#04D1E0) -->
+        <div class="sat-node" id="node-0" data-id="chat">
+          <div class="sat-node-inner" style="background:rgba(4,209,224,0.12);border:2px solid rgba(4,209,224,0.6);box-shadow:0 0 18px rgba(4,209,224,0.25);">
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+              <path d="M4 6C4 4.895 4.895 4 6 4H26C27.105 4 28 4.895 28 6V20C28 21.105 27.105 22 26 22H18L12 28V22H6C4.895 22 4 21.105 4 20V6Z" stroke="#04D1E0" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M9 11H23M9 15H18" stroke="#04D1E0" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="sat-node-label" style="color:rgba(4,209,224,0.7);">BOS Chat</div>
+        </div>
+
+        <!-- Node 1: Project FX (#DA34F1) -->
+        <div class="sat-node" id="node-1" data-id="project">
+          <div class="sat-node-inner" style="background:rgba(218,52,241,0.12);border:2px solid rgba(218,52,241,0.6);box-shadow:0 0 18px rgba(218,52,241,0.25);">
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+              <rect x="4" y="4" width="24" height="24" rx="3" stroke="#DA34F1" stroke-width="1.5"/>
+              <path d="M10 11L13.5 14.5L10 18" stroke="#DA34F1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 18H22" stroke="#DA34F1" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="sat-node-label" style="color:rgba(218,52,241,0.7);">Project FX</div>
+        </div>
+
+        <!-- Node 2: Data Drive (#3CD3FE) -->
+        <div class="sat-node" id="node-2" data-id="data">
+          <div class="sat-node-inner" style="background:rgba(60,211,254,0.12);border:2px solid rgba(60,211,254,0.6);box-shadow:0 0 18px rgba(60,211,254,0.25);">
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+              <ellipse cx="16" cy="9" rx="10" ry="4" stroke="#3CD3FE" stroke-width="1.5"/>
+              <path d="M6 9V16C6 18.21 10.477 20 16 20C21.523 20 26 18.21 26 16V9" stroke="#3CD3FE" stroke-width="1.5"/>
+              <path d="M6 16V23C6 25.21 10.477 27 16 27C21.523 27 26 25.21 26 23V16" stroke="#3CD3FE" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="sat-node-label" style="color:rgba(60,211,254,0.7);">Data Drive</div>
+        </div>
+
+        <!-- Node 3: Agent Builder (#6B5EFF) -->
+        <div class="sat-node" id="node-3" data-id="agent">
+          <div class="sat-node-inner" style="background:rgba(107,94,255,0.12);border:2px solid rgba(107,94,255,0.6);box-shadow:0 0 18px rgba(107,94,255,0.25);">
+            <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+              <rect x="8" y="12" width="16" height="14" rx="4" stroke="#6B5EFF" stroke-width="1.5"/>
+              <circle cx="12.5" cy="18" r="1.5" fill="#6B5EFF"/>
+              <circle cx="19.5" cy="18" r="1.5" fill="#6B5EFF"/>
+              <path d="M13 23C13 23 14.5 24.5 16 24.5C17.5 24.5 19 23 19 23" stroke="#6B5EFF" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M12 12V8M20 12V8" stroke="#6B5EFF" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="12" cy="7" r="1.5" stroke="#6B5EFF" stroke-width="1.25"/>
+              <circle cx="20" cy="7" r="1.5" stroke="#6B5EFF" stroke-width="1.25"/>
+            </svg>
+          </div>
+          <div class="sat-node-label" style="color:rgba(107,94,255,0.7);">Agent Builder</div>
+        </div>
+
+      </div><!-- /orbital-wrap -->
+    </div><!-- /orbital-side -->
+
+    <!-- Info panel -->
+    <div class="info-side" id="info-side">
+      <div class="info-empty" id="info-empty">
+        <div class="info-empty-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="#DA34F1" stroke-width="1.4" stroke-dasharray="3 3"/>
+            <circle cx="10" cy="10" r="2" fill="#DA34F1" opacity="0.7"/>
+          </svg>
+        </div>
+        <p>Click an element in the orbital to explore it</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bos-hint">Hover &nbsp;·&nbsp; then click to explore</div>
+</section>
+
+<script>
+// ─── Data ──────────────────────────────────────────────────────────────────
+const NODES_DATA = [
+  {
+    id:"chat", color:"#04D1E0",
+    name:"BOS Chat", tagline:"Real-time intelligent conversations.",
+    desc:"Run your team, clients, and agents through one conversation layer. Messages trigger actions — automatically.",
+    features:["Natural language processing","Context-aware responses","Multi-turn conversations","Integrated with all data"],
+  },
+  {
+    id:"project", color:"#DA34F1",
+    name:"Project FX", tagline:"Orchestrate complex workflows effortlessly.",
+    desc:"Tasks, CRM, and workflows — unified. Work created from conversations. Everything stays in sync.",
+    features:["Workflow automation","Task prioritization","Real-time collaboration","AI-powered suggestions"],
+  },
+  {
+    id:"data", color:"#3CD3FE",
+    name:"Data Drive", tagline:"Unified data management across all systems.",
+    desc:"A single source of truth for all company data. Documents, structured data, permissions, real-time collaboration.",
+    features:["Multi-source integration","Real-time synchronization","Data governance & security","Advanced analytics"],
+  },
+  {
+    id:"agent", color:"#6B5EFF",
+    name:"Agent Builder", tagline:"Create intelligent agents that work 24/7.",
+    desc:"Create and deploy agents that execute work. No-code. Define goals, actions, permissions, and let them run.",
+    features:["No-code agent creation","Natural language training","Multi-step automation","Performance analytics"],
+  },
+];
+
+const ICON_SVGS = [
+  `<svg width="28" height="28" viewBox="0 0 32 32" fill="none"><path d="M4 6C4 4.895 4.895 4 6 4H26C27.105 4 28 4.895 28 6V20C28 21.105 27.105 22 26 22H18L12 28V22H6C4.895 22 4 21.105 4 20V6Z" stroke="#04D1E0" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 11H23M9 15H18" stroke="#04D1E0" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  `<svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="3" stroke="#DA34F1" stroke-width="1.5"/><path d="M10 11L13.5 14.5L10 18" stroke="#DA34F1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 18H22" stroke="#DA34F1" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  `<svg width="28" height="28" viewBox="0 0 32 32" fill="none"><ellipse cx="16" cy="9" rx="10" ry="4" stroke="#3CD3FE" stroke-width="1.5"/><path d="M6 9V16C6 18.21 10.477 20 16 20C21.523 20 26 18.21 26 16V9" stroke="#3CD3FE" stroke-width="1.5"/><path d="M6 16V23C6 25.21 10.477 27 16 27C21.523 27 26 25.21 26 23V16" stroke="#3CD3FE" stroke-width="1.5"/></svg>`,
+  `<svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect x="8" y="12" width="16" height="14" rx="4" stroke="#6B5EFF" stroke-width="1.5"/><circle cx="12.5" cy="18" r="1.5" fill="#6B5EFF"/><circle cx="19.5" cy="18" r="1.5" fill="#6B5EFF"/><path d="M13 23C13 23 14.5 24.5 16 24.5C17.5 24.5 19 23 19 23" stroke="#6B5EFF" stroke-width="1.5" stroke-linecap="round"/><path d="M12 12V8M20 12V8" stroke="#6B5EFF" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="7" r="1.5" stroke="#6B5EFF" stroke-width="1.25"/><circle cx="20" cy="7" r="1.5" stroke="#6B5EFF" stroke-width="1.25"/></svg>`,
+];
+
+// ─── State ─────────────────────────────────────────────────────────────────
+const CX = 260, CY = 260, R = 190;
+const TILT_3D = 55 * Math.PI / 180;
+const TILT_2D = 0;
+const SPEED_NORMAL = 1.0;
+const SPEED_HOVER  = 0.04;
+const BASE_PERIOD  = 12; // seconds per revolution at speed=1
+
+// Live mutable state (avoids React overhead — direct DOM)
+const anim = {
+  angle: 0,
+  tilt: TILT_3D,
+  targetTilt: TILT_3D,
+  speed: SPEED_NORMAL,
+  targetSpeed: SPEED_NORMAL,
+  last: 0,
+};
+
+// Node offsets evenly spaced
+const OFFSETS = [0, Math.PI * 0.5, Math.PI, Math.PI * 1.5];
+
+let selectedId = null;
+
+// ─── DOM refs ──────────────────────────────────────────────────────────────
+const orbital  = document.getElementById('orbital');
+const ellipse  = document.getElementById('orbit-ellipse');
+const lines    = [0,1,2,3].map(i => document.getElementById(`line-${i}`));
+const nodes    = [0,1,2,3].map(i => document.getElementById(`node-${i}`));
+const infoSide = document.getElementById('info-side');
+const infoEmpty= document.getElementById('info-empty');
+
+// ─── Animation loop ────────────────────────────────────────────────────────
+function tick(now) {
+  const dt = Math.min((now - (anim.last || now)) / 1000, 0.05);
+  anim.last = now;
+
+  // Lerp tilt (fast ~2s transition)
+  anim.tilt  += (anim.targetTilt  - anim.tilt)  * Math.min(dt * 2.5, 1);
+  // Lerp speed (smooth ~1s transition)
+  anim.speed += (anim.targetSpeed - anim.speed) * Math.min(dt * 3, 1);
+
+  // Advance angle
+  anim.angle += dt * (Math.PI * 2 / BASE_PERIOD) * anim.speed;
+
+  const cosT = Math.cos(anim.tilt);
+  const sinT = Math.sin(anim.tilt);
+
+  // Update ellipse ry
+  ellipse.setAttribute('ry', (R * cosT).toFixed(2));
+
+  // Update nodes
+  OFFSETS.forEach((offset, i) => {
+    const a = anim.angle + offset;
+    const nx = CX + R * Math.cos(a);
+    const ny = CY + R * Math.sin(a) * cosT;
+    const depth = Math.sin(a) * sinT; // -1 (back) to +1 (front)
+    const t = (depth + 1) / 2;        // 0..1
+    const scale   = 0.60 + 0.40 * t;
+    const opacity = 0.40 + 0.60 * t;
+    const zIndex  = Math.round(t * 20);
+
+    const node = nodes[i];
+    // Translate so center of node is at (nx, ny) relative to orbital center
+    node.style.transform = `translate(${nx - CX}px, ${ny - CY}px)`;
+    node.style.opacity   = opacity.toFixed(3);
+    node.style.zIndex    = zIndex;
+
+    // Scale applied on inner (so label doesn't scale)
+    const inner = node.querySelector('.sat-node-inner');
+    if (inner) inner.style.transform = `translate(-50%,-50%) scale(${scale.toFixed(3)})`;
+
+    // Connection line endpoints
+    const line = lines[i];
+    line.setAttribute('x2', nx.toFixed(2));
+    line.setAttribute('y2', ny.toFixed(2));
+    line.setAttribute('opacity', (opacity * 0.4).toFixed(3));
+  });
+
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+// ─── Hover — switch 3D ↔ 2D ───────────────────────────────────────────────
+orbital.addEventListener('mouseenter', () => {
+  anim.targetTilt  = TILT_2D;
+  anim.targetSpeed = SPEED_HOVER;
+});
+orbital.addEventListener('mouseleave', () => {
+  anim.targetTilt  = TILT_3D;
+  anim.targetSpeed = SPEED_NORMAL;
+});
+
+// ─── Click — show info panel ───────────────────────────────────────────────
+nodes.forEach((node, i) => {
+  node.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const data = NODES_DATA[i];
+    if (selectedId === data.id) {
+      selectedId = null;
+      nodes.forEach(n => n.classList.remove('selected'));
+      showEmpty();
+      return;
+    }
+    selectedId = data.id;
+    nodes.forEach(n => n.classList.remove('selected'));
+    node.classList.add('selected');
+    showCard(data, i);
+  });
+});
+
+function showEmpty() {
+  infoSide.innerHTML = `
+    <div class="info-empty">
+      <div class="info-empty-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="8" stroke="#DA34F1" stroke-width="1.4" stroke-dasharray="3 3"/>
+          <circle cx="10" cy="10" r="2" fill="#DA34F1" opacity="0.7"/>
+        </svg>
+      </div>
+      <p>Click an element in the orbital to explore it</p>
+    </div>`;
+}
+
+function showCard(data, i) {
+  const c = data.color;
+  const hex = c.replace('#','');
+  infoSide.innerHTML = `
+    <div class="info-card" style="border-color:${c}28;box-shadow:0 0 60px ${c}12,inset 0 0 30px rgba(0,0,0,0.2);">
+      <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,${c}18 0%,transparent 70%);pointer-events:none;"></div>
+      <div class="info-icon-wrap" style="background:${c}18;border:1px solid ${c}30;">
+        ${ICON_SVGS[i]}
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div>
+          <div class="info-name">${data.name}</div>
+          <div class="info-tagline" style="color:${c};">${data.tagline}</div>
+        </div>
+      </div>
+      <div class="info-divider" style="background:linear-gradient(to right,${c}40,transparent);"></div>
+      <p class="info-desc">${data.desc}</p>
+      <ul class="info-features">
+        ${data.features.map(f => `<li><span class="info-feat-dot" style="background:${c};box-shadow:0 0 6px ${c};"></span><span>${f}</span></li>`).join('')}
+      </ul>
+      <a class="info-cta" href="#" style="background:${c}18;border:1px solid ${c}40;color:${c};">
+        Explore ${data.name}
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>`;
+}
+</script>
+</body>
+</html>

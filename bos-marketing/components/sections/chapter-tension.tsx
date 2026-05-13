@@ -24,7 +24,7 @@ export function ChapterTensionSection() {
           <div className="overflow-hidden rounded-[2rem] border border-white/8 bg-gradient-to-br from-[#0a1528] via-[#140a24] to-[#0a0a0a] shadow-[0_32px_100px_rgba(0,0,0,0.5)]">
             <div className="relative px-8 py-16 md:px-14 md:py-24">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_25%,rgba(218,52,241,0.13),transparent_55%)]" />
-              <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-white/40">
+              <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--cyan)] drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
                 The gap
               </p>
               <h2 className="mt-5 font-[family-name:var(--font-display)] text-[clamp(2.25rem,5.5vw,4.75rem)] font-semibold leading-[1.06] tracking-tight">
