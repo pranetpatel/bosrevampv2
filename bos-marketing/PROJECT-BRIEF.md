@@ -40,7 +40,24 @@
 | `tribe`      | Audience |
 | `close`      | Final CTA |
 
-Routes: `/demo`, `/how-it-works`, `/resources`, `/mba`.
+**Inner routes** (all use [`InnerPageShell`](components/inner-page-shell.tsx) pattern: `SiteNav` + `SiteFooter`):
+
+| Route | Purpose |
+|-------|---------|
+| `/product` | Product modules overview |
+| `/how-it-works` | Execution flow |
+| `/mba` | BOS MBA program |
+| `/resources` | Hub / playbooks entry |
+| `/pricing` | Editions + stack value |
+| `/demo` | Demo / video |
+| `/manifesto` | Public manifesto |
+| `/projects` | Case studies |
+| `/compare` | vs stack / categories |
+| `/technology` | Invention / category story |
+| `/industry` | ICP / vertical |
+| `/investors` | Investor narrative |
+| `/partners` | Partner program |
+| `/story` | Founder story |
 
 ## Media pipeline
 

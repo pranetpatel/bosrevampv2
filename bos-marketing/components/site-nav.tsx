@@ -5,10 +5,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const links = [
+  { href: "/product", label: "Product" },
   { href: "/how-it-works", label: "How it works" },
-  { href: "/resources", label: "Resources" },
   { href: "/mba", label: "MBA" },
-  { href: "/demo", label: "Demo" },
+  { href: "/resources", label: "Resources" },
+  { href: "/pricing", label: "Pricing" },
 ] as const;
 
 /**
@@ -16,6 +17,7 @@ const links = [
  */
 export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
   const [scrollBasedSolid, setScrollBasedSolid] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (alwaysSolid) return;
@@ -35,17 +37,26 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
     };
   }, [alwaysSolid]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
+
   const solidBar = alwaysSolid || scrollBasedSolid;
 
   return (
     <header
-      className={`fixed left-0 right-0 top-0 z-[200] flex items-center justify-between px-6 py-5 transition-colors duration-300 md:px-14 ${
+      className={`fixed left-0 right-0 top-0 z-[200] flex items-center justify-between gap-4 px-6 py-5 transition-colors duration-300 md:px-14 ${
         solidBar
           ? "border-b border-white/10 bg-[var(--surface-dark)]/92 backdrop-blur-md"
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <Link href="/" className="flex items-center drop-shadow-[0_1px_12px_rgba(0,0,0,0.5)]">
+      <Link href="/" className="flex shrink-0 items-center drop-shadow-[0_1px_12px_rgba(0,0,0,0.5)]">
         <Image
           src="/BOS Branding/FullLogoNoBackground.svg"
           alt="BOS"
@@ -65,12 +76,62 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
           </Link>
         ))}
       </nav>
-      <Link
-        href="/demo"
-        className="font-[family-name:var(--font-ui)] bg-[var(--cyan)] px-5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--surface-dark)] shadow-[0_0_20px_rgba(4,209,224,0.35)] transition hover:-translate-y-px hover:shadow-[0_0_32px_rgba(4,209,224,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)]"
-      >
-        Get started
-      </Link>
+      <div className="flex items-center gap-2 sm:gap-3">
+        <Link
+          href="/demo"
+          className="inline-flex shrink-0 font-[family-name:var(--font-ui)] bg-[var(--cyan)] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--surface-dark)] shadow-[0_0_20px_rgba(4,209,224,0.35)] transition hover:-translate-y-px hover:shadow-[0_0_32px_rgba(4,209,224,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)] sm:px-5 sm:text-[11px] sm:tracking-[0.12em]"
+        >
+          Get started
+        </Link>
+        <button
+          type="button"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/20 text-white transition hover:border-white/40 hover:bg-white/[0.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)] md:hidden"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav-panel"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          <span className="sr-only">Menu</span>
+          <span className="flex flex-col gap-1.5" aria-hidden>
+            <span
+              className={`block h-0.5 w-5 bg-white transition ${menuOpen ? "translate-y-2 rotate-45" : ""}`}
+            />
+            <span className={`block h-0.5 w-5 bg-white transition ${menuOpen ? "opacity-0" : ""}`} />
+            <span
+              className={`block h-0.5 w-5 bg-white transition ${menuOpen ? "-translate-y-2 -rotate-45" : ""}`}
+            />
+          </span>
+        </button>
+      </div>
+      {menuOpen ? (
+        <div
+          id="mobile-nav-panel"
+          className="fixed inset-x-0 top-[72px] z-[199] border-b border-white/10 bg-[var(--surface-dark)]/98 px-6 py-6 shadow-xl backdrop-blur-md md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site menu"
+        >
+          <nav className="flex flex-col gap-1" aria-label="Mobile main">
+            {links.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="rounded-md px-3 py-3 font-[family-name:var(--font-ui)] text-sm font-semibold uppercase tracking-[0.12em] text-white/90 hover:bg-white/[0.06] hover:text-[var(--cyan)]"
+                onClick={() => setMenuOpen(false)}
+              >
+                {l.label}
+              </Link>
+            ))}
+            <Link
+              href="/demo"
+              className="mt-4 inline-flex justify-center rounded-md bg-[var(--cyan)] px-4 py-3 font-[family-name:var(--font-ui)] text-sm font-bold uppercase tracking-[0.12em] text-[var(--surface-dark)]"
+              onClick={() => setMenuOpen(false)}
+            >
+              Get started
+            </Link>
+          </nav>
+        </div>
+      ) : null}
     </header>
   );
 }
