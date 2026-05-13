@@ -3,8 +3,9 @@ import PricingExperience from "@/components/PricingPage";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing",
-  description: "BOS editions — execution-aligned pricing and stack value in one view.",
+  title: "Plans & Pricing — BOS Studio",
+  description:
+    "BOS Studio beta, Business Starter license, enterprise options, and BOS MBA — plans, compare, and FAQ.",
 };
 
 export default function PricingRoutePage() {

@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOS Studio   Plans &amp; Pricing</title>
+<link href="BOS%20Studio%20Plans%20&amp;%20Pricing_files/css2.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#111827;
+  --ink2:#374151;
+  --ink3:#6B7280;
+  --ink4:#9CA3AF;
+  --border:#E5E7EB;
+  --border2:#D1D5DB;
+  --surface:#F9FAFB;
+  --white:#FFFFFF;
+  --blue:#6D28D9;
+  --blue-dark:#4C1D95;
+  --blue-l:#F5F3FF;
+  --blue-m:#DDD6FE;
+  --teal:#0D9488;
+  --teal-l:#F0FDFA;
+  --purple:#5B21B6;
+  --purple-l:#EDE9FE;
+  --gold:#FBBF24;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--white);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 40px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{font-size:17px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.nav-logo em{color:var(--purple);font-style:normal}
+.nav-links{display:flex;gap:28px}
+.nav-links a{font-size:14px;color:var(--ink3);text-decoration:none;font-weight:500;transition:color .1s}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn-nav-ghost{font-size:14px;font-weight:500;color:var(--ink);background:none;border:none;cursor:pointer;padding:7px 14px;border-radius:7px}
+.btn-nav-ghost:hover{background:var(--surface)}
+.btn-nav-solid{font-size:14px;font-weight:500;color:white;background:var(--blue);border:none;cursor:pointer;padding:8px 18px;border-radius:7px;transition:background .15s}
+.btn-nav-solid:hover{background:var(--blue-dark)}
+
+/* HERO */
+.hero{
+  text-align:center;
+  padding:76px 24px 60px;
+  max-width:680px;margin:0 auto;
+}
+.hero h1{
+  font-size:46px;font-weight:700;letter-spacing:-.03em;
+  line-height:1.1;margin-bottom:18px;color:var(--ink);
+}
+.hero p{
+  font-size:18px;color:var(--ink3);
+  max-width:500px;margin:0 auto 32px;
+  line-height:1.65;
+}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-hero-primary{
+  font-size:15px;font-weight:600;color:white;
+  background:var(--blue);border:none;cursor:pointer;
+  padding:13px 30px;border-radius:8px;
+  transition:background .15s;
+}
+.btn-hero-primary:hover{background:var(--blue-dark)}
+.btn-hero-ghost{
+  font-size:15px;font-weight:500;color:var(--ink);
+  background:white;border:1.5px solid var(--border2);
+  cursor:pointer;padding:13px 30px;border-radius:8px;
+  transition:border-color .15s;
+}
+.btn-hero-ghost:hover{border-color:var(--ink3)}
+
+/* PLANS   2 column */
+.plans-wrap{
+  max-width:860px;margin:0 auto;
+  padding:0 24px 72px;
+}
+.plans-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.plan{
+  padding:32px 28px 28px;
+  border-right:1px solid var(--border);
+  background:white;
+  position:relative;
+}
+.plan:last-child{border-right:none}
+.plan.highlighted{background:var(--blue-l)}
+
+.plan-label{
+  font-size:11px;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;margin-bottom:10px;
+}
+.plan-label.g{color:var(--teal)}
+.plan-label.e{color:var(--purple)}
+
+.popular-chip{
+  display:inline-block;
+  font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--blue);color:white;
+  padding:3px 10px;border-radius:20px;
+  margin-bottom:10px;
+}
+.plan-name{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.plan-desc{font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:24px;min-height:56px}
+
+.plan-cta-row{margin-bottom:28px;display:flex;flex-direction:column;gap:8px}
+.plan-cta{
+  display:block;width:100%;
+  padding:11px;border-radius:8px;
+  font-size:13px;font-weight:600;
+  cursor:pointer;border:none;
+  font-family:'Inter',sans-serif;
+  text-align:center;
+  transition:all .15s;
+  text-decoration:none;
+}
+.cta-primary{background:var(--blue);color:white}
+.cta-primary:hover{background:var(--blue-dark)}
+.cta-dark{background:var(--ink);color:white}
+.cta-dark:hover{background:#1f2937}
+
+.plan-features-preview{}
+.pf-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--ink4);margin-bottom:12px}
+.pf-list{list-style:none;display:flex;flex-direction:column;gap:9px}
+.pf-item{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink2);line-height:1.45}
+.pf-check{color:var(--teal);font-size:13px;flex-shrink:0;margin-top:1px}
+.pf-plus{color:var(--blue);font-weight:700;font-size:13px;flex-shrink:0;margin-top:1px}
+
+/* MBA BANNER */
+.mba-wrap{max-width:860px;margin:0 auto;padding:0 24px 72px}
+.mba-card{
+  background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);
+  border-radius:16px;
+  padding:40px 44px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:40px;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+}
+.mba-card::before{
+  content:'';position:absolute;
+  top:-80px;right:-80px;
+  width:280px;height:280px;
+  background:radial-gradient(circle,rgba(99,102,241,.25),transparent 70%);
+  pointer-events:none;
+}
+.mba-eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.mba-title{font-size:26px;font-weight:700;color:white;letter-spacing:-.02em;margin-bottom:8px;line-height:1.2}
+.mba-sub{font-size:14px;color:#9CA3AF;line-height:1.65;margin-bottom:22px;max-width:520px}
+.mba-features{display:grid;grid-template-columns:1fr 1fr;gap:8px 28px;margin-bottom:24px}
+.mba-feat{
+  display:flex;gap:8px;align-items:flex-start;
+  font-size:13px;color:#D1D5DB;line-height:1.4;
+}
+.mba-feat-icon{color:var(--gold);font-size:13px;flex-shrink:0;margin-top:1px}
+.mba-note{
+  font-size:12px;color:#6B7280;
+  padding:10px 16px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:8px;
+  line-height:1.6;
+}
+.mba-note strong{color:#9CA3AF}
+.mba-right{text-align:center;flex-shrink:0;min-width:180px}
+.mba-price-label{font-size:11px;color:#6B7280;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.mba-price{font-size:40px;font-weight:700;color:white;letter-spacing:-.03em;line-height:1}
+.mba-price-sub{font-size:12px;color:#9CA3AF;margin-top:4px;margin-bottom:28px}
+.mba-cta{
+  display:block;
+  background:var(--gold);color:#111827;
+  padding:13px 28px;border-radius:8px;
+  font-size:14px;font-weight:700;cursor:pointer;
+  border:none;font-family:'Inter',sans-serif;
+  white-space:nowrap;
+  transition:opacity .15s;
+}
+.mba-cta:hover{opacity:.88}
+.mba-cta-sub{font-size:11px;color:#6B7280;margin-top:8px}
+
+/* COMPARE TABLE */
+.compare-wrap{max-width:900px;margin:0 auto;padding:0 24px 80px}
+.compare-header{margin-bottom:32px}
+.compare-eyebrow{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.compare-title{font-size:32px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.compare-sub{font-size:15px;color:var(--ink3)}
+
+.compare-table{width:100%;border-collapse:collapse}
+.ct-head{position:sticky;top:60px;z-index:10;background:white;border-bottom:2px solid var(--border)}
+.ct-head th{
+  padding:14px 16px 12px;
+  font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink3);
+  text-align:left;
+}
+.ct-head th:first-child{width:50%;text-align:left}
+.ct-head th:not(:first-child){width:25%;text-align:center}
+.ct-head th.highlight{color:var(--blue)}
+
+.ct-section-row td{
+  padding:13px 16px 6px;
+  font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink3);
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  user-select:none;
+}
+.ct-section-row td:first-child{display:flex;align-items:center;gap:8px}
+.section-toggle{
+  width:18px;height:18px;border-radius:4px;
+  background:white;border:1px solid var(--border2);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--ink3);flex-shrink:0;
+  transition:transform .2s;
+}
+.section-toggle.open{transform:rotate(90deg)}
+
+.ct-feat-row td{
+  padding:10px 16px;
+  font-size:13px;color:var(--ink2);
+  border-bottom:1px solid var(--border);
+  vertical-align:middle;
+}
+.ct-feat-row td:first-child{color:var(--ink)}
+.ct-feat-row td:not(:first-child){text-align:center}
+.ct-feat-row.hidden{display:none}
+.ct-feat-row:hover td{background:var(--surface)}
+
+.check-yes{color:var(--teal);font-size:16px;font-weight:700}
+.check-no{color:var(--border2);font-size:16px}
+.check-addon{
+  font-size:11px;font-weight:600;
+  background:var(--blue-l);color:var(--blue);
+  padding:2px 8px;border-radius:20px;
+  display:inline-block;
+}
+.check-text{font-size:12px;color:var(--ink3);display:inline-block}
+.ai-badge{
+  font-size:10px;font-weight:600;
+  background:linear-gradient(135deg,#6366F1,#8B5CF6);
+  color:white;
+  padding:1px 7px;border-radius:20px;
+  vertical-align:middle;
+  margin-left:4px;
+}
+
+/* TRUST BAR */
+.trust-wrap{
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:36px 24px;text-align:center;
+  background:var(--surface);
+}
+.trust-label{font-size:12px;font-weight:500;color:var(--ink4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
+.trust-logos{display:flex;gap:48px;justify-content:center;align-items:center;flex-wrap:wrap}
+.trust-logo{font-size:15px;font-weight:700;color:var(--ink4);letter-spacing:-.01em}
+
+/* FAQ */
+.faq-wrap{max-width:680px;margin:0 auto;padding:64px 24px 80px}
+.faq-title{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-bottom:36px;text-align:center}
+.faq-item{border-bottom:1px solid var(--border);padding:18px 0}
+.faq-q{
+  font-size:15px;font-weight:600;color:var(--ink);
+  cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;
+}
+.faq-toggle{font-size:22px;color:var(--ink3);flex-shrink:0;transition:transform .2s;line-height:1;font-weight:300}
+.faq-toggle.open{transform:rotate(45deg)}
+.faq-a{font-size:14px;color:var(--ink3);line-height:1.75;margin-top:12px;display:none}
+.faq-a.open{display:block}
+
+/* BOTTOM CTA */
+.bottom-cta{
+  background:var(--ink);
+  padding:72px 24px;
+  text-align:center;
+}
+.bottom-cta h2{font-size:34px;font-weight:700;color:white;letter-spacing:-.02em;margin-bottom:14px;line-height:1.2}
+.bottom-cta p{font-size:16px;color:#9CA3AF;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto}
+.bottom-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-white{background:white;color:var(--ink);padding:13px 28px;border-radius:8px;font-size:15px;font-weight:600;border:none;cursor:pointer;transition:background .15s}
+.btn-white:hover{background:#F3F4F6}
+.btn-outline-white{background:transparent;color:white;padding:13px 28px;border-radius:8px;font-size:15px;font-weight:600;border:1.5px solid rgba(255,255,255,.25);cursor:pointer;transition:border-color .15s}
+.btn-outline-white:hover{border-color:rgba(255,255,255,.55)}
+
+footer{
+  padding:24px 40px;border-top:1px solid #374151;
+  background:var(--ink);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:12px;color:#6B7280;flex-wrap:wrap;gap:8px;
+}
+</style>
+</head>
+<body>
+<!-- STICKY DEMAND BAR -->
+<div id="demandBar" style="position:sticky;top:0;z-index:200;background:linear-gradient(90deg,#4C1D95,#6D28D9);padding:9px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+  <style>
+    .ticker-wrap{flex:1;overflow:hidden;position:relative}
+    .ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;pointer-events:none}
+    .ticker-wrap::before{left:0;background:linear-gradient(90deg,#4C1D95,transparent)}
+    .ticker-wrap::after{right:0;background:linear-gradient(270deg,#6D28D9,transparent)}
+    .ticker-track{display:flex;white-space:nowrap;animation:ticker 26s linear infinite}
+    .ticker-track:hover{animation-play-state:paused}
+    @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .ticker-item{font-size:13px;color:rgba(255,255,255,.88);padding:0 40px;display:inline-block}
+    .ticker-sep{color:rgba(255,255,255,.25);font-size:11px;padding:0 8px}
+  </style>
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span class="ticker-item">We’re receiving more requests than expected — access is <strong style="color:#FCD34D">first come, first served</strong></span>
+      <span class="ticker-sep">●</span>
+      <span class="ticker-item">We appreciate your patience while we review each request carefully</span>
+      <span class="ticker-sep">●</span>
+      <span class="ticker-item">BOS Studio beta is <strong style="color:#FCD34D">free for 3 months</strong> for founding members</span>
+      <span class="ticker-sep">●</span>
+      <span class="ticker-item">Limited spots remaining — request access now to secure your place</span>
+      <span class="ticker-sep">●</span>
+      <span class="ticker-item">We’re receiving more requests than expected — access is <strong style="color:#FCD34D">first come, first served</strong></span>
+      <span class="ticker-sep">●</span>
+      <span class="ticker-item">We appreciate your patience while we review each request carefully</span>
+      <span class="ticker-sep">●</span>
+      <span class="ticker-item">BOS Studio beta is <strong style="color:#FCD34D">free for 3 months</strong> for founding members</span>
+      <span class="ticker-sep">●</span>
+      <span class="ticker-item">Limited spots remaining — request access now to secure your place</span>
+      <span class="ticker-sep">●</span>
+    </div>
+  </div>
+  <button onclick="document.getElementById('demandBar').style.display='none'" style="font-size:18px;color:rgba(255,255,255,.5);background:none;border:none;cursor:pointer;flex-shrink:0;line-height:1;padding:2px 6px">×</button>
+</div>
+
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">BOS<em>.</em>Studio</div>
+  <div class="nav-links">
+    <a href="#">Platform</a>
+    <a href="#">Solutions</a>
+    <a href="#">Customers</a>
+    <a href="#">Resources</a>
+    <a href="#">Plans</a>
+  </div>
+  <div class="nav-cta">
+    <button class="btn-nav-ghost">Log in</button>
+    <button class="btn-nav-solid">Get a demo</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Power Up</h1>
+  <p>The Business Orchestration System that overrules your fragmented SaaS stack. One license. One intelligence layer. <mark style="background:linear-gradient(120deg,#EDE9FE,#DDD6FE);color:#4C1D95;padding:1px 6px;border-radius:4px;font-weight:600">One stop shop for work</mark></p>
+
+</div>
+
+<!-- PLAN   Business Starter License only -->
+<div class="plans-wrap" style="max-width:680px">
+  <div style="border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);background:white">
+
+    <!-- LIMITED TIME BANNER -->
+    <div style="background:linear-gradient(90deg,#0a0a0a,#1a1a1a);padding:10px 28px;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.75)">Limited time offer</div>
+      <div style="font-size:12px;font-weight:600;color:#FCD34D">Free Beta Access   Founding Members Only</div>
+    </div>
+
+    <div style="padding:32px 36px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#0a0a0a;margin-bottom:8px">Business Starter License</div>
+          <div style="font-size:28px;font-weight:700;color:var(--ink);letter-spacing:-.02em">BOS Studio</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px;color:var(--ink3);margin-bottom:4px">Beta price</div>
+          <div style="font-size:40px;font-weight:700;color:var(--ink);letter-spacing:-.03em;line-height:1">$0</div>
+          <div style="font-size:12px;color:var(--ink3)">during beta period</div>
+        </div>
+      </div>
+
+      <div style="font-size:14px;color:var(--ink3);line-height:1.65;margin-bottom:28px;max-width:480px">The
+ complete Business Orchestration System   overrule Slack, Notion, and 
+fragmented AI tools with one unified platform. Request beta access and 
+get started immediately.</div>
+
+      <button style="display:block;width:100%;padding:16px;border-radius:10px;font-size:16px;font-weight:700;background:#6D28D9;color:white;border:none;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:-.01em" onmouseover="this.style.background='#3B0764'" onmouseout="this.style.background='#6D28D9'">
+        Request Beta Access →
+      </button>
+      <div style="text-align:center;font-size:12px;color:var(--ink4);margin-top:10px">No credit card required · Limited founding spots available</div>
+
+      <div style="border-top:1px solid var(--border);margin:28px 0"></div>
+
+      <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink4);margin-bottom:14px">Capabilities Included</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px 32px">
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink2)"><span style="color:var(--teal);flex-shrink:0;margin-top:1px">✓</span>Agentic Studio Environment</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink2)"><span style="color:var(--teal);flex-shrink:0;margin-top:1px">✓</span>iWorkspace   research &amp; execution</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink2)"><span style="color:var(--teal);flex-shrink:0;margin-top:1px">✓</span>chat fx   channels, DMs &amp; sync</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink2)"><span style="color:var(--teal);flex-shrink:0;margin-top:1px">✓</span>iWorkforce   human + agent registry</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink2)"><span style="color:var(--teal);flex-shrink:0;margin-top:1px">✓</span>project fx   tasks &amp; workflows</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink2)"><span style="color:var(--teal);flex-shrink:0;margin-top:1px">✓</span>1 Agent Included</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink2)"><span style="color:var(--teal);flex-shrink:0;margin-top:1px">✓</span>Data Drive   10 GB storage</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink2)"><span style="color:var(--teal);flex-shrink:0;margin-top:1px">✓</span>Knowledge Graph</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ENTERPRISE HORIZONTAL CARD -->
+<div class="plans-wrap" style="max-width:680px;padding-top:0;padding-bottom:72px">
+  <div style="border:2px solid #7C3AED;border-radius:12px;padding:24px 28px;background:white;display:flex;align-items:center;justify-content:space-between;gap:24px;box-shadow:0 0 0 4px rgba(109,40,217,.12),0 0 24px rgba(109,40,217,.15)">
+    <div>
+      <div style="font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--purple);margin-bottom:6px">Enterprise</div>
+      <div style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:8px">Built for orgs that need to own, control, and scale AI infrastructure</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px 20px">
+        <span style="font-size:12px;color:var(--ink3);display:flex;gap:6px;align-items:center"><span style="color:var(--teal)">✓</span>Unlimited agents &amp; users</span>
+        <span style="font-size:12px;color:var(--ink3);display:flex;gap:6px;align-items:center"><span style="color:var(--teal)">✓</span>Dedicated SLM</span>
+        <span style="font-size:12px;color:var(--ink3);display:flex;gap:6px;align-items:center"><span style="color:var(--teal)">✓</span>VPC / On-Prem</span>
+        <span style="font-size:12px;color:var(--ink3);display:flex;gap:6px;align-items:center"><span style="color:var(--teal)">✓</span>RBAC + compliance</span>
+        <span style="font-size:12px;color:var(--ink3);display:flex;gap:6px;align-items:center"><span style="color:var(--teal)">✓</span>White-glove onboarding</span>
+        <span style="font-size:12px;color:var(--ink3);display:flex;gap:6px;align-items:center"><span style="color:var(--teal)">✓</span>Custom integrations + full API</span>
+      </div>
+    </div>
+    <div style="flex-shrink:0;text-align:center">
+      <div style="font-size:13px;color:var(--ink3);margin-bottom:12px">Custom pricing</div>
+      <button style="padding:12px 28px;border-radius:8px;background:var(--ink);color:white;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap">Contact sales</button>
+    </div>
+  </div>
+</div>
+<!-- JOIN BOS MBA -->
+<div class="mba-wrap">
+  <div class="mba-card" style="padding:40px 44px">
+    <div>
+      <div class="mba-eyebrow">BOS MBA</div>
+      <div class="mba-title" style="font-size:28px;margin-bottom:10px">The founding cohort.<br>Built for operators.</div>
+      <div class="mba-sub" style="font-size:14px;max-width:400px;margin-bottom:20px">Deploy real agents. Shape the roadmap. Get to value faster than anyone else.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.6);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);padding:4px 14px;border-radius:20px;white-space:nowrap">Founding Cohort</span>
+        <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.6);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);padding:4px 14px;border-radius:20px;white-space:nowrap">Operator Track</span>
+        <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.6);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);padding:4px 14px;border-radius:20px;white-space:nowrap">Executive Track</span>
+        <span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.6);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);padding:4px 14px;border-radius:20px;white-space:nowrap">Agency Partners</span>
+      </div>
+    </div>
+    <div class="mba-right">
+      <div class="mba-price-label">Enrollment</div>
+      <div class="mba-price" style="font-size:15px;font-weight:600;line-height:1;margin-bottom:6px;white-space:nowrap">By application</div>
+      <div class="mba-price-sub">Selective intake</div>
+      <button class="mba-cta">Enroll</button>
+      <div class="mba-cta-sub">Limited spots</div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- CAPABILITIES SECTION -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+.wcap{max-width:900px;margin:0 auto;padding:0 24px 80px;font-family:'Inter',sans-serif}
+.wcap-hdr{text-align:center;margin-bottom:44px}
+.wcap-eye{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#6D28D9;margin-bottom:10px}
+.wcap-h{font-size:40px;font-weight:900;letter-spacing:-.04em;color:#111827;line-height:1.05;margin-bottom:12px}
+.wcap-sub{font-size:15px;color:#6B7280;max-width:420px;margin:0 auto;line-height:1.6}
+.wcap-list{display:flex;flex-direction:column;gap:16px}
+.wcon{display:flex;justify-content:center;height:16px;position:relative}
+.wcon::before{content:'';position:absolute;left:50%;transform:translateX(-50%);width:1px;height:100%;background:linear-gradient(180deg,#DDD6FE,#EDE9FE)}
+
+/* APPLE-WHITE CARD */
+.wcard{
+  border-radius:20px;overflow:hidden;
+  border:1px solid #E5E7EB;
+  background:#FFFFFF;
+  display:flex;min-height:160px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
+  transition:box-shadow .2s,transform .2s;
+}
+.wcard:hover{box-shadow:0 4px 24px rgba(109,40,217,.12),0 1px 3px rgba(0,0,0,.06);transform:translateY(-1px)}
+.wcard-accent{flex-shrink:0;width:4px}
+.wcard-content{flex:1;padding:28px 32px;display:flex;flex-direction:column;justify-content:space-between;gap:0}
+.wcard-top{margin-bottom:14px}
+.wcard-num{font-size:10px;font-weight:700;letter-spacing:.1em;color:#9CA3AF;text-transform:uppercase;margin-bottom:6px}
+.wcard-pain{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#EF4444;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.wcard-pain::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:#EF4444;flex-shrink:0}
+.wcard-title{font-size:24px;font-weight:800;color:#111827;letter-spacing:-.03em;line-height:1.1;margin-bottom:8px}
+.wcard-desc{font-size:13px;color:#6B7280;line-height:1.65;max-width:440px}
+.wcard-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #F3F4F6}
+.wcard-tags{display:flex;gap:6px;flex-wrap:wrap}
+.wcard-tag{font-size:10px;font-weight:700;padding:3px 11px;border-radius:20px;white-space:nowrap;letter-spacing:.03em}
+.wcard-rep{font-size:11px;color:#D1D5DB;display:flex;align-items:center;gap:4px}
+.wcard-rep span{text-decoration:line-through;text-decoration-color:rgba(239,68,68,.4);color:#D1D5DB}
+
+/* VISUAL PANEL */
+.wcard-vis{flex-shrink:0;width:240px;position:relative;overflow:hidden;border-left:1px solid #F3F4F6}
+.wcard-vis-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:20px 16px;gap:8px}
+
+/* SHARED MOCK ATOMS */
+.mk-card{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:10px;padding:10px 12px}
+.mk-hd{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#9CA3AF;margin-bottom:7px}
+.mk-row{display:flex;align-items:center;gap:7px;padding:3px 0;border-bottom:1px solid #F3F4F6}
+.mk-row:last-child{border-bottom:none}
+.mk-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mk-line{height:6px;border-radius:3px;background:#E5E7EB;flex:1}
+.mk-bdg{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+.mk-stats{display:flex;gap:6px}
+.mk-stat{flex:1;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:8px;text-align:center}
+.mk-sv{font-size:16px;font-weight:800;color:#111827;line-height:1}
+.mk-sl{font-size:9px;color:#9CA3AF;margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
+
+/* UNIQUE VISUAL ACCENTS PER CARD */
+.vis-comm .wcard-vis-inner{background:linear-gradient(160deg,#F5F3FF 0%,#FAFAFA 100%)}
+.vis-exec .wcard-vis-inner{background:linear-gradient(160deg,#F0FDF4 0%,#FAFAFA 100%)}
+.vis-client .wcard-vis-inner{background:linear-gradient(160deg,#EFF6FF 0%,#FAFAFA 100%)}
+.vis-docs .wcard-vis-inner{background:linear-gradient(160deg,#FFFBEB 0%,#FAFAFA 100%)}
+.vis-ai .wcard-vis-inner{background:linear-gradient(160deg,#FDF4FF 0%,#FAFAFA 100%)}
+</style>
+
+<div class="wcap">
+  <div class="wcap-hdr">
+    <div class="wcap-eye">What you get</div>
+    <div class="wcap-h">Five layers.<br>One system.</div>
+    <div class="wcap-sub">Every problem you've been patching with five tools, solved by one.</div>
+  </div>
+
+  <div class="wcap-list">
+
+    <!-- CARD 1: COMMUNICATION (purple accent) -->
+    <div class="wcard">
+      <div class="wcard-accent" style="background:linear-gradient(180deg,#7C3AED,#A78BFA)"></div>
+      <div class="wcard-content">
+        <div class="wcard-top">
+          <div class="wcard-num">Layer 01</div>
+          <div class="wcard-pain">Still running the team on Slack and WhatsApp?</div>
+          <div class="wcard-title">One Communication Layer</div>
+          <div class="wcard-desc">Every conversation lives inside BOS. 
+Internal, client-facing, project-specific. Your team stops switching 
+between four apps just to send a message.</div>
+        </div>
+        <div class="wcard-bottom">
+          <div class="wcard-tags">
+            <span class="wcard-tag" style="background:#F5F3FF;color:#6D28D9;border:1px solid #DDD6FE">chat fx</span>
+            <span class="wcard-tag" style="background:#F5F3FF;color:#6D28D9;border:1px solid #DDD6FE">Channels</span>
+            <span class="wcard-tag" style="background:#F5F3FF;color:#6D28D9;border:1px solid #DDD6FE">DMs</span>
+          </div>
+          <div class="wcard-rep"><em>Overrules</em> <span>Slack</span> <span>Teams</span></div>
+        </div>
+      </div>
+      <div class="wcard-vis vis-comm">
+        <div class="wcard-vis-inner">
+          <!-- Chat bubbles visual -->
+          <div style="display:flex;flex-direction:column;gap:7px;padding:4px 0">
+            <div style="display:flex;gap:6px;align-items:flex-end">
+              <div style="width:22px;height:22px;border-radius:50%;background:#DDD6FE;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#7C3AED">A</div>
+              <div style="background:#EDE9FE;border-radius:10px 10px 10px 2px;padding:7px 11px;max-width:130px">
+                <div style="height:6px;border-radius:3px;background:#C4B5FD;width:90px;margin-bottom:4px"></div>
+                <div style="height:6px;border-radius:3px;background:#DDD6FE;width:60px"></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:flex-end;justify-content:flex-end">
+              <div style="background:#7C3AED;border-radius:10px 10px 2px 10px;padding:7px 11px;max-width:130px">
+                <div style="height:6px;border-radius:3px;background:rgba(255,255,255,.6);width:80px;margin-bottom:4px"></div>
+                <div style="height:6px;border-radius:3px;background:rgba(255,255,255,.35);width:50px"></div>
+              </div>
+              <div style="width:22px;height:22px;border-radius:50%;background:#7C3AED;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:white">Y</div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:flex-end">
+              <div style="width:22px;height:22px;border-radius:50%;background:#DDD6FE;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#7C3AED">B</div>
+              <div style="background:#EDE9FE;border-radius:10px 10px 10px 2px;padding:7px 11px;max-width:130px">
+                <div style="height:6px;border-radius:3px;background:#C4B5FD;width:100px"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mk-stats" style="margin-top:8px">
+            <div class="mk-stat"><div class="mk-sv" style="color:#7C3AED">0</div><div class="mk-sl">Slack bills</div></div>
+            <div class="mk-stat"><div class="mk-sv">1</div><div class="mk-sl">Inbox</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wcon"></div>
+
+    <!-- CARD 2: EXECUTION (green accent) -->
+    <div class="wcard">
+      <div class="wcard-accent" style="background:linear-gradient(180deg,#059669,#34D399)"></div>
+      <div class="wcard-content">
+        <div class="wcard-top">
+          <div class="wcard-num">Layer 02</div>
+          <div class="wcard-pain">Tasks falling through the gap between chat and ClickUp?</div>
+          <div class="wcard-title">One Execution Layer</div>
+          <div class="wcard-desc">Tasks are created directly from 
+conversations, AI suggestions, or project templates. They're linked to 
+the agent that owns them. Nothing slips.</div>
+        </div>
+        <div class="wcard-bottom">
+          <div class="wcard-tags">
+            <span class="wcard-tag" style="background:#F0FDF4;color:#059669;border:1px solid #BBF7D0">project fx</span>
+            <span class="wcard-tag" style="background:#F0FDF4;color:#059669;border:1px solid #BBF7D0">Workflows</span>
+            <span class="wcard-tag" style="background:#F0FDF4;color:#059669;border:1px solid #BBF7D0">CRM</span>
+          </div>
+          <div class="wcard-rep"><em>Overrules</em> <span>ClickUp</span> <span>Notion</span> <span>Asana</span></div>
+        </div>
+      </div>
+      <div class="wcard-vis vis-exec">
+        <div class="wcard-vis-inner">
+          <!-- Kanban-style task visual -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+            <div style="background:white;border:1px solid #D1FAE5;border-radius:8px;padding:8px">
+              <div style="font-size:9px;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Done</div>
+              <div style="height:5px;border-radius:3px;background:#D1FAE5;margin-bottom:4px"></div>
+              <div style="height:5px;border-radius:3px;background:#D1FAE5;width:70%;margin-bottom:4px"></div>
+              <div style="height:5px;border-radius:3px;background:#D1FAE5;width:50%"></div>
+            </div>
+            <div style="background:white;border:1px solid #DDD6FE;border-radius:8px;padding:8px">
+              <div style="font-size:9px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Active</div>
+              <div style="height:5px;border-radius:3px;background:#EDE9FE;margin-bottom:4px"></div>
+              <div style="height:5px;border-radius:3px;background:#EDE9FE;width:80%"></div>
+            </div>
+          </div>
+          <div class="mk-stats" style="margin-top:8px">
+            <div class="mk-stat"><div class="mk-sv" style="color:#059669">94%</div><div class="mk-sl">On track</div></div>
+            <div class="mk-stat"><div class="mk-sv">0</div><div class="mk-sl">Missed</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wcon"></div>
+
+    <!-- CARD 3: CLIENT RECORD (blue accent) -->
+    <div class="wcard">
+      <div class="wcard-accent" style="background:linear-gradient(180deg,#1D4ED8,#60A5FA)"></div>
+      <div class="wcard-content">
+        <div class="wcard-top">
+          <div class="wcard-num">Layer 03</div>
+          <div class="wcard-pain">Client history scattered across email, Slack and a spreadsheet?</div>
+          <div class="wcard-title">One Client Record</div>
+          <div class="wcard-desc">Every conversation, task, document, 
+and status update about a client in one place. Whoever picks it up has 
+full context in 10 seconds.</div>
+        </div>
+        <div class="wcard-bottom">
+          <div class="wcard-tags">
+            <span class="wcard-tag" style="background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE">CRM</span>
+            <span class="wcard-tag" style="background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE">Client Workspace</span>
+          </div>
+          <div class="wcard-rep"><em>Overrules</em> <span>HubSpot</span> <span>Salesforce</span></div>
+        </div>
+      </div>
+      <div class="wcard-vis vis-client">
+        <div class="wcard-vis-inner">
+          <!-- Contact card visual -->
+          <div style="background:white;border:1px solid #DBEAFE;border-radius:10px;padding:10px 12px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <div style="width:28px;height:28px;border-radius:50%;background:#DBEAFE;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#1D4ED8;flex-shrink:0">AC</div>
+              <div>
+                <div style="height:6px;border-radius:3px;background:#BFDBFE;width:70px;margin-bottom:3px"></div>
+                <div style="height:5px;border-radius:3px;background:#EFF6FF;width:50px"></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:5px;margin-bottom:6px">
+              <div style="font-size:9px;font-weight:700;background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE;padding:2px 7px;border-radius:10px">7 tasks</div>
+              <div style="font-size:9px;font-weight:700;background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE;padding:2px 7px;border-radius:10px">4 docs</div>
+              <div style="font-size:9px;font-weight:700;background:#F0FDF4;color:#059669;border:1px solid #BBF7D0;padding:2px 7px;border-radius:10px">Active</div>
+            </div>
+            <div style="height:5px;border-radius:3px;background:#EFF6FF;margin-bottom:3px"></div>
+            <div style="height:5px;border-radius:3px;background:#EFF6FF;width:70%"></div>
+          </div>
+          <div class="mk-stats" style="margin-top:8px">
+            <div class="mk-stat"><div class="mk-sv" style="color:#1D4ED8">Full</div><div class="mk-sl">History</div></div>
+            <div class="mk-stat"><div class="mk-sv">1</div><div class="mk-sl">Source</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wcon"></div>
+
+    <!-- CARD 4: DOCUMENTS (amber accent) -->
+    <div class="wcard">
+      <div class="wcard-accent" style="background:linear-gradient(180deg,#D97706,#FCD34D)"></div>
+      <div class="wcard-content">
+        <div class="wcard-top">
+          <div class="wcard-num">Layer 04</div>
+          <div class="wcard-pain">Can't find last month's proposal or who last edited the brief?</div>
+          <div class="wcard-title">One Document System</div>
+          <div class="wcard-desc">Every brief, proposal, and report 
+lives inside BOS, linked to the client and project it belongs to. Your 
+AI finds it in seconds. No more Drive archaeology.</div>
+        </div>
+        <div class="wcard-bottom">
+          <div class="wcard-tags">
+            <span class="wcard-tag" style="background:#FFFBEB;color:#D97706;border:1px solid #FDE68A">Data Drive</span>
+            <span class="wcard-tag" style="background:#FFFBEB;color:#D97706;border:1px solid #FDE68A">Linked docs</span>
+            <span class="wcard-tag" style="background:#FFFBEB;color:#D97706;border:1px solid #FDE68A">10 GB</span>
+          </div>
+          <div class="wcard-rep"><em>Overrules</em> <span>Google Drive</span> <span>Dropbox</span></div>
+        </div>
+      </div>
+      <div class="wcard-vis vis-docs">
+        <div class="wcard-vis-inner">
+          <!-- File/folder visual -->
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="background:white;border:1px solid #FDE68A;border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px">
+              <div style="width:24px;height:28px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">📄</div>
+              <div style="flex:1">
+                <div style="height:5px;border-radius:3px;background:#FDE68A;width:80%;margin-bottom:3px"></div>
+                <div style="height:5px;border-radius:3px;background:#FEF3C7;width:55%"></div>
+              </div>
+              <div style="font-size:9px;font-weight:700;background:#FFFBEB;color:#D97706;border:1px solid #FDE68A;padding:2px 6px;border-radius:8px">PDF</div>
+            </div>
+            <div style="background:white;border:1px solid #FDE68A;border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px">
+              <div style="width:24px;height:28px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">📝</div>
+              <div style="flex:1">
+                <div style="height:5px;border-radius:3px;background:#FDE68A;width:65%;margin-bottom:3px"></div>
+                <div style="height:5px;border-radius:3px;background:#FEF3C7;width:40%"></div>
+              </div>
+              <div style="font-size:9px;font-weight:700;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;padding:2px 6px;border-radius:8px">Draft</div>
+            </div>
+          </div>
+          <div class="mk-stats" style="margin-top:8px">
+            <div class="mk-stat"><div class="mk-sv" style="color:#D97706">10GB</div><div class="mk-sl">Drive</div></div>
+            <div class="mk-stat"><div class="mk-sv">AI</div><div class="mk-sl">Search</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wcon"></div>
+
+    <!-- CARD 5: AI LAYER (violet accent) -->
+    <div class="wcard">
+      <div class="wcard-accent" style="background:linear-gradient(180deg,#7C3AED,#C084FC)"></div>
+      <div class="wcard-content">
+        <div class="wcard-top">
+          <div class="wcard-num">Layer 05</div>
+          <div class="wcard-pain">Opening ChatGPT in a separate tab every 20 minutes?</div>
+          <div class="wcard-title">One AI Layer</div>
+          <div class="wcard-desc">AI embedded inside every workflow with
+ full context of your clients, projects, and data. It already knows the 
+brief. It already knows the client. You never leave BOS to think.</div>
+        </div>
+        <div class="wcard-bottom">
+          <div class="wcard-tags">
+            <span class="wcard-tag" style="background:#FDF4FF;color:#7C3AED;border:1px solid #E9D5FF">iWorkspace</span>
+            <span class="wcard-tag" style="background:#FDF4FF;color:#7C3AED;border:1px solid #E9D5FF">Agents</span>
+            <span class="wcard-tag" style="background:#FDF4FF;color:#7C3AED;border:1px solid #E9D5FF">SLM</span>
+          </div>
+          <div class="wcard-rep"><em>Overrules</em> <span>ChatGPT</span> <span>Copilot</span> <span>Claude tabs</span></div>
+        </div>
+      </div>
+      <div class="wcard-vis vis-ai">
+        <div class="wcard-vis-inner">
+          <!-- AI agent pulse visual -->
+          <div style="background:white;border:1px solid #E9D5FF;border-radius:10px;padding:10px 12px">
+            <div style="font-size:9px;font-weight:700;color:#7C3AED;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;display:flex;align-items:center;gap:5px">
+              <div style="width:6px;height:6px;border-radius:50%;background:#7C3AED"></div>
+              Agents working now
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div style="display:flex;align-items:center;gap:7px">
+                <div style="width:20px;height:20px;border-radius:50%;background:#EDE9FE;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#7C3AED;flex-shrink:0">S</div>
+                <div style="flex:1;height:5px;border-radius:3px;background:#EDE9FE"></div>
+                <div style="font-size:9px;font-weight:700;background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE;padding:2px 6px;border-radius:8px">Drafting</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px">
+                <div style="width:20px;height:20px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#059669;flex-shrink:0">C</div>
+                <div style="flex:1;height:5px;border-radius:3px;background:#D1FAE5"></div>
+                <div style="font-size:9px;font-weight:700;background:#F0FDF4;color:#059669;border:1px solid #BBF7D0;padding:2px 6px;border-radius:8px">Done</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px">
+                <div style="width:20px;height:20px;border-radius:50%;background:#EDE9FE;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#7C3AED;flex-shrink:0">O</div>
+                <div style="flex:1;height:5px;border-radius:3px;background:#EDE9FE;width:70%"></div>
+                <div style="font-size:9px;font-weight:700;background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE;padding:2px 6px;border-radius:8px">Routing</div>
+              </div>
+            </div>
+          </div>
+          <div class="mk-stats" style="margin-top:8px">
+            <div class="mk-stat"><div class="mk-sv" style="color:#7C3AED">3</div><div class="mk-sl">Agents live</div></div>
+            <div class="mk-stat"><div class="mk-sv">0</div><div class="mk-sl">Extra tabs</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+<!-- COMPARE FEATURES -->
+<div class="compare-wrap">
+  <div class="compare-header">
+    <div class="compare-eyebrow">Compare plans</div>
+    <div class="compare-title">Everything, side by side</div>
+    <div class="compare-sub">Click any category to expand or collapse the full feature list.</div>
+  </div>
+
+  <table class="compare-table">
+    <thead class="ct-head">
+      <tr>
+        <th>Feature</th>
+        <th class="highlight">Business Starter</th>
+        <th>Enterprise</th>
+      </tr>
+    </thead>
+    <tbody id="compareBody">
+
+      <!-- CORE PLATFORM -->
+      <tr class="ct-section-row" onclick="toggleSection('core')">
+        <td colspan="3"><span class="section-toggle open" id="toggle-core">›</span> Core platform</td>
+      </tr>
+      <tr class="ct-feat-row" data-section="core">
+        <td>Agentic Studio Environment</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="core">
+        <td>chat fx   channels, DMs, calling</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="core">
+        <td>project fx   CRM, tasks &amp; workflows</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="core">
+        <td>iWorkspace   research, brainstorming &amp; execution <span class="ai-badge">AI</span></td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="core">
+        <td>iWorkforce   human + agent registry</td>
+        <td><span class="check-text">Standard</span></td>
+        <td><span class="check-text">Full deployment</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="core">
+        <td>Data Drive   central storage &amp; memory</td>
+        <td><span class="check-text">10 GB</span></td>
+        <td><span class="check-text">2 TB+</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="core">
+        <td>Memory retention</td>
+        <td><span class="check-text">180 days</span></td>
+        <td><span class="check-text">Custom</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="core">
+        <td>Slack import + migration</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="core">
+        <td>Google Drive sync</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+
+      <!-- AGENTS -->
+      <tr class="ct-section-row" onclick="toggleSection('agents')">
+        <td colspan="3"><span class="section-toggle open" id="toggle-agents">›</span> Agents <span class="ai-badge">AI</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="agents">
+        <td>Agents included</td>
+        <td><span class="check-text">1</span></td>
+        <td><span class="check-text">25–Unlimited</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="agents">
+        <td>Agent builder (single)</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="agents">
+        <td>SuperAgent Skills (doc, design, build)</td>
+        <td><span class="check-addon">$</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="agents">
+        <td>Multi-agent workflow orchestration</td>
+        <td><span class="check-addon">$</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="agents">
+        <td>Cross-team agent orchestration</td>
+        <td><span class="check-addon">$</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="agents">
+        <td>Agent kill switch + audit log</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="agents">
+        <td>Usage hard caps   no overage billing</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+
+      <!-- INTELLIGENCE -->
+      <tr class="ct-section-row" onclick="toggleSection('intel')">
+        <td colspan="3"><span class="section-toggle open" id="toggle-intel">›</span> Intelligence layer <span class="ai-badge">AI</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="intel">
+        <td>Knowledge Graph</td>
+        <td><span class="check-text">Auto-structured</span></td>
+        <td><span class="check-text">Private cluster</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="intel">
+        <td>iWidgets dashboards</td>
+        <td><span class="check-text">10</span></td>
+        <td><span class="check-text">Unlimited</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="intel">
+        <td>SLM   Self-Learning Model <span class="ai-badge">AI</span></td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-text">Dedicated</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="intel">
+        <td>Cross-fx learning</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="intel">
+        <td>Predictive insights</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+
+      <!-- fx MODULES -->
+      <tr class="ct-section-row" onclick="toggleSection('fx')">
+        <td colspan="3"><span class="section-toggle open" id="toggle-fx">›</span> fx module activations</td>
+      </tr>
+      <tr class="ct-feat-row" data-section="fx">
+        <td>chat fx</td>
+        <td><span class="check-text">Included</span></td>
+        <td><span class="check-text">Included</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="fx">
+        <td>project fx</td>
+        <td><span class="check-text">Included</span></td>
+        <td><span class="check-text">Included</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="fx">
+        <td>avatar fx</td>
+        <td><span class="check-addon">$</span></td>
+        <td><span class="check-text">Custom</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="fx">
+        <td>concierge fx</td>
+        <td><span class="check-addon">$</span></td>
+        <td><span class="check-text">Custom</span></td>
+      </tr>
+
+      <!-- INTEGRATIONS -->
+      <tr class="ct-section-row" onclick="toggleSection('integrations')">
+        <td colspan="3"><span class="section-toggle open" id="toggle-integrations">›</span> Integrations &amp; API</td>
+      </tr>
+      <tr class="ct-feat-row" data-section="integrations">
+        <td>Email integrations (Gmail, Outlook)</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="integrations">
+        <td>API access</td>
+        <td><span class="check-text">Limited</span></td>
+        <td><span class="check-text">Full + Custom</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="integrations">
+        <td>Webhooks</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="integrations">
+        <td>CRM integration</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="integrations">
+        <td>Custom integrations</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+
+      <!-- SECURITY -->
+      <tr class="ct-section-row" onclick="toggleSection('security')">
+        <td colspan="3"><span class="section-toggle open" id="toggle-security">›</span> Security &amp; governance</td>
+      </tr>
+      <tr class="ct-feat-row" data-section="security">
+        <td>Core security &amp; permissions</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="security">
+        <td>Usage dashboards &amp; alerts</td>
+        <td><span class="check-yes">✓</span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="security">
+        <td>RBAC (role-based access control)</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="security">
+        <td>ABAC (attribute-based access control)</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="security">
+        <td>Compliance audit export</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="security">
+        <td>SOC2-ready controls</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="security">
+        <td>VPC / On-Prem deployment</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="security">
+        <td>Data residency control</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+
+      <!-- SUPPORT -->
+      <tr class="ct-section-row" onclick="toggleSection('support')">
+        <td colspan="3"><span class="section-toggle open" id="toggle-support">›</span> Support</td>
+      </tr>
+      <tr class="ct-feat-row" data-section="support">
+        <td>Support level</td>
+        <td><span class="check-text">Priority</span></td>
+        <td><span class="check-text">White-Glove</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="support">
+        <td>Onboarding</td>
+        <td><span class="check-text">Guided setup</span></td>
+        <td><span class="check-text">Full implementation team</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="support">
+        <td>SLA response time</td>
+        <td><span class="check-text">24–48h</span></td>
+        <td><span class="check-text">4–8h</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="support">
+        <td>Dedicated account manager</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+      <tr class="ct-feat-row" data-section="support">
+        <td>Quarterly optimization reviews</td>
+        <td><span class="check-no"> </span></td>
+        <td><span class="check-yes">✓</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+
+<!-- FAQ -->
+<div class="faq-wrap">
+  <div class="faq-title">Frequently asked questions</div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Is pricing per user or per seat? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">No. BOS does not charge per user. Pricing is per 
+business   you activate capabilities and govern usage. Headcount doesn't
+ drive your bill.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">What happens when I hit a usage limit? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">Execution pauses and admins are notified. There 
+are no automatic overages or surprise charges. You decide whether to 
+upgrade   it's a feature, not a bug.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">What are FX modules? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">FX modules are capability activations   Avatar 
+FX, Concierge FX, and DevOps Copilot FX each unlock a specific layer of 
+intelligence inside BOS. Chat FX and Project FX are always included. 
+Each module has a flat annual activation fee and operates under governed
+ usage tiers.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">What is BOS MBA? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">BOS MBA is our Early Partner Program   a limited 
+founding cohort for businesses ready to deploy BOS and help shape the 
+platform. BOS MBA is a selective enrollment program for founding 
+partners. You get hands-on deployment inside your business, direct 
+roadmap input, and cohort access alongside other founders and operators.
+ Enrollment is by application only.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">What is iWorkspace? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">iWorkspace is BOS's AI-powered intelligence layer
+ for research, brainstorming, and execution   built directly into the 
+platform. Instead of switching to a separate AI tool, your team runs 
+deep research, ideation sessions, and analytical work inside the same 
+environment where work gets done and executed.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">How does BOS compare to paying for Slack + AI tools separately? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">A 25-person team paying for Slack, Google 
+Workspace, and layered AI tools easily spends $1,000–$2,500/month before
+ adding any automation. BOS Growth overrules all of that   
+communication, project management, agents, storage, and an AI 
+intelligence layer   under one business license.</div>
+  </div>
+</div>
+
+<!-- COMPETITOR COMPARISON -->
+<div style="background:linear-gradient(180deg,#F8F8FA 0%,#F2F2F6 100%);padding:40px 0 0;margin-bottom:0">
+<div style="max-width:1100px;margin:0 auto;padding:0 24px 80px">
+
+  <!-- HEADLINE -->
+  <div style="text-align:center;margin-bottom:48px">
+    <div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#6D28D9;margin-bottom:10px">Why BOS</div>
+    <div style="font-size:36px;font-weight:700;letter-spacing:-.03em;color:var(--ink);line-height:1.15;margin-bottom:16px">The SaaS tax is real.<br>BOS ends it.</div>
+    <div style="font-size:16px;color:var(--ink3);max-width:580px;margin:0 auto;line-height:1.7">A
+ 25-person company pays $2,000–$4,000/month just to communicate and 
+store files   before intelligence, automation, or workforce 
+orchestration even exists. None of it actually thinks for them.</div>
+  </div>
+
+  <!-- PAIN STACK -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:48px">
+    <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:18px 20px;text-align:center">
+      <div id="pain-v1" style="font-size:22px;font-weight:700;color:#DC2626;margin-bottom:4px;font-variant-numeric:tabular-nums">$10,600</div>
+      <div style="font-size:13px;font-weight:600;color:#7F1D1D;margin-bottom:4px">Slack</div>
+      <div style="font-size:12px;color:#991B1B">per month · 25 users</div>
+    </div>
+    <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:18px 20px;text-align:center">
+      <div id="pain-v2" style="font-size:22px;font-weight:700;color:#DC2626;margin-bottom:4px;font-variant-numeric:tabular-nums">$10,500</div>
+      <div style="font-size:13px;font-weight:600;color:#7F1D1D;margin-bottom:4px">Google Workspace</div>
+      <div style="font-size:12px;color:#991B1B">per month · 25 users</div>
+    </div>
+    <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:18px 20px;text-align:center">
+      <div id="pain-v3" style="font-size:22px;font-weight:700;color:#DC2626;margin-bottom:4px;font-variant-numeric:tabular-nums">$9,993</div>
+      <div style="font-size:13px;font-weight:600;color:#7F1D1D;margin-bottom:4px">Notion + ClickUp + BI</div>
+      <div style="font-size:12px;color:#991B1B">per month · fragmented</div>
+    </div>
+    <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;padding:18px 20px;text-align:center">
+      <div id="pain-v4" style="font-size:22px;font-weight:700;color:#DC2626;margin-bottom:4px;font-variant-numeric:tabular-nums">$10,675</div>
+      <div style="font-size:13px;font-weight:600;color:#7F1D1D;margin-bottom:4px">AI subscriptions</div>
+      <div style="font-size:12px;color:#991B1B">layered on top</div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var cards = [
+      { id: 'pain-v1', start: 247,  peak: 10600, prefix: '$' },
+      { id: 'pain-v2', start: 1180, peak: 10500, prefix: '$' },
+      { id: 'pain-v3', start: 763,  peak: 10000, prefix: '$' },
+      { id: 'pain-v4', start: 415,  peak: 10999, prefix: '$' }
+    ];
+    var duration = 3200;
+    var pauseAtPeak = 1100;
+    var stagger = 340;
+
+    function easeInOut(t){ return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+    function animateCard(card, delay){
+      var el = document.getElementById(card.id);
+      if(!el) return;
+      var range = card.peak - card.start;
+
+      function runCycle(){
+        var startTime = null;
+        function step(ts){
+          if(!startTime) startTime = ts;
+          var elapsed = ts - startTime;
+          if(elapsed < duration){
+            var progress = easeInOut(Math.min(elapsed / duration, 1));
+            var val = Math.round(card.start + range * progress);
+            el.textContent = card.prefix + val.toLocaleString();
+            requestAnimationFrame(step);
+          } else {
+            el.textContent = card.prefix + card.peak.toLocaleString();
+            setTimeout(function(){
+              el.textContent = card.prefix + card.start.toLocaleString();
+              setTimeout(runCycle, 300);
+            }, pauseAtPeak);
+          }
+        }
+        requestAnimationFrame(step);
+      }
+
+      setTimeout(runCycle, delay);
+    }
+
+    function startAll(){
+      cards.forEach(function(card, i){
+        animateCard(card, i * stagger);
+      });
+    }
+
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', startAll);
+    } else {
+      startAll();
+    }
+  })();
+  </script>
+
+  <!-- TABLE -->
+  <div style="overflow-x:auto;border:1px solid var(--border);border-radius:16px;background:white">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:700px">
+      <thead>
+        <tr>
+          <th style="padding:14px 18px;text-align:left;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);border-bottom:2px solid var(--border);background:#F9FAFB">Feature · 25 users</th>
+          <th style="padding:14px 14px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:2px solid var(--border);background:#F9FAFB">Slack + Google</th>
+          <th style="padding:14px 14px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:2px solid var(--border);background:#F9FAFB">Microsoft 365</th>
+          <th style="padding:14px 14px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:2px solid var(--border);background:#F9FAFB">Claude CoWork</th>
+          <th style="padding:14px 14px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:2px solid var(--border);background:#F9FAFB">Others</th>
+          <th style="padding:14px 18px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6D28D9;border-bottom:2px solid #6D28D9;background:#F5F3FF">BOS Studio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:white">
+          <td style="padding:12px 18px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border)">Messaging</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">$250–400</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Separate tool</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">No</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">$300–450</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);background:#F5F3FF;font-weight:600;color:#6D28D9">Included</td>
+        </tr>
+        <tr style="background:#F9FAFB">
+          <td style="padding:12px 18px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border)">File Storage</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Included (ltd)</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Separate tool</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">No</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">$300–500</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);background:#F5F3FF;font-weight:600;color:#6D28D9">Included</td>
+        </tr>
+        <tr style="background:white">
+          <td style="padding:12px 18px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border)">Project Mgmt</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Add-on</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Separate tool</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Basic</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">$250–500</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);background:#F5F3FF;font-weight:600;color:#6D28D9">Included</td>
+        </tr>
+        <tr style="background:#F9FAFB">
+          <td style="padding:12px 18px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border)">CRM</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Add-on</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Separate tool</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF">No</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">$300–600</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);background:#F5F3FF;font-weight:600;color:#6D28D9">Included</td>
+        </tr>
+        <tr style="background:white">
+          <td style="padding:12px 18px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border)">AI Layer</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">$500+</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">AI tool only</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Claude AI</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">$500+</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);background:#F5F3FF;font-weight:600;color:#6D28D9">Included</td>
+        </tr>
+        <tr style="background:#F9FAFB">
+          <td style="padding:12px 18px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border)">AI Agents</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Basic / none</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Limited</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);background:#F5F3FF;font-weight:600;color:#6D28D9">Included</td>
+        </tr>
+        <tr style="background:white">
+          <td style="padding:12px 18px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border)">Automation</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Add-on</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Add-on</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF">No</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">$200+</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);background:#F5F3FF;font-weight:600;color:#6D28D9">Included</td>
+        </tr>
+        <tr style="background:#F9FAFB">
+          <td style="padding:12px 18px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border)">BI / Dashboards</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">Power BI add-on</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF">No</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--ink3)">$300+</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);background:#F5F3FF;font-weight:600;color:#6D28D9">Included</td>
+        </tr>
+        <tr style="background:white">
+          <td style="padding:12px 18px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border)">Workforce Mgmt</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF">No</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);background:#F5F3FF;font-weight:600;color:#6D28D9">Included</td>
+        </tr>
+        <tr style="background:#F9FAFB">
+          <td style="padding:12px 18px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border)">Digital Twin / Avatar</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF">No</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);background:#F5F3FF;font-weight:600;color:#6D28D9">Included</td>
+        </tr>
+        <tr style="background:white">
+          <td style="padding:12px 18px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border)">Self-Learning AI</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF">No</td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);color:#9CA3AF"> </td>
+          <td style="padding:12px 14px;text-align:center;border-bottom:1px solid var(--border);background:#F5F3FF;font-weight:600;color:#6D28D9">Included</td>
+        </tr>
+        <tr>
+          <td style="padding:14px 18px;font-weight:700;color:var(--ink);background:#F9FAFB">Total monthly cost</td>
+          <td style="padding:14px 14px;text-align:center;background:#FEF2F2;font-weight:700;color:#DC2626">$2,000–4,000+</td>
+          <td style="padding:14px 14px;text-align:center;background:#FEF2F2;font-weight:700;color:#DC2626">$1,500–3,000+</td>
+          <td style="padding:14px 14px;text-align:center;background:#F9FAFB;font-weight:600;color:var(--ink3)">AI only</td>
+          <td style="padding:14px 14px;text-align:center;background:#F9FAFB;font-weight:600;color:var(--ink3)">Varies</td>
+          <td style="padding:14px 14px;text-align:center;background:#F5F3FF;font-weight:700;font-size:16px;color:#6D28D9;border-radius:0 0 16px 0">Pay-as-you-go</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DISRUPTION LINE -->
+  <div style="text-align:center;margin-top:28px;padding:20px 24px;background:var(--ink);border-radius:12px">
+    <div style="font-size:16px;font-weight:700;color:white;margin-bottom:6px">That's not incremental improvement. That's structural disruption.</div>
+    <div style="font-size:13px;color:#9CA3AF">BOS overrules your entire stack under one unified license   pay for what you use, nothing more.</div>
+  </div>
+
+</div>
+</div>
+<!-- TRUST BAR -->
+<div class="trust-wrap">
+  <div class="trust-label">Trusted by forward-thinking teams</div>
+  <div class="trust-logos">
+    <div class="trust-logo">Acme Corp</div>
+    <div class="trust-logo">Meridian</div>
+    <div class="trust-logo">Apex Digital</div>
+    <div class="trust-logo">NorthStar</div>
+    <div class="trust-logo">Velo Group</div>
+  </div>
+</div>
+
+
+
+
+
+<!-- BOTTOM CTA -->
+<div class="bottom-cta">
+  <h2>"BOS costs less than one Slack seat  <br>and overrules the entire fragmented stack."</h2>
+  <p>One license. One intelligence layer. All in one Business Orchestration System.</p>
+  <div class="bottom-btns">
+    <button class="btn-white" onclick="window.location='BOS_Beta_Landing.html'" style="cursor:pointer">Request Beta Access</button>
+  </div>
+</div>
+
+<footer>
+  <div>© 2026 BOS Studio. All rights reserved.</div>
+  <div>Pricing subject to change at renewal. Enterprise pricing confirmed via Order Form.</div>
+  <div>Privacy · Terms · Security</div>
+</footer>
+
+<script>
+function toggleSection(id) {
+  const rows = document.querySelectorAll(`[data-section="${id}"]`);
+  const toggle = document.getElementById(`toggle-${id}`);
+  const isOpen = toggle.classList.contains('open');
+  toggle.classList.toggle('open', !isOpen);
+  rows.forEach(r => r.classList.toggle('hidden', isOpen));
+}
+
+function toggleFaq(el) {
+  const answer = el.nextElementSibling;
+  const icon = el.querySelector('.faq-toggle');
+  const isOpen = answer.classList.contains('open');
+  answer.classList.toggle('open', !isOpen);
+  icon.classList.toggle('open', !isOpen);
+}
+</script>
+
+
+</body></html>
