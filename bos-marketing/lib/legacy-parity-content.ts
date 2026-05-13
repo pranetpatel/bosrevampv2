@@ -8,7 +8,7 @@
  * - bridge + stats (inside gap): `components/sections/problem-bridge-stats.tsx` (used by chapter-tension)
  * - operational-weight nodes (inside gap): `components/gap-friction-dissolve.tsx` (used by chapter-tension)
  * - friction field + cards (inside gap): `components/gap-friction-interactive.tsx` (used by chapter-tension)
- * - commands bento: `components/sections/commands-bento-section.tsx`
+ * - commands bento removed from homepage (module stories live under System orbital)
  * - tribe + trust: `components/sections/chapter-audience.tsx`
  * - manifesto home: `components/sections/chapter-manifesto.tsx`
  * - close + CTA canvas: `components/sections/final-cta.tsx`, `components/cta-orbit-canvas.tsx`

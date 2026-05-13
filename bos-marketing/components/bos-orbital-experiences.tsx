@@ -706,8 +706,23 @@ function ExperienceCommunication({ reduced }: { reduced: boolean }) {
   );
 }
 
+// ─── Command View tuning knobs ───────────────────────────────────────────────
+const CV_SWEEP_RPM = 6;
+const CV_WEDGE_DEG = 45;
+const CV_BLIP_HIT_DEG = 8;
+const CV_GRID_STEP = 18;
+const CV_ARC_COUNT = 5;
+const CV_SPOKE_COUNT = 11;
+// Stable blip layout [normRadius 0–1, normAngle 0–1 across PI span]
+const CV_BLIPS: ReadonlyArray<readonly [number, number]> = [
+  [0.25, 0.12], [0.45, 0.08], [0.55, 0.22], [0.38, 0.35],
+  [0.50, 0.15], [0.30, 0.52], [0.58, 0.60], [0.42, 0.75],
+  [0.68, 0.42], [0.22, 0.65], [0.62, 0.70], [0.44, 0.88],
+  [0.56, 0.48], [0.28, 0.80], [0.58, 0.85],
+];
+
 function ExperienceCommandView({
-  accentColor,
+  // accentColor ignored per spec – sweep locked to #2E5BFF
   reduced,
 }: {
   accentColor: string;
@@ -716,274 +731,437 @@ function ExperienceCommandView({
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (reduced) return;
     const c = ref.current;
     if (!c) return;
     const ctx = c.getContext("2d");
     if (!ctx) return;
     let raf = 0;
-    let t = 0;
     let cancelled = false;
+    let lastTs = 0;
+    // Start sweep midway so it's immediately visible
+    let sweepAngle = Math.PI * 1.3;
+    const WEDGE_RAD = (CV_WEDGE_DEG * Math.PI) / 180;
+    const HIT_RAD = (CV_BLIP_HIT_DEG * Math.PI) / 180;
+    // rad/s constant rotation
+    const SWEEP_SPEED = (CV_SWEEP_RPM / 60) * Math.PI * 2;
+    const blipDecay = new Float32Array(CV_BLIPS.length);
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    const draw = () => {
+    const draw = (ts: number) => {
       if (cancelled) return;
+      const dt = reduced ? 0 : Math.min((ts - (lastTs || ts)) / 1000, 0.05);
+      lastTs = ts;
+
       const w = c.clientWidth;
       const h = c.clientHeight;
-      if (w < 8) {
-        raf = requestAnimationFrame(draw);
-        return;
-      }
+      if (w < 8) { raf = requestAnimationFrame(draw); return; }
       c.width = w * dpr;
       c.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      t += 0.016;
+
+      if (!reduced) {
+        sweepAngle += SWEEP_SPEED * dt;
+        // Stay on upper semicircle [PI, 2PI): after 2PI wrap to PI + remainder
+        while (sweepAngle >= Math.PI * 2) sweepAngle -= Math.PI;
+        while (sweepAngle < Math.PI) sweepAngle += Math.PI;
+      }
+
+      // Origin bottom-center inside the canvas so the full sweep reads in-frame
       const cx = w * 0.5;
-      const cy = h * 0.92;
-      const R = Math.min(w, h) * 0.78;
-      const arc0 = Math.PI * 1.05;
-      const arcLen = Math.PI * 0.95;
+      const cy = h - 6;
+      const R = Math.min(w * 0.48, cy - 10);
 
-      // subtle square grid under arc
-      ctx.strokeStyle = "rgba(255,255,255,0.04)";
-      ctx.lineWidth = 1;
-      const gs = 14;
-      for (let gx = 0; gx < w; gx += gs) {
-        ctx.beginPath();
-        ctx.moveTo(gx, 0);
-        ctx.lineTo(gx, h);
-        ctx.stroke();
+      // 1 ── Background grid (very subtle, instrument-panel feel)
+      ctx.strokeStyle = "#141414";
+      ctx.lineWidth = 0.75;
+      for (let gx = 0; gx < w; gx += CV_GRID_STEP) {
+        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke();
       }
-      for (let gy = 0; gy < h; gy += gs) {
-        ctx.beginPath();
-        ctx.moveTo(0, gy);
-        ctx.lineTo(w, gy);
-        ctx.stroke();
+      for (let gy = 0; gy < h; gy += CV_GRID_STEP) {
+        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke();
       }
 
-      const rings = 5;
-      for (let ri = 1; ri <= rings; ri++) {
-        const rr = (R * ri) / rings;
+      // 2 ── Concentric semicircular arcs (PI → 2*PI, opening upward)
+      ctx.lineWidth = 0.75;
+      for (let ri = 1; ri <= CV_ARC_COUNT; ri++) {
+        const r = (R * ri) / CV_ARC_COUNT;
         ctx.beginPath();
-        ctx.arc(cx, cy, rr, arc0, arc0 + arcLen);
-        ctx.strokeStyle = "rgba(255,255,255,0.06)";
+        ctx.arc(cx, cy, r, Math.PI, Math.PI * 2, false);
+        ctx.strokeStyle = ri === CV_ARC_COUNT ? "#252525" : "#1C1C1C";
         ctx.stroke();
       }
-      for (let k = 0; k < 9; k++) {
-        const ang = arc0 + (k / 8) * arcLen;
+
+      // 3 ── Radial spokes from origin
+      ctx.strokeStyle = "#1A1A1A";
+      ctx.lineWidth = 0.75;
+      for (let k = 0; k <= CV_SPOKE_COUNT; k++) {
+        const ang = Math.PI + (k / CV_SPOKE_COUNT) * Math.PI;
         ctx.beginPath();
         ctx.moveTo(cx, cy);
         ctx.lineTo(cx + Math.cos(ang) * R, cy + Math.sin(ang) * R);
-        ctx.strokeStyle = "rgba(255,255,255,0.05)";
         ctx.stroke();
       }
 
-      // blips
-      const blips = [0.18, 0.42, 0.67, 0.88];
-      for (const u of blips) {
-        const ang = arc0 + u * arcLen;
-        const rr = R * (0.45 + (u * 0.37) % 0.35);
-        const bx = cx + Math.cos(ang) * rr;
-        const by = cy + Math.sin(ang) * rr;
-        ctx.fillStyle = "rgba(255,255,255,0.12)";
+      // 4 ── Precompute blip canvas positions
+      const blipX = new Float32Array(CV_BLIPS.length);
+      const blipY = new Float32Array(CV_BLIPS.length);
+      const blipAng = new Float32Array(CV_BLIPS.length);
+      for (let i = 0; i < CV_BLIPS.length; i++) {
+        const [nr, na] = CV_BLIPS[i];
+        const ang = Math.PI + na * Math.PI;
+        const r = nr * R;
+        blipX[i] = cx + Math.cos(ang) * r;
+        blipY[i] = cy + Math.sin(ang) * r;
+        blipAng[i] = ang;
+      }
+
+      // 5 ── Sweep (animated only)
+      if (!reduced) {
+        // Trailing wedge: multi-slice for soft atmospheric fade
+        const steps = 14;
+        for (let i = 0; i < steps; i++) {
+          const f0 = i / steps;
+          const f1 = (i + 1) / steps;
+          const a0 = Math.max(sweepAngle - f1 * WEDGE_RAD, Math.PI);
+          const a1 = Math.min(sweepAngle - f0 * WEDGE_RAD, Math.PI * 2);
+          if (a0 >= a1) continue;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, R, a0, a1, false);
+          ctx.closePath();
+          ctx.fillStyle = `rgba(46,91,255,${(1 - f0) * 0.2})`;
+          ctx.fill();
+        }
+
+        // Optional secondary echo wedge
+        const echoOff = WEDGE_RAD * 0.55;
+        const ea0 = Math.max(sweepAngle - WEDGE_RAD - echoOff, Math.PI);
+        const ea1 = Math.min(sweepAngle - echoOff, Math.PI * 2);
+        if (ea0 < ea1) {
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, R * 0.88, ea0, ea1, false);
+          ctx.closePath();
+          ctx.fillStyle = "rgba(46,91,255,0.04)";
+          ctx.fill();
+        }
+
+        // Sweep arm – bright blue line
         ctx.beginPath();
-        ctx.arc(bx, by, 2, 0, Math.PI * 2);
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(sweepAngle) * R, cy + Math.sin(sweepAngle) * R);
+        ctx.strokeStyle = "rgba(46,91,255,0.92)";
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = "#2E5BFF";
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Blip hit-test + decay: retrigger every sweep pass; shortest angular gap
+        for (let i = 0; i < CV_BLIPS.length; i++) {
+          let ad = Math.abs(sweepAngle - blipAng[i]);
+          if (ad > Math.PI) ad = 2 * Math.PI - ad;
+          if (ad < HIT_RAD) blipDecay[i] = 1;
+          blipDecay[i] = Math.max(0, blipDecay[i] - dt * 2.2);
+        }
+      }
+
+      // 6 ── Blips
+      for (let i = 0; i < CV_BLIPS.length; i++) {
+        const d = reduced ? 0 : blipDecay[i];
+        const bx = blipX[i];
+        const by = blipY[i];
+
+        if (d > 0.01 && !reduced) {
+          // Radial glow halo on hit
+          const g = ctx.createRadialGradient(bx, by, 0, bx, by, 14);
+          g.addColorStop(0, `rgba(46,91,255,${d * 0.5})`);
+          g.addColorStop(1, "transparent");
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(bx, by, 14, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.beginPath();
+        ctx.arc(bx, by, 1.8 + d * 1.6, 0, Math.PI * 2);
+        ctx.fillStyle = d > 0.05 && !reduced
+          ? `rgba(220,230,255,${0.35 + d * 0.6})`
+          : "rgba(68,68,68,0.75)";
         ctx.fill();
       }
 
-      const sweepA = arc0 + (t * 0.55) % arcLen;
-      const sweepW = 0.42;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, R, sweepA, Math.min(sweepA + sweepW, arc0 + arcLen), false);
-      ctx.closePath();
-      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
-      g.addColorStop(0, hexToRgba(accentColor, 0.2));
-      g.addColorStop(0.55, hexToRgba(accentColor, 0.08));
-      g.addColorStop(1, "transparent");
-      ctx.fillStyle = g;
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(cx + Math.cos(sweepA + sweepW * 0.5) * R, cy + Math.sin(sweepA + sweepW * 0.5) * R);
-      ctx.strokeStyle = hexToRgba(accentColor, 0.85);
-      ctx.lineWidth = 1.25;
-      ctx.stroke();
-
-      // faint echo sweep
-      const echo = sweepA - 0.35;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, R * 0.92, echo, echo + sweepW * 0.6, false);
-      ctx.closePath();
-      ctx.fillStyle = hexToRgba(accentColor, 0.04);
-      ctx.fill();
-
       raf = requestAnimationFrame(draw);
     };
+
     raf = requestAnimationFrame(draw);
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf);
-    };
-  }, [reduced, accentColor]);
+    return () => { cancelled = true; cancelAnimationFrame(raf); };
+  }, [reduced]);
 
   return (
     <div className="mt-5">
-      <VizPanel className="h-[168px]">
+      <div
+        className="relative overflow-hidden rounded-[18px]"
+        style={{ background: "#0a0a0a", border: "1px solid #1f1f1f" }}
+      >
         {reduced ? (
           <div
-            className="flex h-[168px] items-end justify-center pb-3 opacity-50"
+            className="flex h-[210px] items-end justify-center"
             style={{
-              background: `radial-gradient(ellipse 90% 70% at 50% 100%, ${hexToRgba(accentColor, 0.25)}, transparent 55%)`,
+              background:
+                "radial-gradient(ellipse 80% 55% at 50% 100%, rgba(46,91,255,0.12), transparent 60%)",
             }}
             aria-hidden
           />
         ) : (
-          <canvas ref={ref} className="h-[168px] w-full" aria-hidden />
+          <canvas ref={ref} className="block h-[210px] w-full" aria-hidden />
         )}
-      </VizPanel>
+      </div>
     </div>
   );
 }
 
-function hexToRgba(hex: string, a: number) {
-  const m = /^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(hex.trim());
-  if (!m) return `rgba(26,83,253,${a})`;
-  return `rgba(${parseInt(m[1], 16)},${parseInt(m[2], 16)},${parseInt(m[3], 16)},${a})`;
+// ─── Integrations tuning knobs ───────────────────────────────────────────────
+const INT_NODE_COUNT = 24;
+const INT_SPRING_K = 140;
+const INT_DAMPING = 7.5;
+const INT_NOISE_AMP = 10;
+const INT_REPULSION = 320;
+const INT_LINE_ALPHA = 0.34;
+const INT_HUB_BREATHE = 0.035; // ±3.5% scale pulse
+
+// Jewel-tone palette (saturated, not neon)
+const INT_COLORS = [
+  "#00BCD4", "#26C6DA", "#FF7043", "#FF8F00",
+  "#AB47BC", "#7B1FA2", "#E91E63", "#F06292",
+  "#4CAF50", "#66BB6A", "#5C6BC0", "#3F51B5",
+  "#00E5FF", "#FF4081", "#FFCA28", "#FF6D00",
+] as const;
+
+type IntNode = {
+  baseAng: number; baseRad: number; phase: number; driftRate: number;
+  col: string; size: number; x: number; y: number; vx: number; vy: number;
+};
+
+function makeIntNodes(): IntNode[] {
+  return Array.from({ length: INT_NODE_COUNT }, (_, i) => {
+    // Golden-angle distribution for even angular spread
+    const baseAng = (i * 2.399963) % (Math.PI * 2);
+    const baseRad = Math.min(0.35 + ((i * 7) % 13) * 0.05, 0.82);
+    return {
+      baseAng,
+      baseRad,
+      phase: (i * 1.618) % (Math.PI * 2),
+      driftRate: 0.15 + (i % 5) * 0.06,
+      col: INT_COLORS[i % INT_COLORS.length],
+      size: 2.2 + (i % 3) * 0.7,
+      x: 0, y: 0, vx: 0, vy: 0,
+    };
+  });
 }
 
 function ExperienceIntegrations({ reduced }: { reduced: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (reduced) return;
     const c = ref.current;
     if (!c) return;
     const ctx = c.getContext("2d");
     if (!ctx) return;
     let raf = 0;
-    let t = 0;
     let cancelled = false;
+    let lastTs = 0;
+    let simTime = 0;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const colors = ["#10D988", "#E74C3C", "#f5c542", "#DA34F1", "#3CD3FE", "#FF8C42", "#A78BFA"];
-    const n = 22;
-    const nodes = Array.from({ length: n }, (_, i) => {
-      const a = (i / n) * Math.PI * 2 + i * 0.4;
-      const rr = 0.28 + (i % 7) * 0.045;
-      return {
-        ox: Math.cos(a) * rr,
-        oy: Math.sin(a * 1.1) * rr * 0.72,
-        col: colors[i % colors.length],
-        r: 2 + (i % 4) * 0.45,
-      };
-    });
+    const nodes = makeIntNodes();
+    let initialized = false;
 
-    const draw = () => {
+    const draw = (ts: number) => {
       if (cancelled) return;
+      const dt = reduced ? 0 : Math.min((ts - (lastTs || ts)) / 1000, 0.05);
+      lastTs = ts;
+      simTime += dt;
+
       const w = c.clientWidth;
       const h = c.clientHeight;
-      if (w < 8) {
-        raf = requestAnimationFrame(draw);
-        return;
-      }
+      if (w < 8) { raf = requestAnimationFrame(draw); return; }
       c.width = w * dpr;
       c.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      t += 0.01;
-      const cx = w * 0.5;
-      const cy = h * 0.52;
-      const scale = Math.min(w, h) * 0.42;
 
-      const px = nodes.map((node) => cx + node.ox * scale + Math.sin(t * 0.4 + node.oy * 8) * 4);
-      const py = nodes.map((node) => cy + node.oy * scale + Math.cos(t * 0.35 + node.ox * 8) * 3);
+      const hubX = w * 0.5;
+      const hubY = h * 0.5;
+      const scale = Math.min(w, h) * 0.38;
 
-      for (let i = 0; i < n; i++) {
-        for (let j = i + 1; j < n; j++) {
-          const dx = px[i] - px[j];
-          const dy = py[i] - py[j];
-          const d = Math.hypot(dx, dy);
-          if (d < scale * 0.38) {
-            ctx.strokeStyle = `rgba(255,255,255,${0.03 * (1 - d / (scale * 0.38))})`;
-            ctx.lineWidth = 0.55;
-            ctx.beginPath();
-            ctx.moveTo(px[i], py[i]);
-            ctx.lineTo(px[j], py[j]);
-            ctx.stroke();
+      // Place nodes at base positions on first frame
+      if (!initialized) {
+        initialized = true;
+        for (const n of nodes) {
+          const r = n.baseRad * scale;
+          n.x = hubX + Math.cos(n.baseAng) * r;
+          n.y = hubY + Math.sin(n.baseAng) * r;
+        }
+      }
+
+      // Spring physics (skip in reduced mode)
+      if (!reduced && dt > 0) {
+        for (let i = 0; i < nodes.length; i++) {
+          const n = nodes[i];
+          // Slowly drifting target position
+          const tAng = n.baseAng + Math.sin(simTime * n.driftRate + n.phase) * 0.25;
+          const tRad = n.baseRad * scale + Math.sin(simTime * n.driftRate * 0.7 + n.phase + 1) * INT_NOISE_AMP;
+          const tx = hubX + Math.cos(tAng) * tRad;
+          const ty = hubY + Math.sin(tAng) * tRad;
+
+          // Spring toward target
+          n.vx += (INT_SPRING_K * (tx - n.x) - INT_DAMPING * n.vx) * dt;
+          n.vy += (INT_SPRING_K * (ty - n.y) - INT_DAMPING * n.vy) * dt;
+
+          // Weak repulsion against nearby nodes only (trivial reject: d² check)
+          for (let j = i + 1; j < nodes.length; j++) {
+            const m = nodes[j];
+            const dx = n.x - m.x;
+            const dy = n.y - m.y;
+            const d2 = dx * dx + dy * dy;
+            const minD = 20;
+            if (d2 < minD * minD && d2 > 0.01) {
+              const inv = INT_REPULSION / (d2 * Math.sqrt(d2)) * dt;
+              n.vx += dx * inv; n.vy += dy * inv;
+              m.vx -= dx * inv; m.vy -= dy * inv;
+            }
+          }
+        }
+
+        const MAX_V = 80;
+        for (const n of nodes) {
+          n.x += n.vx * dt;
+          n.y += n.vy * dt;
+          const v2 = n.vx * n.vx + n.vy * n.vy;
+          if (v2 > MAX_V * MAX_V) {
+            const inv = MAX_V / Math.sqrt(v2);
+            n.vx *= inv;
+            n.vy *= inv;
+          }
+        }
+
+        // Keep nodes in an annulus around hub (stable “orbit” without drifting off-canvas)
+        const minR = scale * 0.22;
+        const maxR = scale * 0.88;
+        for (const n of nodes) {
+          const dx = n.x - hubX;
+          const dy = n.y - hubY;
+          const dist = Math.hypot(dx, dy) || 1;
+          if (dist < minR) {
+            const k = minR / dist;
+            n.x = hubX + dx * k;
+            n.y = hubY + dy * k;
+            n.vx *= 0.3;
+            n.vy *= 0.3;
+          } else if (dist > maxR) {
+            const k = maxR / dist;
+            n.x = hubX + dx * k;
+            n.y = hubY + dy * k;
+            n.vx *= 0.4;
+            n.vy *= 0.4;
           }
         }
       }
 
-      for (let i = 0; i < n; i++) {
-        const pulse = 0.5 + 0.5 * Math.sin(t * 2 + i * 0.3);
+      // Hub-to-node lines with line shimmer
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        const shimmer = reduced
+          ? INT_LINE_ALPHA
+          : INT_LINE_ALPHA + 0.08 * Math.sin(simTime * 1.2 + i * 0.7);
         ctx.beginPath();
-        ctx.arc(px[i], py[i], nodes[i].r + pulse * 0.6, 0, Math.PI * 2);
-        ctx.fillStyle = nodes[i].col;
-        ctx.globalAlpha = 0.45 + pulse * 0.35;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-        ctx.strokeStyle = "rgba(255,255,255,0.12)";
-        ctx.lineWidth = 0.6;
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.lineTo(px[i], py[i]);
+        ctx.moveTo(hubX, hubY);
+        ctx.lineTo(n.x, n.y);
+        ctx.strokeStyle = `rgba(50,50,50,${shimmer})`;
+        ctx.lineWidth = 0.7;
         ctx.stroke();
       }
 
-      const hubPulse = 0.65 + 0.35 * Math.sin(t * 1.8);
-      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 14 * hubPulse);
-      g.addColorStop(0, `rgba(255,255,255,${0.85 * hubPulse})`);
-      g.addColorStop(0.35, "rgba(218,52,241,0.25)");
-      g.addColorStop(1, "transparent");
-      ctx.fillStyle = g;
+      // Peripheral nodes
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
+        const pulse = reduced ? 0.7 : 0.6 + 0.4 * Math.sin(simTime * 1.8 + i * 0.6);
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.size * pulse, 0, Math.PI * 2);
+        ctx.fillStyle = n.col;
+        ctx.globalAlpha = 0.72 + pulse * 0.2;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // Central hub with breathing glow
+      const breath = reduced ? 1 : 1 + INT_HUB_BREATHE * Math.sin(simTime * 0.9);
+      const hubR = 5 * breath;
+      const hg = ctx.createRadialGradient(hubX, hubY, 0, hubX, hubY, hubR * 3.5);
+      hg.addColorStop(0, "rgba(255,255,255,0.9)");
+      hg.addColorStop(0.4, "rgba(200,210,255,0.18)");
+      hg.addColorStop(1, "transparent");
+      ctx.fillStyle = hg;
       ctx.beginPath();
-      ctx.arc(cx, cy, 6 + hubPulse * 2, 0, Math.PI * 2);
+      ctx.arc(hubX, hubY, hubR * 3.5, 0, Math.PI * 2);
       ctx.fill();
+      // Bright core dot
       ctx.beginPath();
-      ctx.arc(cx, cy, 3, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255,255,255,0.95)";
+      ctx.arc(hubX, hubY, 3, 0, Math.PI * 2);
+      ctx.fillStyle = "#FFFFFF";
       ctx.fill();
 
       raf = requestAnimationFrame(draw);
     };
+
     raf = requestAnimationFrame(draw);
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf);
-    };
+    return () => { cancelled = true; cancelAnimationFrame(raf); };
   }, [reduced]);
 
   return (
     <div className="mt-5">
-      <VizPanel className="h-[200px]">
+      <div
+        className="relative overflow-hidden rounded-[18px]"
+        style={{ background: "#020202", border: `1px solid ${LEGACY.borderGold}` }}
+      >
         {reduced ? (
-          <div className="flex h-[200px] items-center justify-center opacity-55" aria-hidden>
-            <div className="relative h-24 w-24 rounded-full border" style={{ borderColor: LEGACY.borderGold }}>
-              <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
+          <div className="flex h-[220px] items-center justify-center opacity-55" aria-hidden>
+            <div className="relative h-24 w-24 rounded-full" style={{ border: `1px solid ${LEGACY.borderGold}` }}>
+              <span className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
             </div>
           </div>
         ) : (
-          <canvas ref={ref} className="h-[200px] w-full" aria-hidden />
+          <canvas ref={ref} className="block h-[220px] w-full" aria-hidden />
         )}
-      </VizPanel>
-      <div className="mt-4 flex flex-wrap justify-center gap-10 text-center">
+      </div>
+      <div className="mt-4 flex gap-10">
         <div>
-          <p className="font-[family-name:var(--font-display)] text-[26px] font-extrabold" style={{ color: LEGACY.goldLight }}>
+          <p
+            className="font-[family-name:var(--font-display)] text-[30px] font-extrabold leading-none"
+            style={{ color: LEGACY.goldLight }}
+          >
             200+
           </p>
-          <p className="mt-1 font-[family-name:var(--font-sans)] text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: LEGACY.textMuted }}>
+          <p
+            className="mt-1.5 font-[family-name:var(--font-sans)] text-[10px] font-bold uppercase tracking-[0.2em]"
+            style={{ color: LEGACY.textMuted }}
+          >
             Integrations
           </p>
         </div>
         <div>
-          <p className="font-[family-name:var(--font-display)] text-[26px] font-extrabold" style={{ color: LEGACY.goldLight }}>
+          <p
+            className="font-[family-name:var(--font-display)] text-[30px] font-extrabold leading-none"
+            style={{ color: LEGACY.goldLight }}
+          >
             Day 1
           </p>
-          <p className="mt-1 font-[family-name:var(--font-sans)] text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: LEGACY.textMuted }}>
-            Time to value
+          <p
+            className="mt-1.5 font-[family-name:var(--font-sans)] text-[10px] font-bold uppercase tracking-[0.18em]"
+            style={{ color: LEGACY.textMuted }}
+          >
+            Time to Value
           </p>
         </div>
       </div>

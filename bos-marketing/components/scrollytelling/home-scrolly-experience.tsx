@@ -11,7 +11,6 @@ import { ChapterManifestoSection } from "@/components/sections/chapter-manifesto
 import { ChapterSystemSection } from "@/components/sections/chapter-system";
 import { ChapterTensionSection } from "@/components/sections/chapter-tension";
 import { ChaosIntroSection } from "@/components/sections/chaos-intro-section";
-import { CommandsBentoSection } from "@/components/sections/commands-bento-section";
 import { FinalCtaSection } from "@/components/sections/final-cta";
 import { HeroSection } from "@/components/sections/hero";
 import { stripIconsHeroMarquee } from "@/components/icons/bos-strip-icons";
@@ -41,7 +40,6 @@ export function HomeScrollyExperience() {
         <ChapterSystemSection />
         <ChapterFlowSection />
         <ChapterConvictionSection />
-        <CommandsBentoSection />
         <ChapterAudienceSection />
         <ChapterManifestoSection />
         <FinalCtaSection />
