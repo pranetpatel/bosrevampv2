@@ -5,7 +5,6 @@ import { ChapterNav } from "@/components/chapter-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
 import { ChapterAudienceSection } from "@/components/sections/chapter-audience";
-import { ChapterConvictionSection } from "@/components/sections/chapter-conviction";
 import { ChapterFlowPillarsSection } from "@/components/sections/chapter-flow-pillars";
 import { ChapterFlowSection } from "@/components/sections/chapter-flow";
 import { ChapterManifestoSection } from "@/components/sections/chapter-manifesto";
@@ -41,7 +40,6 @@ export function HomeScrollyExperience() {
         <ChapterSystemSection />
         <ChapterFlowSection />
         <ChapterFlowPillarsSection />
-        <ChapterConvictionSection />
         <ChapterAudienceSection />
         <ChapterManifestoSection />
         <FinalCtaSection />

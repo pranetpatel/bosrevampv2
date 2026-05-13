@@ -65,10 +65,9 @@ const CHAPTERS = [
   { id: "tension", step: 3, label: "Friction" },
   { id: "system", step: 4, label: "System" },
   { id: "flow", step: 5, label: "Flow" },
-  { id: "conviction", step: 6, label: "Why" },
-  { id: "tribe", step: 7, label: "Who" },
-  { id: "manifesto", step: 8, label: "Principles" },
-  { id: "close", step: 9, label: "Start" },
+  { id: "tribe", step: 6, label: "Who" },
+  { id: "manifesto", step: 7, label: "Principles" },
+  { id: "close", step: 8, label: "Start" },
 ] as const;
 
 export function ChapterNav() {

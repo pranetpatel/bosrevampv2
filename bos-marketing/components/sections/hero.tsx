@@ -47,7 +47,7 @@ export function HeroSection() {
         style={{ animationDelay: "1.05s" }}
       >
         <Link
-          href="/demo"
+          href="/get-started"
           className="relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-[var(--orchid)] px-10 py-4 font-[family-name:var(--font-ui)] text-sm font-bold tracking-wide text-white shadow-[0_12px_40px_var(--purple-glow)] transition hover:-translate-y-0.5 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cyan)]"
         >
           Get started

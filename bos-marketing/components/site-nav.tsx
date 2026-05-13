@@ -78,7 +78,7 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
       </nav>
       <div className="flex items-center gap-2 sm:gap-3">
         <Link
-          href="/demo"
+          href="/get-started"
           className="inline-flex shrink-0 font-[family-name:var(--font-ui)] bg-[var(--cyan)] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--surface-dark)] shadow-[0_0_20px_rgba(4,209,224,0.35)] transition hover:-translate-y-px hover:shadow-[0_0_32px_rgba(4,209,224,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)] sm:px-5 sm:text-[11px] sm:tracking-[0.12em]"
         >
           Get started
@@ -123,7 +123,7 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
               </Link>
             ))}
             <Link
-              href="/demo"
+              href="/get-started"
               className="mt-4 inline-flex justify-center rounded-md bg-[var(--cyan)] px-4 py-3 font-[family-name:var(--font-ui)] text-sm font-bold uppercase tracking-[0.12em] text-[var(--surface-dark)]"
               onClick={() => setMenuOpen(false)}
             >

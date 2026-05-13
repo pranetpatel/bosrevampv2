@@ -26,7 +26,7 @@ export function FinalCtaSection() {
           <span className="relative inline-flex">
             <CtaOrbitCanvas />
             <Link
-              href="/demo"
+              href="/get-started"
               className="group relative z-[1] inline-flex overflow-hidden rounded-full bg-[var(--orchid)] px-10 py-4 font-[family-name:var(--font-ui)] text-sm font-bold text-white shadow-[0_12px_40px_var(--purple-glow)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_56px_var(--purple-glow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cyan)]"
             >
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-500 group-hover:translate-x-full" aria-hidden />
