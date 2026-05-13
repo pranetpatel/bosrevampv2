@@ -1,6 +1,5 @@
-import { ChapterMediaPanel } from "@/components/chapter-media-panel";
+import { GapFrictionDissolve } from "@/components/gap-friction-dissolve";
 import { MotionClipReveal, MotionReveal } from "@/components/motion-reveal";
-import { SITE_MEDIA } from "@/lib/site-media";
 
 const friction = ["Fragmented tools", "Coordination overhead", "Blind spots"];
 
@@ -12,13 +11,7 @@ export function ChapterTensionSection() {
     >
       <div className="mx-auto max-w-6xl space-y-10">
         <MotionReveal>
-          <ChapterMediaPanel
-            src={SITE_MEDIA.chapterGap}
-            alt="Fragmented operations and coordination overhead — cinematic abstract treatment."
-            variant="edge-fade"
-            aspectClassName="aspect-[16/9] md:aspect-[21/8]"
-            priority={false}
-          />
+          <GapFrictionDissolve />
         </MotionReveal>
         <MotionReveal delay={0.08}>
           <div className="overflow-hidden rounded-[2rem] border border-white/8 bg-gradient-to-br from-[#0a1528] via-[#140a24] to-[#0a0a0a] shadow-[0_32px_100px_rgba(0,0,0,0.5)]">

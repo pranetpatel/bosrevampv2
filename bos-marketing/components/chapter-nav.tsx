@@ -29,17 +29,32 @@ function getScrollYForChapterInHorizontalRail(target: HTMLElement): number | nul
   return st.start + progress * span;
 }
 
-/** Only one horizontal rail is pinned at a time; TOC must not compare X across all sections globally. */
+/**
+ * Which horizontal rail is "current" for TOC. `isActive` can overlap across rails for a frame or
+ * when ranges abut; pick by scroll position instead of first match in DOM.
+ */
 function getActivePinnedHorizontalRail(): HTMLElement | null {
   registerScrollTrigger();
-  const rails = document.querySelectorAll<HTMLElement>("[data-horizontal-rail]");
+  const y = window.scrollY || document.documentElement.scrollTop;
+  const rails = [...document.querySelectorAll<HTMLElement>("[data-horizontal-rail]")];
+  const actives: { rail: HTMLElement; st: ScrollTrigger; start: number; end: number }[] = [];
+
   for (const rail of rails) {
     const st = ScrollTrigger.getAll().find(
       (s) => s.trigger === rail && Boolean((s.vars as { pin?: boolean }).pin),
     );
-    if (st?.isActive) return rail;
+    if (!st?.isActive) continue;
+    actives.push({ rail, st, start: st.start, end: st.end });
   }
-  return null;
+  if (actives.length === 0) return null;
+  if (actives.length === 1) return actives[0].rail;
+
+  const inRange = actives.filter((a) => y >= a.start && y <= a.end);
+  if (inRange.length === 1) return inRange[0].rail;
+  if (inRange.length > 1) {
+    return inRange.reduce((a, b) => (a.start >= b.start ? a : b)).rail;
+  }
+  return actives.reduce((a, b) => (a.start >= b.start ? a : b)).rail;
 }
 
 /** Order matches scroll order on the homepage (not “importance” rank — use step numbers for that). */
@@ -71,11 +86,7 @@ export function ChapterNav() {
       const track = pinnedRail.querySelector<HTMLElement>("[data-horizontal-track]");
       const panels = track ? ([...track.children] as HTMLElement[]) : [];
       const focusX = window.innerWidth * 0.46;
-      const firstPanelId = panels
-        .map((p) => p.getAttribute("data-chapter-panel"))
-        .find((id): id is string => Boolean(id));
-      const firstChapter = firstPanelId ? CHAPTERS.find((c) => c.id === firstPanelId) : undefined;
-      let best: (typeof CHAPTERS)[number]["id"] = firstChapter?.id ?? CHAPTERS[0].id;
+      let best: (typeof CHAPTERS)[number]["id"] | null = null;
       let bestDist = Infinity;
 
       for (const panel of panels) {
@@ -94,17 +105,37 @@ export function ChapterNav() {
           }
         }
       }
-      setActive((prev) => (prev === best ? prev : best));
+
+      if (best === null && panels.length > 0) {
+        const st = ScrollTrigger.getAll().find(
+          (s) => s.trigger === pinnedRail && Boolean((s.vars as { pin?: boolean }).pin),
+        );
+        const y = window.scrollY || document.documentElement.scrollTop;
+        if (st && st.end > st.start) {
+          const t = Math.min(1, Math.max(0, (y - st.start) / (st.end - st.start)));
+          const idx = Math.min(panels.length - 1, Math.round(t * Math.max(panels.length - 1, 0)));
+          const id = panels[idx]?.getAttribute("data-chapter-panel");
+          const hit = id ? CHAPTERS.find((c) => c.id === id) : undefined;
+          if (hit) best = hit.id;
+        }
+      }
+
+      if (best !== null) {
+        setActive((prev) => (prev === best ? prev : best));
+      }
       return;
     }
 
     const focusY = window.innerHeight * 0.38;
-    let best: (typeof CHAPTERS)[number]["id"] = CHAPTERS[0].id;
+    let best: (typeof CHAPTERS)[number]["id"] | null = null;
     let bestDist = Infinity;
 
     for (const c of CHAPTERS) {
       const el = document.getElementById(c.id);
       if (!el) continue;
+      // Sections inside horizontal panels still span the viewport vertically while translated
+      // off-screen; excluding them here prevents false "Gap" / "Principles" hits between rails.
+      if (el.closest("[data-horizontal-track]")) continue;
       const r = el.getBoundingClientRect();
       if (r.bottom < 80 || r.top > window.innerHeight - 80) continue;
       const mid = r.top + r.height / 2;
@@ -114,7 +145,10 @@ export function ChapterNav() {
         best = c.id;
       }
     }
-    setActive((prev) => (prev === best ? prev : best));
+
+    if (best !== null) {
+      setActive((prev) => (prev === best ? prev : best));
+    }
   }, []);
 
   const scheduleActiveUpdate = useCallback(() => {
