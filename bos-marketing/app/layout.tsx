@@ -27,11 +27,11 @@ export const metadata: Metadata = {
     template: "%s | BOS",
   },
   description:
-    "Business Orchestration System — replace fragmented tools with one intelligent layer that executes. Work, data, teams, and agents in one place.",
+    "Business Orchestration System — work made simple by connecting work, data, teams, and agents in an execution layer.",
   openGraph: {
     title: "BOS — Work Made Simple",
     description:
-      "One system for outcomes — not dashboards, workflows, or tool sprawl.",
+      "Work made simple for outcomes — not dashboards, workflows, or tool sprawl.",
     url: siteUrl,
     siteName: "BOS",
     locale: "en_US",

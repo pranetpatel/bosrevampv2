@@ -15,7 +15,7 @@ const sections = [
     items: [
       { label: "What is BOS?", href: "/product", hint: "Modules and execution loop" },
       { label: "How BOS works", href: "/how-it-works", hint: "Message → outcome" },
-      { label: "BOS vs traditional tools", href: "/compare", hint: "Categories vs one system" },
+      { label: "BOS vs traditional tools", href: "/compare", hint: "Categories vs work made simple" },
     ],
   },
   {

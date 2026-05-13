@@ -8,12 +8,17 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
-const legacyHtml = path.join(
-  root,
-  "..",
-  "legacy",
-  "BOS — Work Made Simple.htm",
-);
+const legacyDir = path.join(root, "..", "legacy");
+const legacyFile = fs
+  .readdirSync(legacyDir)
+  .find((file) => file.startsWith("BOS") && file.endsWith(".htm"));
+
+if (!legacyFile) {
+  console.error("No BOS legacy HTML export found.");
+  process.exit(1);
+}
+
+const legacyHtml = path.join(legacyDir, legacyFile);
 
 const html = fs.readFileSync(legacyHtml, "utf8");
 const m = html.match(/data:video\/mp4;base64,([^"]+)/);

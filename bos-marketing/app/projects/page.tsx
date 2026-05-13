@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 
 const cases = [
   {
-    title: "Eight tools → one system",
+    title: "Eight tools → work made simple",
     goal: "Slow follow-ups, scattered systems, no execution visibility.",
     did: "Replaced the stack with BOS — agents for outreach, follow-ups, and coordination with integrations into one execution layer.",
-    result: "Faster responses, higher conversion, fewer tools. One system where agents execute and teams stay aligned.",
+    result: "Faster responses, higher conversion, fewer tools. Agents execute and teams stay aligned.",
   },
   {
     title: "AI sales agent",

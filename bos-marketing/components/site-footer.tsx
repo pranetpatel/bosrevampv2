@@ -15,7 +15,7 @@ export function SiteFooter() {
             />
           </Link>
           <p className="mt-4 font-[family-name:var(--font-sans)] text-sm text-white/60">
-            Business Orchestration System — one intelligent layer for work, data,
+            Business Orchestration System — work made simple across work, data,
             teams, and agents.
           </p>
         </div>

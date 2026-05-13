@@ -33,7 +33,7 @@ export function HeroSection() {
         style={{ animationDelay: "0.75s" }}
       >
         <span className="font-[family-name:var(--font-sans)] block text-[clamp(1.05rem,2.5vw,1.35rem)] font-semibold leading-[1.4] tracking-tight text-white/90">
-          Fragmented ops → one system that executes
+          Fragmented ops → work made simple by execution
         </span>
       </div>
       <div

@@ -86,7 +86,7 @@ export function HorizontalPanel({
       data-chapter-panel={chapterId}
       className="flex h-[100dvh] w-screen shrink-0 flex-col overflow-hidden border-r border-white/[0.04]"
     >
-      <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain [scrollbar-gutter:stable]">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain [scrollbar-gutter:stable]">
         {children}
       </div>
     </div>

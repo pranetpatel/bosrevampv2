@@ -140,10 +140,10 @@ export default function StudioPlansPricing() {
           Power Up
         </h1>
         <p className="mx-auto mt-5 max-w-lg font-[family-name:var(--font-sans)] text-lg leading-relaxed text-white/65">
-          The Business Orchestration System that overrules your fragmented SaaS stack. One
+          The Business Orchestration System that makes fragmented SaaS stacks simple to run. One
           license. One intelligence layer.{" "}
           <mark className="rounded bg-gradient-to-r from-[var(--orchid)]/30 to-[var(--magenta)]/25 px-1.5 py-0.5 font-semibold text-white">
-            One stop shop for work
+            Work made simple
           </mark>
         </p>
       </div>
@@ -174,7 +174,7 @@ export default function StudioPlansPricing() {
             </div>
             <p className="mt-6 max-w-xl font-[family-name:var(--font-sans)] text-sm leading-relaxed text-white/65">
               The complete Business Orchestration System — overrule Slack, Notion, and fragmented AI
-              tools with one unified platform. Request beta access and get started immediately.
+              tools with simple execution across your business. Request beta access and get started immediately.
             </p>
             <Link
               href="/demo"
@@ -279,10 +279,10 @@ export default function StudioPlansPricing() {
           <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-bold leading-tight text-white md:text-4xl">
             Five layers.
             <br />
-            One system.
+            Work made simple.
           </h2>
           <p className="mx-auto mt-4 max-w-md text-sm text-white/55">
-            Every problem you&apos;ve been patching with five tools, solved by one.
+            Every problem you&apos;ve been patching with five tools, made simpler to run.
           </p>
         </div>
         <div className="mt-12 flex flex-col gap-4">
@@ -520,7 +520,7 @@ export default function StudioPlansPricing() {
           &quot;BOS costs less than one Slack seat — and overrules the entire fragmented stack.&quot;
         </h2>
         <p className="mx-auto mt-4 max-w-md text-sm text-white/50">
-          One license. One intelligence layer. All in one Business Orchestration System.
+          One license. One intelligence layer. Work made simple with BOS.
         </p>
         <Link
           href="/demo"

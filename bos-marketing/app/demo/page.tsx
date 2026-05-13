@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Demo",
-  description: "Watch BOS in action — message to execution in one system.",
+  description: "Watch BOS in action — message to execution, work made simple.",
 };
 
 export default function DemoPage() {

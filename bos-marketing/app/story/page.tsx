@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Story",
-  description: "Why BOS — from fragmentation and duct-tape stacks to one system that runs.",
+  description: "Why BOS — from fragmentation and duct-tape stacks to work made simple.",
 };
 
 export default function StoryPage() {

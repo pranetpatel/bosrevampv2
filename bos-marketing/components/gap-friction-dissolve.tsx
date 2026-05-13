@@ -146,9 +146,9 @@ export function GapFrictionDissolve() {
 
   return (
     <div
-      className="panel-vignette relative aspect-[16/9] w-full overflow-hidden md:aspect-[21/8]"
+      className="panel-vignette relative aspect-[16/9] w-full shrink-0 overflow-hidden md:aspect-auto md:h-[clamp(200px,32svh,280px)]"
       role="img"
-      aria-label="Interactive visualization of operational friction. Hover or tap each glowing node to dissolve it."
+      aria-label="Interactive visualization of operational friction. Click each glowing node to dissolve it."
     >
       <div
         className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_38%,rgba(26,83,253,0.14),transparent_58%),linear-gradient(165deg,#0a1528_0%,#140a24_42%,#0a0a0a_100%)]"
@@ -180,7 +180,7 @@ export function GapFrictionDissolve() {
           Operational weight
         </p>
         <p className="mt-2 max-w-md font-[family-name:var(--font-sans)] text-[13px] leading-snug text-white/48 md:text-sm">
-          Clear each source of drag — tap or hover the nodes.
+          Clear each source of drag — click the nodes.
         </p>
       </div>
 
@@ -195,10 +195,6 @@ export function GapFrictionDissolve() {
                 gone ? "pointer-events-none" : "cursor-crosshair",
               ].join(" ")}
               style={{ left: `${n.x}%`, top: `${n.y}%` }}
-              onPointerEnter={(e) => {
-                if (reduced || gone) return;
-                if (e.pointerType === "mouse") onDismiss(n.id);
-              }}
               onClick={() => {
                 if (!gone) onDismiss(n.id);
               }}
@@ -270,7 +266,7 @@ export function GapFrictionDissolve() {
       </div>
 
       <p className="pointer-events-none absolute bottom-4 left-0 right-0 z-[2] text-center font-[family-name:var(--font-ui)] text-[9px] font-semibold uppercase tracking-[0.22em] text-white/28 md:bottom-5">
-        {reduced ? "Tap a node to clear it" : "Hover or tap each node to dissolve it"}
+        {reduced ? "Tap a node to clear it" : "Click each node to dissolve it"}
       </p>
 
       {remaining === 0 ? (

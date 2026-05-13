@@ -50,7 +50,7 @@ export default function ManifestoPage() {
             </h2>
             <p className="mt-4 font-[family-name:var(--font-sans)] text-white/60">
               That power is not reserved for enterprises. We back builders and operators who
-              never had it — one system, outcomes over overhead.
+              never had it — work made simple, outcomes over overhead.
             </p>
             <p className="mt-10">
               <Link
