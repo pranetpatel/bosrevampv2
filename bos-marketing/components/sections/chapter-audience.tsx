@@ -114,14 +114,15 @@ export function ChapterAudienceSection() {
 
         <div className="relative mx-auto max-w-6xl">
           <h2 className="font-[family-name:var(--font-display)] text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[1.04] tracking-tight text-white">
-            Who runs{" "}
-            <span className="bg-gradient-to-r from-[var(--orchid)] to-[var(--cyan)] bg-clip-text text-transparent">
-              on BOS
+            The next generation{" "}
+            <span className="bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] bg-clip-text text-transparent">
+              of companies.
             </span>
           </h2>
           <p className="mt-6 max-w-lg font-[family-name:var(--font-ui)] text-base leading-relaxed text-white/55">
-            Teams that need execution &mdash; not another dashboard. Metrics below are illustrative
-            of the orchestration story, not guarantees.
+            Lean teams. Fast operators. Modern businesses that need speed, clarity, and execution
+            &mdash; not another dashboard. Metrics below are illustrative of the orchestration
+            story, not guarantees.
           </p>
 
           <div className="audience-scroll mt-14 flex gap-6 overflow-x-auto pb-4 pt-2 md:gap-8">
@@ -178,17 +179,18 @@ export function ChapterAudienceSection() {
         >
           <MotionReveal className="flex h-full w-[min(90vw,560px)] shrink-0 flex-col justify-center md:w-[min(70vw,640px)]">
             <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--cyan)]">
-              Chapter &mdash; Audience
+              Chapter &mdash; The next generation
             </p>
             <h2 className="mt-4 font-[family-name:var(--font-display)] text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[1.04] tracking-tight text-white">
-              Who runs{" "}
-              <span className="bg-gradient-to-r from-[var(--orchid)] to-[var(--cyan)] bg-clip-text text-transparent">
-                on BOS
+              The next generation{" "}
+              <span className="bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] bg-clip-text text-transparent">
+                of companies.
               </span>
             </h2>
             <p className="mt-6 max-w-md font-[family-name:var(--font-ui)] text-base leading-relaxed text-white/55">
-              Teams that need execution &mdash; not another dashboard. Metrics below are
-              illustrative of the orchestration story, not guarantees.
+              Lean teams. Fast operators. Modern businesses that need speed, clarity, and execution
+              &mdash; not another dashboard. Metrics below are illustrative of the orchestration
+              story, not guarantees.
             </p>
             <p className="mt-8 inline-flex items-center gap-2 font-[family-name:var(--font-ui)] text-[11px] font-medium uppercase tracking-[0.22em] text-white/35">
               <span aria-hidden>&rarr;</span>

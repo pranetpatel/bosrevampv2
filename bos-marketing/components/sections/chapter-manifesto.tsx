@@ -67,26 +67,20 @@ export function ChapterManifestoSection() {
           </p>
           <h2 className="mt-6 font-[family-name:var(--font-display)] text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.06] tracking-tight text-white">
             <MotionClipReveal delay={0.06} as="span">
-              We did not build{" "}
-            </MotionClipReveal>
-            <MotionClipReveal delay={0.14} as="span">
-              another tool.
+              {manifestoHome.mainHed}
             </MotionClipReveal>
           </h2>
-          <p className="mt-8 border-l-2 border-[var(--orchid)]/35 pl-5 font-[family-name:var(--font-sans)] text-sm leading-[1.85] text-white/45">
+          <p className="mt-8 font-[family-name:var(--font-sans)] text-sm leading-[1.85] text-white/45">
             {manifestoHome.thesis}
           </p>
-          <blockquote className="mt-10 border-l-2 border-[var(--magenta)]/35 py-2 pl-5 font-[family-name:var(--font-display)] text-lg font-semibold italic leading-snug text-white/70 md:text-xl">
-            {manifestoHome.quote}
-          </blockquote>
-          <p className="mt-4 pl-5 font-[family-name:var(--font-ui)] text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
-            {manifestoHome.attr}
+          <p className="mt-6 font-[family-name:var(--font-ui)] text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
+            {manifestoHome.meta}
           </p>
           <Link
             href="/manifesto"
             className="mt-10 inline-flex items-center gap-3 border border-white/15 px-5 py-3 font-[family-name:var(--font-ui)] text-[11px] font-bold uppercase tracking-[0.12em] text-white/80 transition hover:border-[var(--orchid)]/40 hover:text-white"
           >
-            Read full manifesto
+            {manifestoHome.cta}
             <span className="text-[var(--orchid)]" aria-hidden>
               →
             </span>
@@ -97,7 +91,7 @@ export function ChapterManifestoSection() {
           <div
             role="tablist"
             aria-label="Principles"
-            className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3"
+            className="grid grid-cols-2 gap-2 sm:gap-3"
             onKeyDown={onTabListKeyDown}
           >
             {tiles.map((t, i) => {
@@ -164,7 +158,7 @@ export function ChapterManifestoSection() {
                         <p className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--cyan)]">
                           {tile.statN}
                         </p>
-                        <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.1em] text-white/35">
+                        <p className="mt-1 text-[11px] font-medium leading-snug tracking-wide text-white/45">
                           {tile.statL}
                         </p>
                       </div>
