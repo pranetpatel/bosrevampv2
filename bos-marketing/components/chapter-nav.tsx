@@ -59,6 +59,7 @@ export function ChapterNav() {
   const [active, setActive] = useState<string>("welcome");
   const railRef = useRef<HTMLDivElement>(null);
   const dotRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const rafRef = useRef(0);
   const [fillPct, setFillPct] = useState(0);
   const lenis = useLenis();
 
@@ -93,7 +94,7 @@ export function ChapterNav() {
           }
         }
       }
-      setActive(best);
+      setActive((prev) => (prev === best ? prev : best));
       return;
     }
 
@@ -113,8 +114,16 @@ export function ChapterNav() {
         best = c.id;
       }
     }
-    setActive(best);
+    setActive((prev) => (prev === best ? prev : best));
   }, []);
+
+  const scheduleActiveUpdate = useCallback(() => {
+    if (rafRef.current) return;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0;
+      updateActive();
+    });
+  }, [updateActive]);
 
   useEffect(() => {
     const rail = railRef.current;
@@ -124,37 +133,27 @@ export function ChapterNav() {
     const railRect = rail.getBoundingClientRect();
     const dotRect = activeDot.getBoundingClientRect();
     const dotCenter = dotRect.top + dotRect.height / 2 - railRect.top;
-    setFillPct((dotCenter / railRect.height) * 100);
+    const next = railRect.height > 0 ? (dotCenter / railRect.height) * 100 : 0;
+    setFillPct((prev) => (Math.abs(prev - next) < 0.5 ? prev : next));
   }, [activeIndex]);
 
   useEffect(() => {
-    const raf = requestAnimationFrame(() => updateActive());
-    window.addEventListener("scroll", updateActive, { passive: true });
-    window.addEventListener("resize", updateActive, { passive: true });
+    if (lenis) {
+      lenis.on("scroll", scheduleActiveUpdate);
+    } else {
+      window.addEventListener("scroll", scheduleActiveUpdate, { passive: true });
+    }
+    window.addEventListener("resize", scheduleActiveUpdate, { passive: true });
+    scheduleActiveUpdate();
     return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", updateActive);
-      window.removeEventListener("resize", updateActive);
+      if (lenis) lenis.off("scroll", scheduleActiveUpdate);
+      else window.removeEventListener("scroll", scheduleActiveUpdate);
+      window.removeEventListener("resize", scheduleActiveUpdate);
+      const id = rafRef.current;
+      if (id) cancelAnimationFrame(id);
+      rafRef.current = 0;
     };
-  }, [updateActive]);
-
-  useEffect(() => {
-    if (!lenis) return;
-    const onLenisScroll = () => {
-      updateActive();
-    };
-    lenis.on("scroll", onLenisScroll);
-    return () => {
-      lenis.off("scroll", onLenisScroll);
-    };
-  }, [lenis, updateActive]);
-
-  useEffect(() => {
-    const id = window.setTimeout(() => {
-      updateActive();
-    }, 0);
-    return () => window.clearTimeout(id);
-  }, [updateActive]);
+  }, [lenis, scheduleActiveUpdate]);
 
   return (
     <nav

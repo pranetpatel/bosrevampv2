@@ -2,7 +2,6 @@
 
 import { gsap, registerScrollTrigger } from "@/lib/gsap-client";
 import { useLayoutEffect, useRef } from "react";
-import { SplitRevealHeading } from "./split-reveal-heading";
 
 const CAPSULES = [
   {
@@ -43,6 +42,8 @@ export function CapsuleStackSection() {
     if (cards.length < 3) return;
 
     const ctx = gsap.context(() => {
+      gsap.set(cards, { opacity: 1, y: 0, scale: 1, rotate: 0, transformOrigin: "50% 50%" });
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
@@ -115,7 +116,8 @@ export function CapsuleStackSection() {
       className="chapter-rule-top section-grain relative bg-[var(--surface-dark)]"
       style={{ height: "240vh" }}
     >
-      <div className="sticky top-0 flex min-h-[100dvh] items-center justify-center px-5 py-16 md:px-10">
+      {/* Avoid position:sticky inside a ScrollTrigger-pinned parent — it collapses layout. */}
+      <div className="flex min-h-[100dvh] w-full flex-col justify-center px-5 py-16 md:px-10">
         <div className="relative mx-auto w-full max-w-lg">
           <div
             ref={blobARef}
@@ -128,10 +130,9 @@ export function CapsuleStackSection() {
             aria-hidden
           />
 
-          <SplitRevealHeading
-            text="Capsules of clarity — stacked, then released."
-            className="relative z-[1] mb-14 max-w-xl font-[family-name:var(--font-display)] text-[clamp(1.75rem,4.5vw,2.75rem)] font-semibold leading-[1.12] tracking-tight text-white"
-          />
+          <p className="relative z-[1] mb-14 max-w-xl font-[family-name:var(--font-display)] text-[clamp(1.75rem,4.5vw,2.75rem)] font-semibold leading-[1.12] tracking-tight text-white">
+            Capsules of clarity — stacked, then released.
+          </p>
 
           <div className="relative z-[2] mx-auto mt-4 h-[380px] w-full max-w-md md:h-[420px]">
             {CAPSULES.map((c, i) => (
