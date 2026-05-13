@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "How it works",
+  title: "How BOS Works",
   description:
     "From one message to complete execution — the BOS flow in five steps.",
 };
@@ -39,11 +39,10 @@ export default function HowItWorksPage() {
         <div className="mx-auto max-w-3xl">
           <MotionSection>
             <h1 className="font-[family-name:var(--font-display)] text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[1.4] tracking-tight text-white">
-              How BOS works
+              How BOS Works
             </h1>
             <p className="mt-6 font-[family-name:var(--font-sans)] text-lg text-white/65">
-              Work moves from one message to complete execution — continuously, not as a brittle
-              checklist.
+              you think it, BOS executes it
             </p>
           </MotionSection>
           <ol className="mt-14 space-y-12 border-l-2 border-[var(--orchid)]/40 pl-10">

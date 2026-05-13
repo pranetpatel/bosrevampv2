@@ -45,7 +45,7 @@ export default function MbaPage() {
                 href="/how-it-works"
                 className="inline-flex rounded-full border border-white/25 bg-white/[0.06] px-8 py-3 font-[family-name:var(--font-ui)] text-sm font-semibold text-white backdrop-blur-sm transition hover:border-white/45"
               >
-                How BOS works
+                How BOS Works
               </Link>
             </div>
           </MotionSection>

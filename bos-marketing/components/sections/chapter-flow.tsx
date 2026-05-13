@@ -18,11 +18,11 @@ export function ChapterFlowSection() {
         <MotionReveal className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
           <div>
             <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-white/52">
-              How it works
+              How BOS Works
             </p>
             <h2 className="mt-5 font-[family-name:var(--font-display)] text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.06] tracking-tight text-white">
-              <MotionClipReveal delay={0.1} as="span">Outcomes,</MotionClipReveal>
-              <MotionClipReveal delay={0.2} as="span">not overhead.</MotionClipReveal>
+              <MotionClipReveal delay={0.1} as="span">you think it,</MotionClipReveal>{" "}
+              <MotionClipReveal delay={0.2} as="span">BOS executes it</MotionClipReveal>
             </h2>
           </div>
           <Link

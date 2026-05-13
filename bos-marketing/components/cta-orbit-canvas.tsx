@@ -20,19 +20,39 @@ export function CtaOrbitCanvas() {
     let t = 0;
     let cancelled = false;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    /** Avoid GPU/browser failures from oversized backing stores. */
+    const MAX_BACKING = 4096;
+    let lastBw = 0;
+    let lastBh = 0;
 
     const draw = () => {
       if (cancelled) return;
-      const w = c.clientWidth;
-      const h = c.clientHeight;
+      const w = Math.floor(c.clientWidth);
+      const h = Math.floor(c.clientHeight);
       if (w < 8 || h < 8) {
         raf = requestAnimationFrame(draw);
         return;
       }
-      c.width = w * dpr;
-      c.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, w, h);
+      let bw = Math.max(1, Math.floor(w * dpr));
+      let bh = Math.max(1, Math.floor(h * dpr));
+      bw = Math.min(bw, MAX_BACKING);
+      bh = Math.min(bh, MAX_BACKING);
+      // Resizing every frame reallocates the draw target and can throw InvalidStateError.
+      if (bw !== lastBw || bh !== lastBh) {
+        lastBw = bw;
+        lastBh = bh;
+        c.width = bw;
+        c.height = bh;
+      }
+      const sx = bw / w;
+      const sy = bh / h;
+      try {
+        ctx.setTransform(sx, 0, 0, sy, 0, 0);
+        ctx.clearRect(0, 0, w, h);
+      } catch {
+        raf = requestAnimationFrame(draw);
+        return;
+      }
       t += 0.04;
       const cx = w / 2;
       const cy = h / 2;
