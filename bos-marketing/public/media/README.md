@@ -5,9 +5,9 @@ Files in this folder are wired through [`lib/site-media.ts`](../../lib/site-medi
 | File | Use |
 |------|-----|
 | `hero-poster.png` | Hero video poster (first paint) |
-| `chapter-gap-fragmentation-unity.png` | Tension / “The gap” chapter |
-| `chapter-system-coordination.png` | System / “What BOS is” chapter |
-| `chapter-velocity-momentum.png` | Conviction / “Why it matters” chapter |
+| `chapter-gap-fragmentation-unity.png` | Tension / “The gap” chapter; also **hero micro-card** still (CSS crop) |
+| `chapter-system-coordination.png` | System / “What BOS is” chapter; **hero micro-card** still |
+| `chapter-velocity-momentum.png` | Conviction / “Why it matters” chapter; **hero micro-card** still |
 | `og-social-human-ai-network.png` | Open Graph + Twitter (`app/layout.tsx` metadata) |
 
 Next.js Image optimization (`/_next/image`) automatically converts and serves images in WebP/AVIF based on browser support — no manual `.webp` copies needed.

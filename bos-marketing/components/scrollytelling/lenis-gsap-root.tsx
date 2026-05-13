@@ -37,9 +37,9 @@ function LenisScrollTriggerBridge() {
 
 const lenisOptions: NonNullable<LenisProps["options"]> = {
   autoRaf: false,
-  duration: 1.15,
-  easing: (t) => 1 - Math.pow(1 - t, 2.5),
-  smoothWheel: true,
+  duration: 0.62,
+  easing: (t) => 1 - Math.pow(1 - t, 1.35),
+  smoothWheel: false,
 };
 
 /**

@@ -36,7 +36,9 @@ export function ChapterMediaPanel({
         .filter(Boolean)
         .join(" ")}
     >
-      <div className={`relative w-full ${aspectClassName}`}>
+      <div
+        className={`relative w-full overflow-hidden bg-[var(--surface-dark)] ${aspectClassName}`}
+      >
         <Image
           src={src}
           alt={alt}

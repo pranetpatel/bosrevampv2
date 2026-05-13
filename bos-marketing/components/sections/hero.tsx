@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CycleHeadline } from "../cycle-headline";
+import { HeroMicroCards } from "../hero-micro-cards";
 import { HeroVideo } from "../hero-video";
 
 export function HeroSection() {
@@ -36,23 +37,13 @@ export function HeroSection() {
         </span>
       </div>
       <div
-        className="animate-fade-up relative z-[2] mx-auto mt-7 flex max-w-xl flex-wrap justify-center gap-2.5 px-2"
+        className="animate-fade-up relative z-[2] mx-auto mt-5 px-2 sm:mt-6"
         style={{ animationDelay: "0.9s" }}
       >
-        {["No dashboards", "No workflow builders", "No tool sprawl"].map((t) => (
-          <span
-            key={t}
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/18 bg-white/10 px-4 py-2 font-[family-name:var(--font-ui)] text-xs font-semibold text-white/90 backdrop-blur-md"
-          >
-            <span className="text-[10px] text-white/55" aria-hidden>
-              ✕
-            </span>
-            {t}
-          </span>
-        ))}
+        <HeroMicroCards />
       </div>
       <div
-        className="animate-fade-up relative z-[2] mt-12 flex flex-wrap items-center justify-center gap-5"
+        className="animate-fade-up relative z-[2] mt-8 flex flex-wrap items-center justify-center gap-5 sm:mt-10"
         style={{ animationDelay: "1.05s" }}
       >
         <Link
@@ -72,7 +63,7 @@ export function HeroSection() {
         </Link>
       </div>
       <div className="pointer-events-none absolute bottom-10 left-1/2 z-[2] flex -translate-x-1/2 flex-col items-center gap-2 opacity-70">
-        <span className="h-14 w-px bg-gradient-to-b from-neutral-500 to-transparent" />
+        <span className="h-14 w-px bg-gradient-to-b from-neutral-500 to-[rgb(10_10_10_/_0)]" />
         <p className="font-[family-name:var(--font-sans)] text-[9px] font-bold uppercase tracking-[0.2em] text-white/55">
           Scroll
         </p>

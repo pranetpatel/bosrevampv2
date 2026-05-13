@@ -20,16 +20,13 @@ export function ChapterSystemSection() {
               Six Systems.
             </MotionClipReveal>
           </h2>
-          <p className="mx-auto mt-6 max-w-md text-center font-[family-name:var(--font-ui)] text-base leading-relaxed text-white/55 md:text-lg">
-            Work, data, teams, agents — one layer that executes.
-          </p>
         </MotionReveal>
 
         <MotionReveal delay={0.15}>
           <BosOrbital />
         </MotionReveal>
 
-          <p className="text-center font-[family-name:var(--font-display)] text-[9px] font-semibold uppercase tracking-[0.22em] text-white/45">
+        <p className="text-center font-[family-name:var(--font-display)] text-[9px] font-semibold uppercase tracking-[0.22em] text-white/45">
           Hover · then click to explore
         </p>
       </div>

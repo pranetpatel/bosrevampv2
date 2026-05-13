@@ -1,5 +1,6 @@
 "use client";
 
+import { getPrefersReducedMotion } from "@/lib/prefers-reduced-motion";
 import { gsap, registerScrollTrigger } from "@/lib/gsap-client";
 import { useLayoutEffect, useRef } from "react";
 
@@ -7,17 +8,17 @@ const CAPSULES = [
   {
     kicker: "Signal",
     title: "What matters, surfaced",
-    body: "Noise drops away. Operators see the next move — not another dashboard.",
+    body: "Next move in view — not another dashboard.",
   },
   {
     kicker: "Coordination",
     title: "Work finds its path",
-    body: "People, agents, and systems stay aligned without brittle workflow builders.",
+    body: "Aligned without brittle workflow builders.",
   },
   {
     kicker: "Execution",
     title: "Outcomes over overhead",
-    body: "The layer that runs the business — not the stack that slows it down.",
+    body: "One layer that runs the business.",
   },
 ] as const;
 
@@ -34,6 +35,7 @@ export function CapsuleStackSection() {
   useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
+    if (getPrefersReducedMotion()) return;
     registerScrollTrigger();
 
     const cards = cardsRef.current.filter(Boolean) as HTMLElement[];

@@ -23,6 +23,8 @@
   /* App-wide dark shell */
   --background: #0a0a0a;
   --foreground: #f4f4f5;
+  /* Alpha-0 of shell dark — use in gradients instead of `transparent` (avoids OKLab “white” bands). */
+  --surface-dark-clear: rgb(10 10 10 / 0);
 }
 
 @theme inline {
@@ -39,7 +41,9 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Lenis already smooths wheel scroll; `smooth` here doubled motion on anchor/TAB jumps. */
+  position: relative;
+  scroll-behavior: auto;
   --font-display: var(--font-jura);
   --font-sans: var(--font-plus-jakarta);
   --font-ui: var(--font-plus-jakarta);
@@ -53,6 +57,7 @@ html {
 }
 
 body {
+  position: relative;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--sans);
@@ -126,7 +131,7 @@ body.custom-cursor-root .bos-cursor-dot.bos-cursor-big {
     radial-gradient(
       ellipse 85% 65% at 50% 40%,
       rgba(26, 83, 253, 0.12) 0%,
-      transparent 55%
+      var(--surface-dark-clear) 55%
     ),
     linear-gradient(
       to bottom,
@@ -167,10 +172,10 @@ body.custom-cursor-root .bos-cursor-dot.bos-cursor-big {
   height: 1px;
   background: linear-gradient(
     to right,
-    transparent,
+    var(--surface-dark-clear),
     rgba(26, 83, 253, 0.35) 35%,
     rgba(218, 52, 241, 0.25) 65%,
-    transparent
+    var(--surface-dark-clear)
   );
   pointer-events: none;
   z-index: 2;
@@ -183,7 +188,17 @@ body.custom-cursor-root .bos-cursor-dot.bos-cursor-big {
   inset: 0;
   pointer-events: none;
   z-index: 2;
-  background:
-    linear-gradient(to bottom, transparent 55%, var(--surface-dark) 100%),
-    linear-gradient(to right, var(--surface-dark) 0%, transparent 9%, transparent 91%, var(--surface-dark) 100%);
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(10, 10, 10, 0) 55%,
+      #0a0a0a 100%
+    ),
+    linear-gradient(
+      to right,
+      #0a0a0a 0%,
+      rgba(10, 10, 10, 0) 14%,
+      rgba(10, 10, 10, 0) 86%,
+      #0a0a0a 100%
+    );
 }

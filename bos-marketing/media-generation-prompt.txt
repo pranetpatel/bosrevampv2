@@ -17,7 +17,7 @@ IMAGERY DIRECTION (people-forward):
 - Optional: subtle glass/light overlay on human subjects to keep “orchestration” metaphor.
 - Leave clear negative space for headline overlay (safe zone ~40% frame).
 
-GENERATE:
+0) HERO MICRO-CARDS (optional dedicated exports) — ~800×600 each, tight crop on UI-adjacent abstract detail (roster strip, presence dots, call state) — **or** reuse chapter PNGs with CSS `object-position` until these ship.
 
 1) HERO POSTER — 1920×1080, save as hero-poster.png. People + atmosphere OR human silhouette + volumetric cyan/magenta beams; grade with orchid/cyan.
 

@@ -92,6 +92,12 @@ const toneGlow: Record<FrictionNode["tone"], string> = {
   cyan: "rgba(4, 209, 224, 0.4)",
 };
 
+const toneLabel: Record<FrictionNode["tone"], string> = {
+  hot: "text-[var(--hot)]",
+  magenta: "text-[var(--magenta)]",
+  cyan: "text-[var(--cyan)]",
+};
+
 export function GapFrictionDissolve() {
   const reduced = usePrefersReducedMotion();
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(() => new Set());
@@ -170,14 +176,11 @@ export function GapFrictionDissolve() {
       </svg>
 
       <div className="pointer-events-none absolute left-0 right-0 top-8 z-[2] flex flex-col items-center px-6 text-center md:top-10">
-        <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.28em] text-white/40">
-          What disappears
+        <p className="max-w-xl bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] bg-clip-text font-[family-name:var(--font-display)] text-[clamp(1.2rem,3vw,1.75rem)] font-semibold leading-tight tracking-tight text-transparent">
+          Operational weight
         </p>
-        <p className="mt-3 max-w-lg font-[family-name:var(--font-display)] text-[clamp(1.15rem,2.8vw,1.65rem)] font-semibold leading-snug tracking-tight text-white/88">
-          Imagine work without the{" "}
-          <span className="bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] bg-clip-text italic text-transparent">
-            operational weight.
-          </span>
+        <p className="mt-2 max-w-md font-[family-name:var(--font-sans)] text-[13px] leading-snug text-white/48 md:text-sm">
+          Clear each source of drag — tap or hover the nodes.
         </p>
       </div>
 
@@ -205,7 +208,7 @@ export function GapFrictionDissolve() {
                   shiftRefs.current.set(n.id, el);
                 }}
                 className={[
-                  "flex flex-col items-center transition duration-500 ease-out will-change-transform",
+                  "group/node flex flex-col items-center transition duration-500 ease-out will-change-transform",
                   gone ? "pointer-events-none scale-50 opacity-0 blur-sm" : "opacity-100",
                 ].join(" ")}
               >
@@ -218,7 +221,7 @@ export function GapFrictionDissolve() {
                       onDismiss(n.id);
                     }
                   }}
-                  className="group relative flex h-[var(--sz)] w-[var(--sz)] cursor-pointer items-center justify-center rounded-full border-2 bg-black/25 shadow-[0_0_28px_var(--glow)] outline-none transition hover:scale-110 focus-visible:ring-2 focus-visible:ring-[var(--orchid)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a]"
+                  className="relative flex h-[var(--sz)] w-[var(--sz)] cursor-pointer items-center justify-center rounded-full border-2 bg-black/25 shadow-[0_0_28px_var(--glow)] outline-none transition hover:scale-110 focus-visible:ring-2 focus-visible:ring-[var(--orchid)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a]"
                   style={
                     {
                       "--sz": `${n.r * 2}px`,
@@ -227,21 +230,36 @@ export function GapFrictionDissolve() {
                     } as CSSProperties
                   }
                   aria-pressed={gone}
-                  aria-label={`Dissolve: ${n.label}`}
+                  aria-label={
+                    n.sub ? `Dissolve: ${n.label}. ${n.sub}` : `Dissolve: ${n.label}`
+                  }
                 >
                   <span
-                    className="absolute inset-2 rounded-full opacity-80 group-hover:opacity-100"
+                    className="absolute inset-2 rounded-full opacity-80 group-hover/node:opacity-100"
                     style={{
                       background: `radial-gradient(circle at 35% 30%, ${toneGlow[n.tone]}, transparent 65%)`,
                     }}
                     aria-hidden
                   />
                 </button>
-                <span className="mt-2 max-w-[9rem] text-center font-[family-name:var(--font-ui)] text-[10px] font-semibold uppercase leading-tight tracking-[0.14em] text-white/72">
+                <span
+                  className={[
+                    "mt-2 max-w-[9rem] text-center font-[family-name:var(--font-ui)] text-[10px] font-semibold uppercase leading-tight tracking-[0.14em]",
+                    toneLabel[n.tone],
+                  ].join(" ")}
+                >
                   {n.label}
                 </span>
                 {n.sub ? (
-                  <span className="mt-0.5 max-w-[9rem] text-center font-[family-name:var(--font-ui)] text-[9px] font-medium uppercase tracking-[0.12em] text-[var(--orchid)]/80">
+                  <span
+                    className={[
+                      "mt-0.5 max-w-[9rem] text-center font-[family-name:var(--font-ui)] text-[9px] font-medium uppercase tracking-[0.12em] text-white/42 transition-opacity duration-200",
+                      reduced
+                        ? "opacity-100"
+                        : "opacity-100 max-md:opacity-100 md:opacity-0 md:group-hover/node:opacity-100 md:group-focus-within/node:opacity-100",
+                    ].join(" ")}
+                    aria-hidden
+                  >
                     {n.sub}
                   </span>
                 ) : null}

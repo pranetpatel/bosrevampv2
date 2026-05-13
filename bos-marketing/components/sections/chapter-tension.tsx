@@ -1,8 +1,6 @@
 import { GapFrictionDissolve } from "@/components/gap-friction-dissolve";
 import { MotionClipReveal, MotionReveal } from "@/components/motion-reveal";
 
-const friction = ["Fragmented tools", "Coordination overhead", "Blind spots"];
-
 export function ChapterTensionSection() {
   return (
     <section
@@ -52,14 +50,6 @@ export function ChapterTensionSection() {
                   </div>
                 </MotionReveal>
               </div>
-              <ul className="mt-12 flex flex-wrap gap-x-10 gap-y-4 font-[family-name:var(--font-ui)] text-sm font-medium text-white/55">
-                {friction.map((b) => (
-                  <li key={b} className="flex items-center gap-2.5">
-                    <span className="h-px w-4 shrink-0 bg-[var(--cyan)]/60" aria-hidden />
-                    {b}
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         </MotionReveal>

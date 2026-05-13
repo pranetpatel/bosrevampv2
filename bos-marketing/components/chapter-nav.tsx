@@ -1,5 +1,6 @@
 "use client";
 
+import { getPrefersReducedMotion } from "@/lib/prefers-reduced-motion";
 import { registerScrollTrigger, ScrollTrigger } from "@/lib/gsap-client";
 import { useLenis } from "lenis/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -223,22 +224,30 @@ export function ChapterNav() {
                   onClick={() => {
                     const el = document.getElementById(c.id);
                     if (!el) return;
+                    const reduced = getPrefersReducedMotion();
                     const railY = getScrollYForChapterInHorizontalRail(el);
                     if (railY !== null) {
                       if (lenis) {
-                        lenis.scrollTo(railY, { duration: 1.35, easing: scrollEase });
+                        if (reduced) lenis.scrollTo(railY, { immediate: true });
+                        else lenis.scrollTo(railY, { duration: 0.85, easing: scrollEase });
                       } else {
-                        window.scrollTo({ top: railY, behavior: "smooth" });
+                        window.scrollTo({ top: railY, behavior: reduced ? "auto" : "smooth" });
                       }
                       return;
                     }
                     if (lenis) {
-                      lenis.scrollTo(el, {
-                        duration: 1.35,
-                        easing: scrollEase,
-                      });
+                      if (reduced) lenis.scrollTo(el, { immediate: true });
+                      else
+                        lenis.scrollTo(el, {
+                          duration: 0.85,
+                          easing: scrollEase,
+                        });
                     } else {
-                      el.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+                      el.scrollIntoView({
+                        behavior: reduced ? "auto" : "smooth",
+                        block: "start",
+                        inline: "nearest",
+                      });
                     }
                   }}
                   aria-current={isOn ? "location" : undefined}

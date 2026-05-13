@@ -5,7 +5,8 @@
       "Bash(Select-Object -Last 30)",
       "Bash(cd /mnt/c/Users/prane/BOS-RevampV2/bos-marketing && npm run lint 2>&1)",
       "Read(//mnt/c/Users/prane/BOS-RevampV2/**)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(python scripts/trim-white-borders.py)"
     ]
   }
 }
