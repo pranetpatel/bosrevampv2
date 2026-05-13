@@ -1,72 +1,93 @@
 'use client';
 
+import {
+  BosOrbitalExperience,
+  type LegacyOrbitalModuleId,
+} from '@/components/bos-orbital-experiences';
 import { useEffect, useRef, useState } from 'react';
 
-const NODES_DATA = [
+const NODES_DATA: {
+  id: LegacyOrbitalModuleId;
+  color: string;
+  name: string;
+  eyebrow: string;
+  headline: string;
+  desc: string;
+}[] = [
   {
-    id: 'chat',
+    id: 'ai-execution',
     color: '#04D1E0',
-    name: 'BOS Chat',
-    tagline: 'Real-time intelligent conversations.',
-    desc: 'Run your team, clients, and agents through one conversation layer. Messages trigger actions — automatically.',
-    features: ['Natural language processing', 'Context-aware responses', 'Multi-turn conversations', 'Integrated with all data'],
+    name: 'AI Execution',
+    eyebrow: 'AI Execution',
+    headline: 'Agents that act, not just answer.',
+    desc: 'BOS AI agents do not surface suggestions. They execute. Assign a task, set a goal, and watch the work get done across every connected system.',
   },
   {
-    id: 'project',
+    id: 'workflow',
     color: '#DA34F1',
-    name: 'Project FX',
-    tagline: 'Orchestrate complex workflows effortlessly.',
-    desc: 'Tasks, CRM, and workflows — unified. Work created from conversations. Everything stays in sync.',
-    features: ['Workflow automation', 'Task prioritization', 'Real-time collaboration', 'AI-powered suggestions'],
+    name: 'Workflow',
+    eyebrow: 'Workflow',
+    headline: 'Build once. Run forever.',
+    desc: 'Design any process: approvals, onboarding, delivery. BOS handles routing, reminders, and escalations automatically.',
   },
   {
-    id: 'workforce',
+    id: 'team-ops',
     color: '#10D988',
-    name: 'Workforce',
-    tagline: 'Your people layer, fully orchestrated.',
-    desc: 'Manage hiring pipelines, roles, performance, and capacity — all connected to the work happening in real time.',
-    features: ['Hiring pipeline management', 'Role & permission control', 'Performance tracking', 'Capacity planning'],
+    name: 'Team OPS',
+    eyebrow: 'Team OPS',
+    headline: 'Everyone aligned. Always.',
+    desc: 'Assignments, context, and status travel together. No re-explaining. One place your whole team operates from.',
   },
   {
-    id: 'data',
-    color: '#3CD3FE',
-    name: 'Data Drive',
-    tagline: 'Unified data management across all systems.',
-    desc: 'A single source of truth for all company data. Documents, structured data, permissions, real-time sync.',
-    features: ['Multi-source integration', 'Real-time synchronization', 'Data governance & security', 'Advanced analytics'],
+    id: 'client-delivery',
+    color: '#c9a227',
+    name: 'Client Delivery',
+    eyebrow: 'Client Delivery',
+    headline: 'Every client. On time.',
+    desc: 'From brief to delivery, BOS tracks every step, flags blockers early, and keeps clients informed automatically.',
   },
   {
-    id: 'agent',
+    id: 'intelligence',
+    color: '#f5c542',
+    name: 'Intelligence',
+    eyebrow: 'Intelligence',
+    headline: 'Decisions from clarity.',
+    desc: 'BOS surfaces signals from across your operations: pipeline, capacity, risk. So you decide from clarity, not instinct.',
+  },
+  {
+    id: 'communication',
     color: '#6B5EFF',
-    name: 'Agent Builder',
-    tagline: 'Create intelligent agents that work 24/7.',
-    desc: 'Build and deploy agents that execute work autonomously. No-code. Define goals, actions, permissions — let them run.',
-    features: ['No-code agent creation', 'Natural language training', 'Multi-step automation', 'Performance analytics'],
+    name: 'Communication',
+    eyebrow: 'Communication',
+    headline: 'One thread. Every decision.',
+    desc: 'Conversations become tasks. Context never leaves the thread. Your entire communication history is searchable and actionable.',
   },
   {
-    id: 'connect',
+    id: 'command-view',
+    color: '#1A53FD',
+    name: 'Command View',
+    eyebrow: 'Command View',
+    headline: "The founder's window into everything.",
+    desc: 'See every client, project, and team member from one screen. No chasing. No asking. The kitchen window, exactly as it should be.',
+  },
+  {
+    id: 'integrations',
     color: '#FF8C42',
-    name: 'Connect',
-    tagline: 'Every tool your business runs on, unified.',
-    desc: 'Sync any external platform into BOS instantly. One integration layer — no duct tape, no data drift.',
-    features: ['500+ native integrations', 'Bi-directional sync', 'Webhook & API gateway', 'Custom connector builder'],
+    name: 'Integrations',
+    eyebrow: 'Integrations',
+    headline: 'Connects to everything you use.',
+    desc: 'BOS layers over your existing stack, pulling signals in and pushing actions out, until the stack becomes optional.',
   },
 ];
 
-const ICON_SVGS = [
-  // BOS Chat
-  <svg key="chat" width="26" height="26" viewBox="0 0 32 32" fill="none"><path d="M4 6C4 4.895 4.895 4 6 4H26C27.105 4 28 4.895 28 6V20C28 21.105 27.105 22 26 22H18L12 28V22H6C4.895 22 4 21.105 4 20V6Z" stroke="#04D1E0" strokeWidth="1.5" strokeLinejoin="round"/><path d="M9 11H23M9 15H18" stroke="#04D1E0" strokeWidth="1.5" strokeLinecap="round"/></svg>,
-  // Project FX
-  <svg key="project" width="26" height="26" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="3" stroke="#DA34F1" strokeWidth="1.5"/><path d="M10 11L13.5 14.5L10 18" stroke="#DA34F1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M16 18H22" stroke="#DA34F1" strokeWidth="1.5" strokeLinecap="round"/></svg>,
-  // Workforce
-  <svg key="workforce" width="26" height="26" viewBox="0 0 32 32" fill="none"><circle cx="12" cy="10" r="4" stroke="#10D988" strokeWidth="1.5"/><circle cx="22" cy="10" r="3" stroke="#10D988" strokeWidth="1.5"/><path d="M4 26C4 21.582 7.582 18 12 18C16.418 18 20 21.582 20 26" stroke="#10D988" strokeWidth="1.5" strokeLinecap="round"/><path d="M22 17C24.761 17 27 19.239 27 22V26" stroke="#10D988" strokeWidth="1.5" strokeLinecap="round"/></svg>,
-  // Data Drive
-  <svg key="data" width="26" height="26" viewBox="0 0 32 32" fill="none"><ellipse cx="16" cy="9" rx="10" ry="4" stroke="#3CD3FE" strokeWidth="1.5"/><path d="M6 9V16C6 18.21 10.477 20 16 20C21.523 20 26 18.21 26 16V9" stroke="#3CD3FE" strokeWidth="1.5"/><path d="M6 16V23C6 25.21 10.477 27 16 27C21.523 27 26 25.21 26 23V16" stroke="#3CD3FE" strokeWidth="1.5"/></svg>,
-  // Agent Builder
-  <svg key="agent" width="26" height="26" viewBox="0 0 32 32" fill="none"><rect x="8" y="12" width="16" height="14" rx="4" stroke="#6B5EFF" strokeWidth="1.5"/><circle cx="12.5" cy="18" r="1.5" fill="#6B5EFF"/><circle cx="19.5" cy="18" r="1.5" fill="#6B5EFF"/><path d="M13 23C13 23 14.5 24.5 16 24.5C17.5 24.5 19 23 19 23" stroke="#6B5EFF" strokeWidth="1.5" strokeLinecap="round"/><path d="M12 12V8M20 12V8" stroke="#6B5EFF" strokeWidth="1.5" strokeLinecap="round"/><circle cx="12" cy="7" r="1.5" stroke="#6B5EFF" strokeWidth="1.25"/><circle cx="20" cy="7" r="1.5" stroke="#6B5EFF" strokeWidth="1.25"/></svg>,
-  // Connect
-  <svg key="connect" width="26" height="26" viewBox="0 0 32 32" fill="none"><circle cx="8" cy="16" r="3.5" stroke="#FF8C42" strokeWidth="1.5"/><circle cx="24" cy="8" r="3.5" stroke="#FF8C42" strokeWidth="1.5"/><circle cx="24" cy="24" r="3.5" stroke="#FF8C42" strokeWidth="1.5"/><path d="M11.5 16H17M17 16L20.5 9.5M17 16L20.5 22.5" stroke="#FF8C42" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>,
-];
+function NodeGlyph({ color }: { color: string }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+      <circle cx="11" cy="11" r="6" stroke={color} strokeWidth="1.5" opacity="0.9" />
+      <circle cx="11" cy="11" r="2.5" fill={color} opacity="0.85" />
+    </svg>
+  );
+}
 
 const CX = 260, CY = 260, R = 190;
 const TILT_3D = 55 * Math.PI / 180;
@@ -77,17 +98,18 @@ const BASE_PERIOD = 14;
 const N = NODES_DATA.length;
 const OFFSETS = Array.from({ length: N }, (_, i) => (i * Math.PI * 2) / N);
 
-type NodeData = (typeof NODES_DATA)[number];
-
-export function BosOrbital() {
+export function BosOrbital({ paused = false }: { paused?: boolean }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const ellipseRef = useRef<SVGEllipseElement>(null);
   const lineRefs = useRef<(SVGLineElement | null)[]>(Array(N).fill(null));
   const nodeRefs = useRef<(HTMLDivElement | null)[]>(Array(N).fill(null));
   const animRef = useRef({ angle: 0, tilt: TILT_3D, targetTilt: TILT_3D, speed: SPEED_NORMAL, targetSpeed: SPEED_NORMAL, last: 0 });
   const rafRef = useRef<number>(0);
-  const [selected, setSelected] = useState<NodeData | null>(null);
+  const pausedRef = useRef(paused);
+  const [selected, setSelected] = useState<(typeof NODES_DATA)[number] | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+
+  pausedRef.current = paused;
 
   useEffect(() => {
     const anim = animRef.current;
@@ -95,9 +117,12 @@ export function BosOrbital() {
     function tick(now: number) {
       const dt = Math.min((now - (anim.last || now)) / 1000, 0.05);
       anim.last = now;
-      anim.tilt += (anim.targetTilt - anim.tilt) * Math.min(dt * 2.5, 1);
-      anim.speed += (anim.targetSpeed - anim.speed) * Math.min(dt * 3, 1);
-      anim.angle += dt * (Math.PI * 2 / BASE_PERIOD) * anim.speed;
+      const frozen = pausedRef.current;
+      if (!frozen) {
+        anim.tilt += (anim.targetTilt - anim.tilt) * Math.min(dt * 2.5, 1);
+        anim.speed += (anim.targetSpeed - anim.speed) * Math.min(dt * 3, 1);
+        anim.angle += dt * (Math.PI * 2 / BASE_PERIOD) * anim.speed;
+      }
 
       const cosT = Math.cos(anim.tilt);
       const sinT = Math.sin(anim.tilt);
@@ -139,8 +164,16 @@ export function BosOrbital() {
     rafRef.current = requestAnimationFrame(tick);
 
     const wrap = wrapRef.current;
-    const onEnter = () => { anim.targetTilt = TILT_2D; anim.targetSpeed = SPEED_HOVER; };
-    const onLeave = () => { anim.targetTilt = TILT_3D; anim.targetSpeed = SPEED_NORMAL; };
+    const onEnter = () => {
+      if (pausedRef.current) return;
+      anim.targetTilt = TILT_2D;
+      anim.targetSpeed = SPEED_HOVER;
+    };
+    const onLeave = () => {
+      if (pausedRef.current) return;
+      anim.targetTilt = TILT_3D;
+      anim.targetSpeed = SPEED_NORMAL;
+    };
     wrap?.addEventListener('mouseenter', onEnter);
     wrap?.addEventListener('mouseleave', onLeave);
 
@@ -164,14 +197,12 @@ export function BosOrbital() {
 
   return (
     <div className="flex flex-col items-center gap-10 lg:flex-row lg:items-center lg:gap-0">
-      {/* Orbital */}
       <div className="flex flex-shrink-0 items-center justify-center lg:flex-[0_0_540px]">
         <div
           ref={wrapRef}
           className="relative cursor-default select-none"
           style={{ width: 520, height: 520 }}
         >
-          {/* SVG layer */}
           <svg
             className="pointer-events-none absolute inset-0 overflow-visible"
             style={{ width: '100%', height: '100%' }}
@@ -199,7 +230,6 @@ export function BosOrbital() {
             ))}
           </svg>
 
-          {/* Center hub */}
           <div
             className="absolute z-20 flex items-center justify-center rounded-full"
             style={{
@@ -225,19 +255,27 @@ export function BosOrbital() {
             </svg>
           </div>
 
-          {/* Satellite nodes */}
           {NODES_DATA.map((data, i) => (
             <div
               key={data.id}
               ref={el => { nodeRefs.current[i] = el; }}
               className="absolute z-[15] cursor-pointer"
-              style={{ left: 260, top: 260, width: 56, height: 56, transform: 'translate(0,0)' }}
+              style={{ left: 260, top: 260, width: 52, height: 52, transform: 'translate(0,0)' }}
               onClick={() => handleNodeClick(i)}
+              role="button"
+              tabIndex={0}
+              aria-pressed={selectedIndex === i}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleNodeClick(i);
+                }
+              }}
             >
               <div
                 className="sat-node-inner absolute flex items-center justify-center rounded-full transition-shadow duration-300"
                 style={{
-                  width: 56, height: 56,
+                  width: 52, height: 52,
                   background: `${data.color}1E`,
                   border: `2px solid ${data.color}99`,
                   boxShadow: `0 0 18px ${data.color}40`,
@@ -246,17 +284,18 @@ export function BosOrbital() {
                   outlineOffset: 3,
                 }}
               >
-                {ICON_SVGS[i]}
+                <NodeGlyph color={data.color} />
               </div>
               <div
-                className="pointer-events-none absolute whitespace-nowrap font-[family-name:var(--font-display)] text-[11px] font-bold uppercase tracking-[0.14em]"
+                className="pointer-events-none absolute max-w-[120px] text-center font-[family-name:var(--font-display)] text-[9px] font-bold uppercase leading-tight tracking-[0.1em]"
                 style={{
-                  top: 'calc(100% + 14px)',
+                  top: 'calc(100% + 12px)',
                   left: '50%',
                   transform: 'translateX(-50%)',
                   color: '#f4f4f5',
-                  opacity: selectedIndex === i ? 1 : 0.92,
-                  textShadow: `0 1px 3px rgba(0,0,0,1), 0 0 18px ${data.color}99`,
+                  opacity: selectedIndex === i ? 1 : 0.88,
+                  textShadow: `0 1px 3px rgba(0,0,0,1), 0 0 14px ${data.color}88`,
+                  whiteSpace: 'normal',
                 }}
               >
                 {data.name}
@@ -266,10 +305,9 @@ export function BosOrbital() {
         </div>
       </div>
 
-      {/* Info panel */}
-      <div className="flex min-h-[320px] flex-1 items-center justify-center px-4 lg:pl-10">
+      <div className="flex min-h-[320px] w-full max-w-md flex-1 items-start justify-center px-4 lg:max-w-none lg:pl-10">
         {!selected ? (
-          <div className="flex flex-col items-center gap-4 text-center">
+          <div className="flex flex-col items-center gap-4 self-center text-center">
             <div
               className="flex h-14 w-14 items-center justify-center rounded-full"
               style={{ background: 'rgba(218,52,241,0.08)', border: '1px solid rgba(218,52,241,0.2)', animation: 'bos-hub-pulse 3s ease-in-out infinite' }}
@@ -279,14 +317,14 @@ export function BosOrbital() {
                 <circle cx="10" cy="10" r="2" fill="#DA34F1" opacity="0.7" />
               </svg>
             </div>
-            <p className="max-w-[200px] font-[family-name:var(--font-ui)] text-sm font-medium leading-relaxed text-white/80">
-              Click an element in the orbital to explore it
+            <p className="max-w-[220px] font-[family-name:var(--font-ui)] text-sm font-medium leading-relaxed text-white/80">
+              Click a surface in the orbital to see how it moves work.
             </p>
           </div>
         ) : (
           <div
             key={selected.id}
-            className="w-full max-w-sm rounded-2xl p-8"
+            className="w-full rounded-2xl p-6 md:p-8"
             style={{
               background: 'rgba(255,255,255,0.035)',
               backdropFilter: 'blur(24px)',
@@ -295,24 +333,16 @@ export function BosOrbital() {
               animation: 'bos-info-in 0.35s cubic-bezier(0.16,1,0.3,1) both',
             }}
           >
-            <div
-              className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl"
-              style={{ background: `${selected.color}1E`, border: `1px solid ${selected.color}30`, animation: 'bos-hub-pulse 3s ease-in-out infinite' }}
-            >
-              {ICON_SVGS[selectedIndex]}
-            </div>
-            <p className="font-[family-name:var(--font-display)] text-xl font-semibold text-white/95">{selected.name}</p>
-            <p className="mt-1 font-[family-name:var(--font-ui)] text-sm" style={{ color: selected.color }}>{selected.tagline}</p>
-            <div className="my-4 h-px" style={{ background: `linear-gradient(to right, ${selected.color}40, transparent)` }} />
-            <p className="font-[family-name:var(--font-ui)] text-sm leading-[1.72] text-white/72">{selected.desc}</p>
-            <ul className="mt-5 flex flex-col gap-2.5">
-              {selected.features.map(f => (
-                <li key={f} className="flex items-center gap-2.5">
-                  <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full" style={{ background: selected.color, boxShadow: `0 0 6px ${selected.color}` }} />
-                  <span className="font-[family-name:var(--font-ui)] text-sm text-white/65">{f}</span>
-                </li>
-              ))}
-            </ul>
+            <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-[#c9a227]">
+              {selected.eyebrow}
+            </p>
+            <p className="mt-3 font-[family-name:var(--font-display)] text-xl font-semibold leading-snug text-white/95 md:text-2xl">
+              {selected.headline}
+            </p>
+            <p className="mt-3 font-[family-name:var(--font-sans)] text-sm leading-relaxed text-white/60">
+              {selected.desc}
+            </p>
+            <BosOrbitalExperience moduleId={selected.id} accentColor={selected.color} />
           </div>
         )}
       </div>

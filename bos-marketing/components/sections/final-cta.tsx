@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CtaOrbitCanvas } from "@/components/cta-orbit-canvas";
 import { MotionClipReveal, MotionReveal } from "@/components/motion-reveal";
 
 export function FinalCtaSection() {
@@ -22,14 +23,16 @@ export function FinalCtaSection() {
           Run your business on BOS
         </p>
         <div className="mt-12 flex flex-wrap justify-center gap-4">
-          <Link
-            href="/demo"
-            className="group relative inline-flex overflow-hidden rounded-full bg-[var(--orchid)] px-10 py-4 font-[family-name:var(--font-ui)] text-sm font-bold text-white shadow-[0_12px_40px_var(--purple-glow)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_56px_var(--purple-glow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cyan)]"
-          >
-            {/* Shimmer sweep on hover */}
-            <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-500 group-hover:translate-x-full" aria-hidden />
-            <span className="relative">Get started</span>
-          </Link>
+          <span className="relative inline-flex">
+            <CtaOrbitCanvas />
+            <Link
+              href="/demo"
+              className="group relative z-[1] inline-flex overflow-hidden rounded-full bg-[var(--orchid)] px-10 py-4 font-[family-name:var(--font-ui)] text-sm font-bold text-white shadow-[0_12px_40px_var(--purple-glow)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_56px_var(--purple-glow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cyan)]"
+            >
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-500 group-hover:translate-x-full" aria-hidden />
+              <span className="relative">Get started</span>
+            </Link>
+          </span>
           <Link
             href="/mba"
             className="inline-flex rounded-full border border-white/20 bg-white/[0.04] px-10 py-4 font-[family-name:var(--font-ui)] text-sm font-semibold text-white/80 backdrop-blur-sm transition duration-300 hover:border-white/35 hover:bg-white/[0.08] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)]"

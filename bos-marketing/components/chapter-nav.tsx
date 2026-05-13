@@ -61,19 +61,20 @@ function getActivePinnedHorizontalRail(): HTMLElement | null {
 /** Order matches scroll order on the homepage (not “importance” rank — use step numbers for that). */
 const CHAPTERS = [
   { id: "welcome", step: 1, label: "Welcome" },
-  { id: "tension", step: 2, label: "Gap" },
-  { id: "system", step: 3, label: "System" },
-  { id: "flow", step: 4, label: "Flow" },
-  { id: "conviction", step: 5, label: "Why" },
-  { id: "manifesto", step: 6, label: "Principles" },
-  { id: "tribe", step: 7, label: "Who" },
-  { id: "stack", step: 8, label: "Layers" },
-  { id: "close", step: 9, label: "Start" },
+  { id: "strips", step: 2, label: "Signal" },
+  { id: "tension", step: 3, label: "Friction" },
+  { id: "system", step: 4, label: "System" },
+  { id: "flow", step: 5, label: "Flow" },
+  { id: "conviction", step: 6, label: "Why" },
+  { id: "commands", step: 7, label: "Commands" },
+  { id: "tribe", step: 8, label: "Who" },
+  { id: "manifesto", step: 9, label: "Principles" },
+  { id: "close", step: 10, label: "Start" },
 ] as const;
 
 export function ChapterNav() {
   const [active, setActive] = useState<string>("welcome");
-  const railRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const dotRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const rafRef = useRef(0);
   const [fillPct, setFillPct] = useState(0);
@@ -134,8 +135,6 @@ export function ChapterNav() {
     for (const c of CHAPTERS) {
       const el = document.getElementById(c.id);
       if (!el) continue;
-      // Sections inside horizontal panels still span the viewport vertically while translated
-      // off-screen; excluding them here prevents false "Gap" / "Principles" hits between rails.
       if (el.closest("[data-horizontal-track]")) continue;
       const r = el.getBoundingClientRect();
       if (r.bottom < 80 || r.top > window.innerHeight - 80) continue;
@@ -161,15 +160,17 @@ export function ChapterNav() {
   }, [updateActive]);
 
   useEffect(() => {
-    const rail = railRef.current;
-    const activeDot = dotRefs.current[activeIndex];
-    if (!rail || !activeDot) return;
+    const track = trackRef.current;
+    const activeBtn = dotRefs.current[activeIndex];
+    if (!track || !activeBtn) return;
 
-    const railRect = rail.getBoundingClientRect();
-    const dotRect = activeDot.getBoundingClientRect();
-    const dotCenter = dotRect.top + dotRect.height / 2 - railRect.top;
-    const next = railRect.height > 0 ? (dotCenter / railRect.height) * 100 : 0;
-    setFillPct((prev) => (Math.abs(prev - next) < 0.5 ? prev : next));
+    const trackRect = track.getBoundingClientRect();
+    const btnRect = activeBtn.getBoundingClientRect();
+    const btnCenterY = btnRect.top + btnRect.height / 2;
+    const centerInContent = btnCenterY - trackRect.top + track.scrollTop;
+    const denom = track.scrollHeight || trackRect.height;
+    const next = denom > 0 ? (centerInContent / denom) * 100 : 0;
+    setFillPct(Math.min(100, Math.max(0, next)));
   }, [activeIndex]);
 
   useEffect(() => {
@@ -192,24 +193,28 @@ export function ChapterNav() {
 
   return (
     <nav
-      className="pointer-events-none fixed right-4 top-1/2 z-[190] hidden w-[min(9.5rem,calc(100vw-1.25rem))] -translate-y-1/2 opacity-[0.72] transition-opacity duration-300 hover:opacity-100 lg:block"
+      className="pointer-events-none fixed right-0 top-1/2 z-[190] -translate-y-1/2 pr-[max(0.35rem,env(safe-area-inset-right))] pl-2"
       aria-label="On this page"
     >
-      <div className="pointer-events-auto rounded-lg border border-white/[0.05] bg-black/25 py-2 pl-2 pr-1.5 backdrop-blur-sm supports-[backdrop-filter]:bg-black/20">
-        <div className="relative pr-0.5">
+      <div className="pointer-events-auto max-h-[min(88vh,52rem)] w-[min(6.25rem,calc(100vw-1.25rem))] overflow-hidden rounded-l-lg border border-white/[0.08] border-r-0 bg-black/35 py-2 shadow-[-12px_0_40px_rgba(0,0,0,0.35)] backdrop-blur-md supports-[backdrop-filter]:bg-black/25">
+        <div
+          ref={trackRef}
+          className="relative flex max-h-[min(88vh,52rem)] overflow-y-auto overflow-x-hidden py-1 pl-1 pr-1.5 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.12)_transparent]"
+        >
           <div
-            ref={railRef}
-            className="pointer-events-none absolute right-[11px] top-0 bottom-0 w-px -translate-x-1/2"
+            className="relative w-4 shrink-0 self-stretch py-1"
             aria-hidden
           >
-            <div className="absolute inset-0 bg-white/[0.08]" />
+            <div className="pointer-events-none absolute bottom-2 left-1/2 top-2 w-px -translate-x-1/2 overflow-hidden rounded-full bg-white/[0.08]" />
             <div
-              className="absolute left-0 top-0 w-full bg-white/[0.14] transition-all duration-500 ease-out"
-              style={{ height: `${fillPct}%` }}
+              className="pointer-events-none absolute bottom-2 left-1/2 top-2 w-px origin-top overflow-hidden rounded-full bg-gradient-to-b from-[var(--orchid)]/45 via-white/35 to-[var(--cyan)]/40 transition-transform duration-500 ease-out"
+              style={{
+                transform: `translateX(-50%) scaleY(${Math.max(0.04, fillPct / 100)})`,
+              }}
             />
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="relative z-[1] flex min-w-0 flex-1 flex-col gap-y-0.5 pr-0.5 pt-0.5">
             {CHAPTERS.map((c, i) => {
               const isOn = active === c.id;
               return (
@@ -220,7 +225,7 @@ export function ChapterNav() {
                   }}
                   type="button"
                   title={`${c.step}. ${c.label}`}
-                  className="group flex w-full items-center gap-1.5 rounded-md py-1 pl-0.5 pr-0.5 text-left transition-colors hover:bg-white/[0.04] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-white/30"
+                  className="group flex w-full items-center justify-end gap-2 rounded-md py-1.5 pl-1 pr-1.5 text-right transition-colors hover:bg-white/[0.06] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-white/35"
                   onClick={() => {
                     const el = document.getElementById(c.id);
                     if (!el) return;
@@ -252,25 +257,27 @@ export function ChapterNav() {
                   }}
                   aria-current={isOn ? "location" : undefined}
                 >
+                  <div className="flex min-w-0 flex-col items-end gap-0.5">
+                    <span
+                      className={`font-[family-name:var(--font-ui)] text-[8px] font-medium tabular-nums leading-none ${
+                        isOn ? "text-zinc-300" : "text-zinc-600 group-hover:text-zinc-500"
+                      }`}
+                    >
+                      {c.step}
+                    </span>
+                    <span
+                      className={`max-w-[4.5rem] font-[family-name:var(--font-ui)] text-[7px] font-medium uppercase leading-tight tracking-[0.08em] text-zinc-500 sm:max-w-[5rem] sm:text-[8px] sm:tracking-[0.1em] ${
+                        isOn ? "text-zinc-100" : "group-hover:text-zinc-400"
+                      }`}
+                    >
+                      {c.label}
+                    </span>
+                  </div>
                   <span
-                    className={`w-4 shrink-0 text-right font-[family-name:var(--font-ui)] text-[9px] font-medium tabular-nums ${
-                      isOn ? "text-zinc-300" : "text-zinc-600 group-hover:text-zinc-500"
-                    }`}
-                  >
-                    {c.step}
-                  </span>
-                  <span
-                    className={`min-w-0 flex-1 font-[family-name:var(--font-ui)] text-[9px] font-medium uppercase leading-tight tracking-[0.1em] ${
-                      isOn ? "text-zinc-100" : "text-zinc-500 group-hover:text-zinc-400"
-                    }`}
-                  >
-                    {c.label}
-                  </span>
-                  <span
-                    className={`relative flex h-1.5 w-1.5 shrink-0 rounded-full border transition-colors duration-300 ${
+                    className={`h-1.5 w-1.5 shrink-0 rounded-full border transition-colors duration-300 ${
                       isOn
                         ? "border-white/50 bg-white/90"
-                        : "border-white/15 bg-transparent group-hover:border-white/25"
+                        : "border-white/12 bg-transparent group-hover:border-white/25"
                     }`}
                     aria-hidden
                   />

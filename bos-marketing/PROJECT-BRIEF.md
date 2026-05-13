@@ -32,7 +32,7 @@
 | Anchor ID     | Intent |
 |--------------|--------|
 | `welcome`    | Full-viewport hero + video |
-| `tension`    | Gap / friction + panel image |
+| `tension`    | Friction (sprawl) + interactive field/cards + “The gap” panel + bridge stats |
 | `system`     | What BOS is + panel image + pillars |
 | `flow`       | How it works — three steps |
 | `conviction` | Why it matters + velocity panel image |

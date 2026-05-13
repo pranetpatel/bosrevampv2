@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePrefersReducedMotion } from "./use-prefers-reduced-motion";
 
-const WORDS = ["Work"] as const;
+const WORDS = ["Work", "Business", "Operations", "Execution"] as const;
 
 const LONGEST = [...WORDS].reduce((a, b) => (b.length > a.length ? b : a));
 

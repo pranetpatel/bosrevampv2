@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { usePrefersReducedMotion } from "@/components/use-prefers-reduced-motion";
 
 type FrictionNode = {
@@ -18,66 +18,12 @@ type FrictionNode = {
 };
 
 const NODES: FrictionNode[] = [
-  {
-    id: "n1",
-    label: "Fragmented tools",
-    sub: "Lost context",
-    x: 11,
-    y: 24,
-    r: 15,
-    rx: 1.05,
-    ry: 0.88,
-    phase: 0.2,
-    tone: "hot",
-  },
-  {
-    id: "n2",
-    label: "Coordination overhead",
-    sub: "Continuous rebuild",
-    x: 72,
-    y: 18,
-    r: 13,
-    rx: 0.92,
-    ry: 1.1,
-    phase: 1.1,
-    tone: "magenta",
-  },
-  {
-    id: "n3",
-    label: "Blind spots",
-    sub: "Enterprise drag",
-    x: 48,
-    y: 62,
-    r: 12,
-    rx: 1.2,
-    ry: 0.95,
-    phase: 2.4,
-    tone: "cyan",
-  },
-  {
-    id: "n4",
-    label: "Scattered comms",
-    sub: "Platform switching",
-    x: 28,
-    y: 48,
-    r: 11,
-    rx: 0.78,
-    ry: 1.15,
-    phase: 0.6,
-    tone: "magenta",
-  },
-  {
-    id: "n5",
-    label: "Broken automations",
-    sub: "Workflow drift",
-    x: 84,
-    y: 52,
-    r: 10,
-    rx: 1.0,
-    ry: 1.0,
-    phase: 3.0,
-    tone: "hot",
-  },
+  { id: "f1", label: "Fragmented tools", sub: "Lost context", x: 11, y: 24, r: 15, rx: 1.05, ry: 0.88, phase: 0.2, tone: "hot" },
+  { id: "f2", label: "Workflow drift", sub: "Same bridges weekly", x: 84, y: 52, r: 10, rx: 1.0, ry: 1.0, phase: 3.0, tone: "hot" },
+  { id: "f3", label: "Invisible work", sub: "Never surfaces to leadership", x: 48, y: 62, r: 12, rx: 1.2, ry: 0.95, phase: 2.4, tone: "cyan" },
+  { id: "f4", label: "Agent sprawl", sub: "Demos without a spine", x: 72, y: 18, r: 13, rx: 0.92, ry: 1.1, phase: 1.1, tone: "magenta" },
+  { id: "f5", label: "Permission fog", sub: "Who can act is unclear", x: 28, y: 48, r: 11, rx: 0.78, ry: 1.15, phase: 0.6, tone: "magenta" },
+  { id: "f6", label: "Metric theater", sub: "Activity hides outcomes", x: 58, y: 35, r: 10, rx: 1.1, ry: 0.9, phase: 1.8, tone: "magenta" },
 ];
 
 const toneRing: Record<FrictionNode["tone"], string> = {
@@ -98,24 +44,19 @@ const toneLabel: Record<FrictionNode["tone"], string> = {
   cyan: "text-[var(--cyan)]",
 };
 
-export function GapFrictionDissolve() {
+type Props = {
+  cleared: ReadonlySet<string>;
+  onClear: (id: string) => void;
+};
+
+export function GapFrictionDissolve({ cleared, onClear }: Props) {
   const reduced = usePrefersReducedMotion();
-  const [dismissed, setDismissed] = useState<ReadonlySet<string>>(() => new Set());
   const shiftRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
-  const dismissedRef = useRef(new Set<string>());
+  const clearedRef = useRef(cleared);
 
   useEffect(() => {
-    dismissedRef.current = new Set(dismissed);
-  }, [dismissed]);
-
-  const onDismiss = useCallback((id: string) => {
-    setDismissed((prev) => {
-      if (prev.has(id)) return prev;
-      const next = new Set(prev);
-      next.add(id);
-      return next;
-    });
-  }, []);
+    clearedRef.current = cleared;
+  }, [cleared]);
 
   useEffect(() => {
     if (reduced) return;
@@ -126,7 +67,7 @@ export function GapFrictionDissolve() {
       if (cancelled) return;
       const t = (performance.now() - t0) / 1000;
       for (const n of NODES) {
-        if (dismissedRef.current.has(n.id)) continue;
+        if (clearedRef.current.has(n.id)) continue;
         const el = shiftRefs.current.get(n.id);
         if (!el) continue;
         const ox = Math.sin(t * n.rx + n.phase) * 22;
@@ -142,11 +83,11 @@ export function GapFrictionDissolve() {
     };
   }, [reduced]);
 
-  const remaining = NODES.length - dismissed.size;
+  const remaining = NODES.length - cleared.size;
 
   return (
     <div
-      className="panel-vignette relative aspect-[16/9] w-full shrink-0 overflow-hidden md:aspect-auto md:h-[clamp(200px,32svh,280px)]"
+      className="panel-vignette relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-2xl border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.55)] min-h-[min(52vh,640px)] md:aspect-auto md:min-h-[min(56svh,720px)] md:max-h-[min(78svh,820px)]"
       role="img"
       aria-label="Interactive visualization of operational friction. Click each glowing node to dissolve it."
     >
@@ -175,18 +116,18 @@ export function GapFrictionDissolve() {
         </defs>
       </svg>
 
-      <div className="pointer-events-none absolute left-0 right-0 top-8 z-[2] flex flex-col items-center px-6 text-center md:top-10">
-        <p className="max-w-xl bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] bg-clip-text font-[family-name:var(--font-display)] text-[clamp(1.2rem,3vw,1.75rem)] font-semibold leading-tight tracking-tight text-transparent">
+      <div className="pointer-events-none absolute left-0 right-0 top-8 z-[2] flex flex-col items-center px-6 text-center md:top-12">
+        <p className="max-w-xl bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] bg-clip-text font-[family-name:var(--font-display)] text-[clamp(1.35rem,3.5vw,2.25rem)] font-semibold leading-tight tracking-tight text-transparent">
           Operational weight
         </p>
-        <p className="mt-2 max-w-md font-[family-name:var(--font-sans)] text-[13px] leading-snug text-white/48 md:text-sm">
-          Clear each source of drag — click the nodes.
+        <p className="mt-3 max-w-md font-[family-name:var(--font-sans)] text-sm leading-snug text-white/48 md:text-base">
+          Clear each source of drag — click the nodes or the cards below.
         </p>
       </div>
 
       <div className="absolute inset-0 z-[3]">
         {NODES.map((n) => {
-          const gone = dismissed.has(n.id);
+          const gone = cleared.has(n.id);
           return (
             <div
               key={n.id}
@@ -196,7 +137,7 @@ export function GapFrictionDissolve() {
               ].join(" ")}
               style={{ left: `${n.x}%`, top: `${n.y}%` }}
               onClick={() => {
-                if (!gone) onDismiss(n.id);
+                if (!gone) onClear(n.id);
               }}
             >
               <div
@@ -210,17 +151,17 @@ export function GapFrictionDissolve() {
               >
                 <button
                   type="button"
-                  onClick={() => onDismiss(n.id)}
+                  onClick={() => onClear(n.id)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
-                      onDismiss(n.id);
+                      onClear(n.id);
                     }
                   }}
-                  className="relative flex h-[var(--sz)] w-[var(--sz)] cursor-pointer items-center justify-center rounded-full border-2 bg-black/25 shadow-[0_0_28px_var(--glow)] outline-none transition hover:scale-110 focus-visible:ring-2 focus-visible:ring-[var(--orchid)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a]"
+                  className="relative flex h-[var(--sz)] w-[var(--sz)] cursor-pointer items-center justify-center rounded-full border-2 bg-black/25 shadow-[0_0_28px_var(--glow)] outline-none transition hover:scale-110 focus-visible:ring-2 focus-visible:ring-[var(--orchid)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a] md:scale-[1.08]"
                   style={
                     {
-                      "--sz": `${n.r * 2}px`,
+                      "--sz": `${Math.round(n.r * 2.4)}px`,
                       borderColor: toneRing[n.tone],
                       boxShadow: `0 0 32px ${toneGlow[n.tone]}, inset 0 0 18px rgba(0,0,0,0.5)`,
                     } as CSSProperties
@@ -240,7 +181,7 @@ export function GapFrictionDissolve() {
                 </button>
                 <span
                   className={[
-                    "mt-2 max-w-[9rem] text-center font-[family-name:var(--font-ui)] text-[10px] font-semibold uppercase leading-tight tracking-[0.14em]",
+                    "mt-2 max-w-[11rem] text-center font-[family-name:var(--font-ui)] text-[10px] font-semibold uppercase leading-tight tracking-[0.14em] md:max-w-[13rem] md:text-[11px]",
                     toneLabel[n.tone],
                   ].join(" ")}
                 >
@@ -249,7 +190,7 @@ export function GapFrictionDissolve() {
                 {n.sub ? (
                   <span
                     className={[
-                      "mt-0.5 max-w-[9rem] text-center font-[family-name:var(--font-ui)] text-[9px] font-medium uppercase tracking-[0.12em] text-white/42 transition-opacity duration-200",
+                      "mt-0.5 max-w-[11rem] text-center font-[family-name:var(--font-ui)] text-[9px] font-medium uppercase tracking-[0.12em] text-white/42 transition-opacity duration-200 md:max-w-[13rem]",
                       reduced
                         ? "opacity-100"
                         : "opacity-100 max-md:opacity-100 md:opacity-0 md:group-hover/node:opacity-100 md:group-focus-within/node:opacity-100",
@@ -265,12 +206,12 @@ export function GapFrictionDissolve() {
         })}
       </div>
 
-      <p className="pointer-events-none absolute bottom-4 left-0 right-0 z-[2] text-center font-[family-name:var(--font-ui)] text-[9px] font-semibold uppercase tracking-[0.22em] text-white/28 md:bottom-5">
+      <p className="pointer-events-none absolute bottom-5 left-0 right-0 z-[2] text-center font-[family-name:var(--font-ui)] text-[9px] font-semibold uppercase tracking-[0.22em] text-white/28 md:bottom-7 md:text-[10px]">
         {reduced ? "Tap a node to clear it" : "Click each node to dissolve it"}
       </p>
 
       {remaining === 0 ? (
-        <p className="pointer-events-none absolute bottom-12 left-0 right-0 z-[2] text-center font-[family-name:var(--font-display)] text-sm font-semibold tracking-wide text-[var(--cyan)]/90 md:bottom-14">
+        <p className="pointer-events-none absolute bottom-14 left-0 right-0 z-[2] text-center font-[family-name:var(--font-display)] text-sm font-semibold tracking-wide text-[var(--cyan)]/90 md:bottom-16 md:text-base">
           Operational weight cleared
         </p>
       ) : null}

@@ -1,6 +1,17 @@
 import { BosOrbital } from "@/components/bos-orbital";
 import { MotionClipReveal, MotionReveal } from "@/components/motion-reveal";
 
+const ORBITAL_SURFACE_NAMES = [
+  "AI Execution",
+  "Workflow",
+  "Team OPS",
+  "Client Delivery",
+  "Intelligence",
+  "Communication",
+  "Command View",
+  "Integrations",
+] as const;
+
 export function ChapterSystemSection() {
   return (
     <section
@@ -14,12 +25,27 @@ export function ChapterSystemSection() {
           </p>
           <h2 className="mt-5 text-center font-[family-name:var(--font-display)] text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.06] tracking-tight text-white">
             <MotionClipReveal delay={0.1} as="span">
-              One Platform.
+              Business Made
             </MotionClipReveal>
             <MotionClipReveal delay={0.22} as="span">
-              Six Systems.
+              Simple.
             </MotionClipReveal>
           </h2>
+          <p
+            className="mx-auto mt-8 max-w-4xl text-center font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase leading-relaxed tracking-[0.18em] text-white/55 md:text-[11px] md:tracking-[0.2em]"
+            aria-label="BOS surfaces in the orbital"
+          >
+            {ORBITAL_SURFACE_NAMES.map((name, i) => (
+              <span key={name} className="inline-block">
+                {i > 0 ? (
+                  <span className="mx-2 text-white/25 md:mx-2.5" aria-hidden>
+                    ·
+                  </span>
+                ) : null}
+                {name}
+              </span>
+            ))}
+          </p>
         </MotionReveal>
 
         <MotionReveal delay={0.15}>
@@ -27,7 +53,7 @@ export function ChapterSystemSection() {
         </MotionReveal>
 
         <p className="text-center font-[family-name:var(--font-display)] text-[9px] font-semibold uppercase tracking-[0.22em] text-white/45">
-          Hover · then click to explore
+          Hover · then click a surface to explore
         </p>
       </div>
     </section>

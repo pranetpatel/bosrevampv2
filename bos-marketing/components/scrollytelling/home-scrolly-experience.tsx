@@ -1,5 +1,6 @@
 "use client";
 
+import { AmbientSiteCanvas } from "@/components/ambient-site-canvas";
 import { ChapterNav } from "@/components/chapter-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
@@ -9,79 +10,43 @@ import { ChapterFlowSection } from "@/components/sections/chapter-flow";
 import { ChapterManifestoSection } from "@/components/sections/chapter-manifesto";
 import { ChapterSystemSection } from "@/components/sections/chapter-system";
 import { ChapterTensionSection } from "@/components/sections/chapter-tension";
+import { ChaosIntroSection } from "@/components/sections/chaos-intro-section";
+import { CommandsBentoSection } from "@/components/sections/commands-bento-section";
 import { FinalCtaSection } from "@/components/sections/final-cta";
 import { HeroSection } from "@/components/sections/hero";
-import { usePrefersReducedMotion } from "@/components/use-prefers-reduced-motion";
-import { CapsuleStackSection } from "./capsule-stack-section";
-import { HorizontalPanel, HorizontalRail } from "./horizontal-rail";
-import { LenisGsapRoot } from "./lenis-gsap-root";
-import { ScrollyModeProvider } from "./scrolly-mode-context";
+import { stripIconsHeroMarquee } from "@/components/icons/bos-strip-icons";
+import { HomeMarqueeStrips } from "@/components/sections/home-marquee-strips";
 
 /**
- * Flow: vertical hero → horizontal (gap + system) → vertical (flow + conviction) →
- * horizontal (manifesto + tribe) → vertical stack + CTA.
+ * Homepage scroll is primarily vertical: chapters stack in document order.
+ * The audience chapter (`ChapterAudienceSection`) is the lone exception — it pins
+ * itself and translates vertical scroll into horizontal pan of its card track.
  */
-function HomeVerticalFallback() {
+export function HomeScrollyExperience() {
   return (
     <>
+      <AmbientSiteCanvas />
       <SiteNav />
       <ChapterNav />
-      <main className="text-[var(--foreground)]">
+      <main className="relative z-[1] pr-20 text-[var(--foreground)] sm:pr-24 md:pr-28">
         <HeroSection />
+        <HomeMarqueeStrips
+          entries={stripIconsHeroMarquee}
+          sectionId="strips"
+          mode="marquee"
+          eyebrow="BOS — every surface"
+        />
+        <ChaosIntroSection />
         <ChapterTensionSection />
         <ChapterSystemSection />
         <ChapterFlowSection />
         <ChapterConvictionSection />
-        <ChapterManifestoSection />
+        <CommandsBentoSection />
         <ChapterAudienceSection />
-        <CapsuleStackSection />
+        <ChapterManifestoSection />
         <FinalCtaSection />
       </main>
       <SiteFooter />
     </>
-  );
-}
-
-export function HomeScrollyExperience() {
-  const reduced = usePrefersReducedMotion();
-  if (reduced) {
-    return <HomeVerticalFallback />;
-  }
-
-  return (
-    <ScrollyModeProvider>
-      <LenisGsapRoot>
-        <SiteNav />
-        <ChapterNav />
-        <main className="text-[var(--foreground)]">
-          <HeroSection />
-
-          <HorizontalRail railId="rail-arc">
-            <HorizontalPanel chapterId="tension">
-              <ChapterTensionSection />
-            </HorizontalPanel>
-            <HorizontalPanel chapterId="system">
-              <ChapterSystemSection />
-            </HorizontalPanel>
-          </HorizontalRail>
-
-          <ChapterFlowSection />
-          <ChapterConvictionSection />
-
-          <HorizontalRail railId="rail-principles">
-            <HorizontalPanel chapterId="manifesto">
-              <ChapterManifestoSection />
-            </HorizontalPanel>
-            <HorizontalPanel chapterId="tribe">
-              <ChapterAudienceSection />
-            </HorizontalPanel>
-          </HorizontalRail>
-
-          <CapsuleStackSection />
-          <FinalCtaSection />
-        </main>
-        <SiteFooter />
-      </LenisGsapRoot>
-    </ScrollyModeProvider>
   );
 }

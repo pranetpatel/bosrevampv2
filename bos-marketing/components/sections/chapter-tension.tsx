@@ -1,17 +1,61 @@
+"use client";
+
+import { useCallback, useState } from "react";
 import { GapFrictionDissolve } from "@/components/gap-friction-dissolve";
+import { GapFrictionInteractive } from "@/components/gap-friction-interactive";
 import { MotionClipReveal, MotionReveal } from "@/components/motion-reveal";
+import { ProblemBridgeStats } from "@/components/sections/problem-bridge-stats";
 
 export function ChapterTensionSection() {
+  const [cleared, setCleared] = useState<ReadonlySet<string>>(() => new Set());
+
+  const onClear = useCallback((id: string) => {
+    setCleared((prev) => {
+      if (prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+  }, []);
+
+  const onToggle = useCallback((id: string) => {
+    setCleared((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
   return (
     <section
       id="tension"
-      className="chapter-rule-top section-grain relative z-[1] flex min-h-0 flex-1 flex-col bg-[var(--surface-dark)] px-6 pb-8 pt-8 md:px-14 md:pb-12 md:pt-10"
+      className="chapter-rule-top section-grain relative z-[1] flex min-h-0 flex-1 flex-col bg-[var(--surface-dark)] px-6 pb-12 pt-8 md:px-14 md:pb-16 md:pt-10"
     >
-      <div className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col space-y-6 md:space-y-8">
+      <div className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col space-y-10 md:space-y-12">
         <MotionReveal>
-          <GapFrictionDissolve />
+          <p className="flex justify-center gap-3 font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--cyan)]">
+            <span className="h-px w-5 self-center bg-[var(--cyan)]/80" aria-hidden />
+            Friction
+          </p>
+          <h2 className="mt-6 text-center font-[family-name:var(--font-display)] text-[clamp(1.75rem,4.5vw,3.75rem)] font-semibold leading-[1.06] tracking-tight text-white">
+            The sprawl isn&apos;t your fault.{" "}
+            <em className="not-italic text-white/45">The architecture is.</em>
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-center font-[family-name:var(--font-sans)] text-sm text-white/40">
+            Click the glowing nodes or the cards below to clear each source of operational drag.
+          </p>
         </MotionReveal>
+
+        <MotionReveal delay={0.05}>
+          <GapFrictionDissolve cleared={cleared} onClear={onClear} />
+        </MotionReveal>
+
         <MotionReveal delay={0.08}>
+          <GapFrictionInteractive cleared={cleared} onToggle={onToggle} compact />
+        </MotionReveal>
+
+        <MotionReveal delay={0.1}>
           <div className="min-h-0 shrink overflow-hidden rounded-[2rem] border border-white/8 bg-gradient-to-br from-[#0a1528] via-[#140a24] to-[#0a0a0a] shadow-[0_32px_100px_rgba(0,0,0,0.5)]">
             <div className="relative px-6 py-10 md:px-12 md:py-16">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_25%,rgba(218,52,241,0.13),transparent_55%)]" />
@@ -53,6 +97,7 @@ export function ChapterTensionSection() {
             </div>
           </div>
         </MotionReveal>
+        <ProblemBridgeStats />
       </div>
     </section>
   );
