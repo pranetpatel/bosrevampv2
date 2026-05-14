@@ -25,10 +25,10 @@ export function ChapterSystemSection() {
           </p>
           <h2 className="mt-5 text-center font-[family-name:var(--font-display)] text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.06] tracking-tight text-white">
             <MotionClipReveal delay={0.1} as="span">
-              Business Made
-            </MotionClipReveal>
-            <MotionClipReveal delay={0.22} as="span">
-              Simple.
+              you think it,
+            </MotionClipReveal>{" "}
+            <MotionClipReveal delay={0.2} as="span">
+              BOS executes it
             </MotionClipReveal>
           </h2>
           <p

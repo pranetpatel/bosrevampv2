@@ -3,8 +3,7 @@
 import { useCallback, useState } from "react";
 import { GapFrictionDissolve } from "@/components/gap-friction-dissolve";
 import { GapFrictionInteractive } from "@/components/gap-friction-interactive";
-import { MotionClipReveal, MotionReveal } from "@/components/motion-reveal";
-import { ProblemBridgeStats } from "@/components/sections/problem-bridge-stats";
+import { MotionReveal } from "@/components/motion-reveal";
 
 export function ChapterTensionSection() {
   const [cleared, setCleared] = useState<ReadonlySet<string>>(() => new Set());
@@ -55,6 +54,7 @@ export function ChapterTensionSection() {
           <GapFrictionInteractive cleared={cleared} onToggle={onToggle} compact />
         </MotionReveal>
 
+        {/*
         <MotionReveal delay={0.1}>
           <div className="min-h-0 shrink overflow-hidden rounded-[2rem] border border-white/8 bg-gradient-to-br from-[#0a1528] via-[#140a24] to-[#0a0a0a] shadow-[0_32px_100px_rgba(0,0,0,0.5)]">
             <div className="relative px-6 py-10 md:px-12 md:py-16">
@@ -98,6 +98,7 @@ export function ChapterTensionSection() {
           </div>
         </MotionReveal>
         <ProblemBridgeStats />
+        */}
       </div>
     </section>
   );

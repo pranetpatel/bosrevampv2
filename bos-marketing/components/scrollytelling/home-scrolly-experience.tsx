@@ -6,11 +6,12 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
 import { ChapterAudienceSection } from "@/components/sections/chapter-audience";
 import { ChapterFlowPillarsSection } from "@/components/sections/chapter-flow-pillars";
-import { ChapterFlowSection } from "@/components/sections/chapter-flow";
+import { ChapterIntroduceSection } from "@/components/sections/chapter-introduce";
 import { ChapterManifestoSection } from "@/components/sections/chapter-manifesto";
 import { ChapterSystemSection } from "@/components/sections/chapter-system";
 import { ChapterTensionSection } from "@/components/sections/chapter-tension";
 import { ChaosIntroSection } from "@/components/sections/chaos-intro-section";
+import { BosMbaSection } from "@/components/sections/chapter-bos-mba";
 import { FinalCtaSection } from "@/components/sections/final-cta";
 import { HeroSection } from "@/components/sections/hero";
 import { stripIconsHeroMarquee } from "@/components/icons/bos-strip-icons";
@@ -37,11 +38,12 @@ export function HomeScrollyExperience() {
         />
         <ChaosIntroSection />
         <ChapterTensionSection />
+        <ChapterManifestoSection />
+        <ChapterIntroduceSection />
         <ChapterSystemSection />
-        <ChapterFlowSection />
         <ChapterFlowPillarsSection />
         <ChapterAudienceSection />
-        <ChapterManifestoSection />
+        <BosMbaSection videoSrc="/video/BOSMBAHERO.mp4" />
         <FinalCtaSection />
       </main>
       <SiteFooter />

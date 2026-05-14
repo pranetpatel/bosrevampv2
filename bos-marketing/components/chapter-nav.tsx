@@ -58,16 +58,17 @@ function getActivePinnedHorizontalRail(): HTMLElement | null {
   return actives.reduce((a, b) => (a.start >= b.start ? a : b)).rail;
 }
 
-/** Order matches scroll order on the homepage (not “importance” rank — use step numbers for that). */
+/** Order matches scroll order on the homepage (not "importance" rank — use step numbers for that). */
 const CHAPTERS = [
   { id: "welcome", step: 1, label: "Welcome" },
   { id: "strips", step: 2, label: "Signal" },
   { id: "tension", step: 3, label: "Friction" },
-  { id: "system", step: 4, label: "System" },
-  { id: "flow", step: 5, label: "Flow" },
-  { id: "tribe", step: 6, label: "Who" },
-  { id: "manifesto", step: 7, label: "Principles" },
-  { id: "close", step: 8, label: "Start" },
+  { id: "manifesto", step: 4, label: "Principles" },
+  { id: "introduce", step: 5, label: "BOS" },
+  { id: "system", step: 6, label: "System" },
+  { id: "tribe", step: 7, label: "Who" },
+  { id: "bos-mba", step: 8, label: "BOS MBA" },
+  { id: "close", step: 9, label: "Start" },
 ] as const;
 
 export function ChapterNav() {

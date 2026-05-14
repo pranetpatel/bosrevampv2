@@ -19,8 +19,7 @@ export default function DemoPage() {
               Watch BOS
             </h1>
             <p className="mx-auto mt-6 max-w-xl font-[family-name:var(--font-sans)] text-lg text-white/70">
-              Full product walkthrough — same asset as the homepage flow section. Intent in,
-              execution out.
+              Full product walkthrough. Intent in, execution out.
             </p>
           </MotionSection>
           <MotionSection className="mt-14" delay={0.06}>
