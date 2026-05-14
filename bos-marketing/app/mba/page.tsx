@@ -88,26 +88,26 @@ export default function MbaPage() {
         <div className="absolute top-1/2 left-0 right-0 h-px bg-[rgba(244,240,232,0.12)]" />
 
         {/* Main content */}
-        <div className="relative z-10 flex flex-col flex-1 justify-end px-8 pb-28 md:px-16 lg:px-16">
+        <div className="relative z-10 flex flex-col flex-1 justify-end px-4 pb-20 sm:px-8 sm:pb-24 md:px-16 md:pb-28">
           <p className="font-[family-name:var(--font-dm-mono)] text-[11px] tracking-[0.25em] uppercase text-[#C9A84C] mb-6">
             New Cohort
           </p>
           <h1
             className="font-[family-name:var(--font-playfair)] font-black leading-[0.92] tracking-[-0.02em] text-[#F4F0E8] mb-6"
-            style={{ fontSize: "clamp(4rem,9.5vw,9rem)" }}
+            style={{ fontSize: "clamp(2.75rem,9.5vw,9rem)" }}
           >
             The New
             <br />
             <em className="not-italic text-[#C9A84C]">Playbook.</em>
           </h1>
-          <p className="font-[family-name:var(--font-dm-sans)] font-light text-[17.6px] leading-[26px] text-[rgba(244,240,232,0.45)] max-w-[430px] mb-10">
+          <p className="font-[family-name:var(--font-dm-sans)] font-light text-sm sm:text-base md:text-[17.6px] leading-[26px] text-[rgba(244,240,232,0.45)] max-w-[430px] mb-10">
             The world runs on systems now. For the first time, you can learn
             business by building and operating one in real time.
           </p>
-          <div className="flex flex-wrap items-center gap-8">
+          <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 sm:gap-8">
             <Link
               href="/get-started"
-              className="inline-flex items-center px-10 py-4 bg-[#C9A84C] text-[#0A0A0A] font-[family-name:var(--font-dm-sans)] font-medium text-[13px] tracking-[0.1em] uppercase hover:bg-[#b8943e] transition-colors"
+              className="inline-flex items-center px-6 py-3 sm:px-10 sm:py-4 bg-[#C9A84C] text-[#0A0A0A] font-[family-name:var(--font-dm-sans)] font-medium text-[13px] tracking-[0.1em] uppercase hover:bg-[#b8943e] transition-colors"
             >
               Apply for Early Access
             </Link>
@@ -144,7 +144,7 @@ export default function MbaPage() {
         <MbaProblemVideo />
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col justify-center min-h-screen px-8 md:px-16">
+        <div className="relative z-10 flex flex-col justify-center min-h-screen px-4 sm:px-8 md:px-16">
           {/* Label */}
           <div className="flex items-center gap-4 mb-10">
             <div className="w-8 h-px bg-[#C9A84C]" />
@@ -180,12 +180,12 @@ export default function MbaPage() {
       </section>
 
       {/* ─── SECTION 3: OPERATORS — fragmented tools ─── */}
-      <section className="border-t border-[rgba(244,240,232,0.12)] py-24 md:py-36">
-        <div className="mx-auto max-w-[1072px] px-8 md:px-16">
+      <section className="border-t border-[rgba(244,240,232,0.12)] py-16 sm:py-24 md:py-36">
+        <div className="mx-auto max-w-[1072px] px-4 sm:px-8 md:px-16">
           <p className="font-[family-name:var(--font-dm-mono)] text-[10px] tracking-[0.3em] uppercase text-[#C9A84C] mb-10">
             01 — Operators
           </p>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 lg:gap-24 items-end">
             <h2
               className="font-[family-name:var(--font-playfair)] font-bold leading-[1.15] tracking-[-0.01em] text-[#F4F0E8]"
               style={{ fontSize: "clamp(1.9rem,3.8vw,3.2rem)" }}
@@ -214,8 +214,8 @@ export default function MbaPage() {
       </section>
 
       {/* ─── SECTION 4: THREE FAILURES ─── */}
-      <section className="border-t border-[rgba(244,240,232,0.12)] py-24 md:py-36">
-        <div className="mx-auto max-w-[1072px] px-8 md:px-16">
+      <section className="border-t border-[rgba(244,240,232,0.12)] py-16 sm:py-24 md:py-36">
+        <div className="mx-auto max-w-[1072px] px-4 sm:px-8 md:px-16">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-8 h-px bg-[#C9A84C]" />
             <p className="font-[family-name:var(--font-dm-mono)] text-[11px] tracking-[0.3em] uppercase text-[#C9A84C]">
@@ -249,7 +249,7 @@ export default function MbaPage() {
             ].map((item, i) => (
               <div
                 key={item.n}
-                className={`p-10 ${i < 2 ? "border-b md:border-b-0 md:border-r border-[rgba(244,240,232,0.12)]" : ""}`}
+                className={`p-6 md:p-10 ${i < 2 ? "border-b md:border-b-0 md:border-r border-[rgba(244,240,232,0.12)]" : ""}`}
               >
                 <p className="font-[family-name:var(--font-dm-mono)] text-[11px] tracking-[0.2em] uppercase text-[#C9A84C] mb-5">
                   Failure {item.n}
@@ -267,8 +267,8 @@ export default function MbaPage() {
       </section>
 
       {/* ─── SECTION 5: QUOTE ─── */}
-      <section className="border-t border-[rgba(244,240,232,0.12)] py-28 md:py-44">
-        <div className="mx-auto max-w-[1072px] px-8 md:px-16 text-center">
+      <section className="border-t border-[rgba(244,240,232,0.12)] py-16 sm:py-28 md:py-44">
+        <div className="mx-auto max-w-[1072px] px-4 sm:px-8 md:px-16 text-center">
           <p
             className="font-[family-name:var(--font-playfair)] font-normal leading-[1.25] tracking-[-0.01em] text-[#F4F0E8]"
             style={{ fontSize: "clamp(1.75rem,4vw,4rem)" }}
@@ -294,8 +294,8 @@ export default function MbaPage() {
       </section>
 
       {/* ─── SECTION 6: OLD vs NEW PLAYBOOK ─── */}
-      <section className="border-t border-[rgba(244,240,232,0.12)] py-24 md:py-36 bg-[rgba(201,168,76,0.03)]">
-        <div className="mx-auto max-w-[1072px] px-8 md:px-16">
+      <section className="border-t border-[rgba(244,240,232,0.12)] py-16 sm:py-24 md:py-36 bg-[rgba(201,168,76,0.03)]">
+        <div className="mx-auto max-w-[1072px] px-4 sm:px-8 md:px-16">
           <div className="flex items-center gap-4 mb-14">
             <div className="w-8 h-px bg-[#C9A84C]" />
             <p className="font-[family-name:var(--font-dm-mono)] text-[11px] tracking-[0.3em] uppercase text-[#C9A84C]">
@@ -303,11 +303,11 @@ export default function MbaPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2">
-            <p className="font-[family-name:var(--font-dm-mono)] text-[10px] tracking-[0.3em] uppercase text-[rgba(244,240,232,0.25)] mb-6">
+          <div className="grid grid-cols-2 min-w-0">
+            <p className="font-[family-name:var(--font-dm-mono)] text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-[rgba(244,240,232,0.25)] mb-6">
               Old Playbook
             </p>
-            <p className="font-[family-name:var(--font-dm-mono)] text-[10px] tracking-[0.3em] uppercase text-[#C9A84C] mb-6 pl-6 md:pl-10">
+            <p className="font-[family-name:var(--font-dm-mono)] text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-[#C9A84C] mb-6 pl-4 sm:pl-6 md:pl-10">
               New Playbook
             </p>
 
@@ -319,22 +319,22 @@ export default function MbaPage() {
               ["Graduate. Then figure it out.", "Graduate operating."],
             ].map(([old, next], i) => (
               <React.Fragment key={old}>
-                <div className="border-t border-[rgba(244,240,232,0.12)] py-4 pr-4">
+                <div className="border-t border-[rgba(244,240,232,0.12)] py-3 sm:py-4 pr-3 sm:pr-4">
                   <p
-                    className="font-[family-name:var(--font-playfair)] font-normal leading-[34px] text-[rgba(244,240,232,0.3)] line-through"
-                    style={{ fontSize: "clamp(1rem,1.8vw,1.5rem)" }}
+                    className="font-[family-name:var(--font-playfair)] font-normal leading-[1.5] text-[rgba(244,240,232,0.3)] line-through text-sm sm:text-base"
+                    style={{ fontSize: "clamp(0.75rem,1.8vw,1.5rem)" }}
                   >
                     {old}
                   </p>
                 </div>
-                <div className="border-t border-[rgba(244,240,232,0.12)] py-4 border-l border-l-[rgba(244,240,232,0.08)] pl-6 md:pl-10">
+                <div className="border-t border-[rgba(244,240,232,0.12)] py-3 sm:py-4 border-l border-l-[rgba(244,240,232,0.08)] pl-4 sm:pl-6 md:pl-10">
                   <p
-                    className={`font-[family-name:var(--font-playfair)] leading-[34px] ${
+                    className={`font-[family-name:var(--font-playfair)] leading-[1.5] text-sm sm:text-base ${
                       i === 4
                         ? "font-bold text-[#F4F0E8]"
                         : "italic font-bold text-[#C9A84C]"
                     }`}
-                    style={{ fontSize: "clamp(1rem,1.8vw,1.5rem)" }}
+                    style={{ fontSize: "clamp(0.75rem,1.8vw,1.5rem)" }}
                   >
                     {next}
                   </p>
@@ -346,8 +346,8 @@ export default function MbaPage() {
       </section>
 
       {/* ─── SECTION 7: REVENUE COMPARISON ─── */}
-      <section className="border-t border-[rgba(244,240,232,0.12)] py-24 md:py-36">
-        <div className="mx-auto max-w-[1072px] px-8 md:px-16">
+      <section className="border-t border-[rgba(244,240,232,0.12)] py-16 sm:py-24 md:py-36">
+        <div className="mx-auto max-w-[1072px] px-4 sm:px-8 md:px-16">
           <div className="flex items-center gap-4 mb-16">
             <div className="w-8 h-px bg-[#C9A84C]" />
             <p className="font-[family-name:var(--font-dm-mono)] text-[11px] tracking-[0.3em] uppercase text-[#C9A84C]">
@@ -355,7 +355,7 @@ export default function MbaPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
             {/* Old path */}
             <div>
               <p className="font-[family-name:var(--font-dm-mono)] text-[10px] tracking-[0.3em] uppercase text-[rgba(244,240,232,0.25)] mb-2">
@@ -405,14 +405,14 @@ export default function MbaPage() {
       </section>
 
       {/* ─── SECTION 8: BOS ─── */}
-      <section className="border-t border-[rgba(244,240,232,0.12)] py-28 md:py-44">
-        <div className="mx-auto max-w-[1072px] px-8 md:px-16 text-center">
+      <section className="border-t border-[rgba(244,240,232,0.12)] py-16 sm:py-28 md:py-44">
+        <div className="mx-auto max-w-[1072px] px-4 sm:px-8 md:px-16 text-center">
           <p className="font-[family-name:var(--font-dm-mono)] text-[11px] tracking-[0.3em] uppercase text-[#C9A84C] mb-6">
             We built something different.
           </p>
           <h2
             className="font-[family-name:var(--font-playfair)] font-black leading-none tracking-[-0.04em] text-[#F4F0E8]"
-            style={{ fontSize: "clamp(5rem,13vw,12rem)" }}
+            style={{ fontSize: "clamp(3.5rem,13vw,12rem)" }}
           >
             BOS
           </h2>
@@ -430,12 +430,14 @@ export default function MbaPage() {
             ].map((item, i) => (
               <div
                 key={item.title}
-                className={`py-8 px-6 ${
-                  i % 2 === 0
-                    ? "border-b md:border-b-0 border-r border-[rgba(244,240,232,0.12)]"
-                    : i < 3
-                      ? "border-b md:border-b-0 md:border-r border-[rgba(244,240,232,0.12)]"
-                      : ""
+                className={`py-6 px-4 sm:py-8 sm:px-6 ${
+                  i === 0
+                    ? "border-b border-r border-[rgba(244,240,232,0.12)] md:border-b-0"
+                    : i === 1
+                      ? "border-b border-[rgba(244,240,232,0.12)] md:border-b-0 md:border-r"
+                      : i === 2
+                        ? "border-r border-[rgba(244,240,232,0.12)]"
+                        : ""
                 }`}
               >
                 <p className="font-[family-name:var(--font-playfair)] font-bold text-[17.6px] leading-[29px] text-[#F4F0E8]">
@@ -457,7 +459,7 @@ export default function MbaPage() {
       </section>
 
       {/* ─── SECTION 9: BOS MBA ─── */}
-      <section className="border-t border-[rgba(244,240,232,0.12)] py-24 md:py-36 bg-[rgba(201,168,76,0.016)] relative overflow-hidden">
+      <section className="border-t border-[rgba(244,240,232,0.12)] py-16 sm:py-24 md:py-36 bg-[rgba(201,168,76,0.016)] relative overflow-hidden">
         {/* Watermark */}
         <div
           className="absolute right-[-2%] top-1/3 font-[family-name:var(--font-playfair)] font-black leading-none tracking-[-0.05em] text-[rgba(244,240,232,0.024)] select-none pointer-events-none hidden md:block"
@@ -466,7 +468,7 @@ export default function MbaPage() {
           MBA
         </div>
 
-        <div className="mx-auto max-w-[1072px] px-8 md:px-16 relative z-10">
+        <div className="mx-auto max-w-[1072px] px-4 sm:px-8 md:px-16 relative z-10">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-8 h-px bg-[#C9A84C]" />
             <p className="font-[family-name:var(--font-dm-mono)] text-[11px] tracking-[0.3em] uppercase text-[#C9A84C]">
@@ -480,22 +482,27 @@ export default function MbaPage() {
           >
             BOS MBA.
           </h2>
-          <p className="font-[family-name:var(--font-dm-sans)] font-light text-[17.6px] leading-[30px] text-[rgba(244,240,232,0.45)] max-w-[545px] mb-16">
+          <p className="font-[family-name:var(--font-dm-sans)] font-light text-sm sm:text-base md:text-[17.6px] leading-[30px] text-[rgba(244,240,232,0.45)] max-w-[545px] mb-16">
             Not a course. Not a certification. A community where you build and
             run a company in real time, using the exact tools the best operators
             use today.
           </p>
 
           {/* Phase cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border border-[rgba(244,240,232,0.12)]">
-            {phases.map((item, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border border-[rgba(244,240,232,0.12)]">
+            {phases.map((item, i) => {
+              const borderCls =
+                i === 0
+                  ? "border-b border-r border-[rgba(244,240,232,0.12)] lg:border-b-0"
+                  : i === 1
+                    ? "border-b border-[rgba(244,240,232,0.12)] lg:border-b-0 lg:border-r"
+                    : i === 2
+                      ? "border-b border-[rgba(244,240,232,0.12)] sm:border-b-0 sm:border-r"
+                      : "";
+              return (
               <div
                 key={item.phase}
-                className={`p-8 flex flex-col ${
-                  i < 3
-                    ? "border-b lg:border-b-0 lg:border-r border-[rgba(244,240,232,0.12)]"
-                    : ""
-                }`}
+                className={`p-6 sm:p-8 flex flex-col ${borderCls}`}
               >
                 <p className="font-[family-name:var(--font-dm-mono)] text-[9px] tracking-[0.35em] uppercase text-[#C9A84C] mb-5">
                   Phase {item.phase}
@@ -513,7 +520,8 @@ export default function MbaPage() {
                   </p>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Quote */}
@@ -529,9 +537,9 @@ export default function MbaPage() {
       {/* ─── SECTION 10: EXPERIENCE / CURRICULUM ─── */}
       <section
         id="experience"
-        className="border-t border-[rgba(244,240,232,0.12)] py-24 md:py-36"
+        className="border-t border-[rgba(244,240,232,0.12)] py-16 sm:py-24 md:py-36"
       >
-        <div className="mx-auto max-w-[1072px] px-8 md:px-16">
+        <div className="mx-auto max-w-[1072px] px-4 sm:px-8 md:px-16">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-8 h-px bg-[#C9A84C]" />
             <p className="font-[family-name:var(--font-dm-mono)] text-[11px] tracking-[0.3em] uppercase text-[#C9A84C]">
@@ -564,7 +572,7 @@ export default function MbaPage() {
                 />
 
                 {/* Week label */}
-                <div className="pl-8 w-24 md:w-28 flex-shrink-0 pt-10 pb-10">
+                <div className="pl-6 sm:pl-8 w-20 sm:w-24 md:w-28 flex-shrink-0 pt-8 pb-8 sm:pt-10 sm:pb-10">
                   <p className="font-[family-name:var(--font-dm-mono)] text-[11px] tracking-[0.2em] uppercase text-[#C9A84C]">
                     {item.week}
                   </p>
@@ -572,7 +580,7 @@ export default function MbaPage() {
 
                 {/* Content */}
                 <div
-                  className={`flex-1 pt-10 pb-10 ${i < weeks.length - 1 ? "border-b border-[rgba(244,240,232,0.06)]" : ""}`}
+                  className={`flex-1 pt-8 pb-8 sm:pt-10 sm:pb-10 ${i < weeks.length - 1 ? "border-b border-[rgba(244,240,232,0.06)]" : ""}`}
                 >
                   <h3 className="font-[family-name:var(--font-playfair)] font-bold text-[22.4px] leading-[37px] text-[#F4F0E8] mb-3">
                     {item.title}
@@ -588,11 +596,11 @@ export default function MbaPage() {
       </section>
 
       {/* ─── FINAL CTA ─── */}
-      <section className="border-t border-[rgba(244,240,232,0.12)] py-32 md:py-52 text-center">
-        <div className="mx-auto max-w-[1072px] px-8 md:px-16">
+      <section className="border-t border-[rgba(244,240,232,0.12)] py-20 sm:py-32 md:py-52 text-center">
+        <div className="mx-auto max-w-[1072px] px-4 sm:px-8 md:px-16">
           <h2
-            className="font-[family-name:var(--font-playfair)] font-black leading-[1.1] tracking-[-0.02em] text-[#F4F0E8] mb-12"
-            style={{ fontSize: "clamp(2.25rem,5.5vw,4.5rem)" }}
+            className="font-[family-name:var(--font-playfair)] font-black leading-[1.1] tracking-[-0.02em] text-[#F4F0E8] mb-10 sm:mb-12"
+            style={{ fontSize: "clamp(2rem,5.5vw,4.5rem)" }}
           >
             This is how businesses
             <br />
@@ -600,7 +608,7 @@ export default function MbaPage() {
           </h2>
           <Link
             href="/get-started"
-            className="inline-flex items-center px-12 py-5 bg-[#C9A84C] text-[#0A0A0A] font-[family-name:var(--font-dm-sans)] font-medium text-[13px] tracking-[0.1em] uppercase hover:bg-[#b8943e] transition-colors"
+            className="inline-flex items-center px-8 py-4 sm:px-12 sm:py-5 bg-[#C9A84C] text-[#0A0A0A] font-[family-name:var(--font-dm-sans)] font-medium text-[13px] tracking-[0.1em] uppercase hover:bg-[#b8943e] transition-colors"
           >
             Apply for Early Access
           </Link>

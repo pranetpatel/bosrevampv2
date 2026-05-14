@@ -27,7 +27,7 @@ export function HomeScrollyExperience() {
       <MouseParticleField />
       <SiteNav />
       <ChapterNav />
-      <main className="relative z-[1] pr-20 text-[var(--foreground)] sm:pr-24 md:pr-28">
+      <main className="relative z-[1] text-[var(--foreground)] md:pr-28">
         <HeroSection />
         <HomeMidStrip />
         <ChaosIntroSection />

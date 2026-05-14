@@ -587,30 +587,32 @@ export default function ProductPage() {
             Join the waitlist for the latest updates and news.
           </p>
 
-          <div className="mt-10 flex items-center gap-3 rounded-full border border-white/15 bg-white/5 p-2 pl-5 backdrop-blur-md">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--orchid)] to-[var(--magenta)]">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-                <circle cx="7" cy="7" r="5.5" stroke="white" strokeWidth="1.5" />
-                <path
-                  d="M4.5 7l2 2 3-3"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+          <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-0 sm:rounded-full sm:border sm:border-white/15 sm:bg-white/5 sm:p-2 sm:pl-5 sm:backdrop-blur-md">
+            <div className="flex items-center gap-3 rounded-full border border-white/15 bg-white/5 p-2 pl-5 backdrop-blur-md sm:contents">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--orchid)] to-[var(--magenta)]">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+                  <circle cx="7" cy="7" r="5.5" stroke="white" strokeWidth="1.5" />
+                  <path
+                    d="M4.5 7l2 2 3-3"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+              <input
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 min-w-0 bg-transparent text-sm text-white placeholder-white/35 outline-none"
+                style={{ fontFamily: "var(--font-ui)" }}
+              />
             </div>
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-transparent text-sm text-white placeholder-white/35 outline-none"
-              style={{ fontFamily: "var(--font-ui)" }}
-            />
             <Link
               href={`/get-started${email ? `?email=${encodeURIComponent(email)}` : ""}`}
-              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-2.5 text-sm font-bold text-[#0d0b1e] transition hover:bg-white/90"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-white px-6 py-3 sm:py-2.5 text-sm font-bold text-[#0d0b1e] transition hover:bg-white/90"
               style={{ fontFamily: "var(--font-ui)" }}
             >
               Join the waitlist <span aria-hidden>→</span>

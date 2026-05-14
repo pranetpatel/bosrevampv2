@@ -313,8 +313,89 @@ export function MeetBosSection() {
         Meet BOS
       </h2>
 
-      {/* Central stage */}
-      <div className="relative mx-auto" style={{ width: 520, height: 560 }}>
+      {/* ── Mobile: centered orb only ── */}
+      <div className="md:hidden flex flex-col items-center gap-4 py-8">
+        <div className="relative">
+          {/* Concentric ring glows */}
+          {[320, 240, 160, 100].map((d, i) => (
+            <div
+              key={d}
+              className="absolute rounded-full border border-white/[0.06] pointer-events-none -translate-x-1/2 -translate-y-1/2"
+              style={{
+                width: d,
+                height: d,
+                top: "50%",
+                left: "50%",
+                opacity: 0.3 + i * 0.05,
+              }}
+            />
+          ))}
+          <div className="relative flex flex-col items-center gap-4" style={{ width: 320, height: 320 }}>
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10">
+              <div className="relative">
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    boxShadow: "0 0 60px 20px rgba(120,50,255,0.35)",
+                    animation: "orb-pulse 2.8s ease-in-out infinite",
+                  }}
+                />
+                <AsteroidOrb size={100} />
+              </div>
+
+              {/* Status ticker */}
+              <div
+                className="mt-2 flex items-center gap-2 rounded-full border border-white/10 bg-[#0d0a20]/90 px-4 py-1.5 backdrop-blur-sm"
+                style={{ minWidth: 200 }}
+              >
+                <span className="relative flex h-1.5 w-1.5 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-violet-400" />
+                </span>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={ticker}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.25 }}
+                    className="text-[11px] text-violet-300/85"
+                    style={{ fontFamily: "var(--font-ui)" }}
+                  >
+                    {ticker}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+
+              {completedCount > 0 && (
+                <div className="flex items-center gap-1.5 rounded-lg border border-emerald-800/40 bg-emerald-950/50 px-3 py-1">
+                  <span className="text-[10px] text-emerald-400 font-semibold" style={{ fontFamily: "var(--font-ui)" }}>
+                    ✦ {completedCount} tasks completed
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Latest card shown inline on mobile */}
+        <AnimatePresence mode="wait">
+          {liveCards.slice(-1).map(({ uid, card }) => (
+            <motion.div
+              key={uid}
+              initial={{ opacity: 0, y: 12, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1, transition: { duration: 0.4 } }}
+              exit={{ opacity: 0, y: -8, scale: 0.97, transition: { duration: 0.25 } }}
+              className="pointer-events-none"
+            >
+              <ActivityCardRenderer card={card} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {/* ── Desktop: full floating-cards stage ── */}
+      <div className="hidden md:block relative mx-auto" style={{ width: 520, height: 560 }}>
 
         {/* Concentric ring glows */}
         {[520, 400, 280, 160].map((d, i) => (
@@ -334,7 +415,6 @@ export function MeetBosSection() {
         {/* Orb center */}
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10">
           <div className="relative">
-            {/* Pulsing glow ring behind orb */}
             <div
               className="absolute inset-0 rounded-full"
               style={{
@@ -369,7 +449,6 @@ export function MeetBosSection() {
             </AnimatePresence>
           </div>
 
-          {/* Completed counter */}
           {completedCount > 0 && (
             <div className="flex items-center gap-1.5 rounded-lg border border-emerald-800/40 bg-emerald-950/50 px-3 py-1">
               <span className="text-[10px] text-emerald-400 font-semibold" style={{ fontFamily: "var(--font-ui)" }}>

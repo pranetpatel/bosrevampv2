@@ -43,7 +43,7 @@ export function ChapterIntroduceSection() {
           <div className="absolute inset-0 flex items-center justify-center">
             <Link
               href="/get-started"
-              className="group inline-flex items-center gap-4 rounded-full bg-[var(--orchid)] px-10 py-5 font-[family-name:var(--font-ui)] text-base font-bold uppercase tracking-[0.14em] text-white shadow-[0_12px_48px_rgba(124,58,237,0.65)] transition-all duration-200 hover:scale-[1.03] hover:bg-[var(--magenta)] hover:shadow-[0_12px_56px_rgba(218,52,241,0.65)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/60"
+              className="group inline-flex items-center gap-3 rounded-full bg-[var(--orchid)] px-6 py-3.5 sm:px-10 sm:py-5 font-[family-name:var(--font-ui)] text-sm sm:text-base font-bold uppercase tracking-[0.14em] text-white shadow-[0_12px_48px_rgba(124,58,237,0.65)] transition-all duration-200 hover:scale-[1.03] hover:bg-[var(--magenta)] hover:shadow-[0_12px_56px_rgba(218,52,241,0.65)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/60"
             >
               Request Trial Run
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/25 transition-transform duration-200 group-hover:translate-x-0.5">

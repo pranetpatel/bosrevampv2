@@ -116,16 +116,16 @@ export function GapFrictionDissolve({ cleared, onClear }: Props) {
         </defs>
       </svg>
 
-      <div className="pointer-events-none absolute left-0 right-0 top-8 z-[2] flex flex-col items-center px-6 text-center md:top-12">
-        <p className="max-w-xl bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] bg-clip-text font-[family-name:var(--font-display)] text-[clamp(1.35rem,3.5vw,2.25rem)] font-semibold leading-tight tracking-tight text-transparent">
+      <div className="pointer-events-none absolute left-0 right-0 top-4 z-[2] flex flex-col items-center px-6 text-center md:top-10">
+        <p className="max-w-xl bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] bg-clip-text font-[family-name:var(--font-display)] text-[clamp(1.1rem,3.5vw,2.25rem)] font-semibold leading-tight tracking-tight text-transparent">
           Operational weight
         </p>
-        <p className="mt-3 max-w-md font-[family-name:var(--font-sans)] text-sm leading-snug text-white/48 md:text-base">
+        <p className="mt-2 hidden sm:block max-w-md font-[family-name:var(--font-sans)] text-sm leading-snug text-white/48 md:text-base">
           Clear each source of drag — click the nodes or the cards below.
         </p>
       </div>
 
-      <div className="absolute inset-0 z-[3]">
+      <div className="absolute inset-x-0 bottom-0 top-10 sm:top-0 z-[3]">
         {NODES.map((n) => {
           const gone = cleared.has(n.id);
           return (

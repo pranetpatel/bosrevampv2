@@ -141,7 +141,7 @@ export function BosMbaSection({ videoSrc }: BosMbaSectionProps) {
       />
 
       {/* Content */}
-      <div className="relative z-[3] flex flex-1 flex-col justify-between px-10 pb-16 pt-12 md:px-16 md:pb-24 md:pt-16">
+      <div className="relative z-[3] flex flex-1 flex-col justify-between px-6 pb-12 pt-10 sm:px-10 md:px-16 md:pb-24 md:pt-16">
         {/* Eyebrow */}
         <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.3em] text-[#C9A84C]">
           BOS MBA &mdash; NEW COHORT

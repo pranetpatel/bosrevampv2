@@ -192,7 +192,7 @@ export function ChapterNav() {
 
   return (
     <nav
-      className="pointer-events-none fixed right-0 top-1/2 z-[190] -translate-y-1/2 pr-[max(0.35rem,env(safe-area-inset-right))] pl-2"
+      className="pointer-events-none fixed right-0 top-1/2 z-[190] -translate-y-1/2 pr-[max(0.35rem,env(safe-area-inset-right))] pl-2 hidden md:block"
       aria-label="On this page"
     >
       <div className="pointer-events-auto max-h-[min(88vh,52rem)] w-[min(6.25rem,calc(100vw-1.25rem))] overflow-hidden rounded-l-lg border border-white/[0.08] border-r-0 bg-black/35 py-2 shadow-[-12px_0_40px_rgba(0,0,0,0.35)] backdrop-blur-md supports-[backdrop-filter]:bg-black/25">

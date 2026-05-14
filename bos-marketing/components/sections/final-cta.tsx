@@ -22,12 +22,12 @@ export function FinalCtaSection() {
         <p className="mx-auto mt-8 max-w-lg font-[family-name:var(--font-display)] text-xl font-semibold leading-[1.15] text-white/78 md:text-2xl">
           Run your business on BOS
         </p>
-        <div className="mt-12 flex flex-wrap justify-center gap-4">
+        <div className="mt-12 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4">
           <span className="relative inline-flex">
             <CtaOrbitCanvas />
             <Link
               href="/get-started"
-              className="group relative z-[1] inline-flex overflow-hidden rounded-full bg-[var(--orchid)] px-10 py-4 font-[family-name:var(--font-ui)] text-sm font-bold text-white shadow-[0_12px_40px_var(--purple-glow)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_56px_var(--purple-glow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cyan)]"
+              className="group relative z-[1] inline-flex overflow-hidden rounded-full bg-[var(--orchid)] px-8 py-3.5 sm:px-10 sm:py-4 font-[family-name:var(--font-ui)] text-sm font-bold text-white shadow-[0_12px_40px_var(--purple-glow)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_56px_var(--purple-glow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cyan)]"
             >
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-500 group-hover:translate-x-full" aria-hidden />
               <span className="relative">Get started</span>
