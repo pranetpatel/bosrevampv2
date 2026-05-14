@@ -90,7 +90,7 @@ export default function MbaPage() {
         {/* Main content */}
         <div className="relative z-10 flex flex-col flex-1 justify-end px-8 pb-28 md:px-16 lg:px-16">
           <p className="font-[family-name:var(--font-dm-mono)] text-[11px] tracking-[0.25em] uppercase text-[#C9A84C] mb-6">
-            New Cohort — September 2025
+            New Cohort
           </p>
           <h1
             className="font-[family-name:var(--font-playfair)] font-black leading-[0.92] tracking-[-0.02em] text-[#F4F0E8] mb-6"
