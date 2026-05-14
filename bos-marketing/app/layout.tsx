@@ -1,19 +1,42 @@
 import type { Metadata } from "next";
-import { Jura, Plus_Jakarta_Sans, DM_Mono, DM_Sans, Playfair_Display } from "next/font/google";
+import {
+  Bebas_Neue,
+  DM_Mono,
+  DM_Sans,
+  Inter,
+  Playfair_Display,
+  Plus_Jakarta_Sans,
+  Space_Grotesk,
+} from "next/font/google";
 import "./globals.css";
+import { AmbientSiteCanvas } from "@/components/ambient-site-canvas";
 import { OptionalCursor } from "@/components/optional-cursor";
 import { SITE_MEDIA } from "@/lib/site-media";
 
-const jura = Jura({
+/** Large marketing headlines — matches legacy `index.html` `--display`. */
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["600"],
-  variable: "--font-jura",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-plus-jakarta",
   display: "swap",
 });
 
-const plusJakarta = Plus_Jakarta_Sans({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-plus-jakarta",
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-bebas",
   display: "swap",
 });
 
@@ -76,9 +99,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${jura.variable} ${plusJakarta.variable} ${dmMono.variable} ${dmSans.variable} ${playfair.variable} h-full`}>
+    <html
+      lang="en"
+      className={`${plusJakarta.variable} ${spaceGrotesk.variable} ${inter.variable} ${bebasNeue.variable} ${dmMono.variable} ${dmSans.variable} ${playfair.variable} h-full`}
+    >
       <body className="min-h-full antialiased">
         <OptionalCursor />
+        <AmbientSiteCanvas />
         {children}
       </body>
     </html>

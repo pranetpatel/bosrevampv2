@@ -26,59 +26,76 @@ const chaosStats = [
 
 export function ChaosIntroSection() {
   return (
-    <section id="chaos" className="relative z-[1] bg-[var(--surface-dark)]">
-      {/* Pull image under the strip above so the marquee bottom gradient can reveal it */}
-      <div className="relative -mt-12 min-h-[72vh] overflow-hidden md:-mt-16">
-        <Image
-          src="/media/clutter.jpg"
-          alt="Fragmented tools chaos"
-          fill
-          className="object-cover object-top"
-          priority
-        />
-        {/* Scrim: shell-tinted top so the photo reads as one field with the strip, not a third panel */}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--surface-dark)_0%,rgb(10_10_10_/_0.78)_9%,rgb(10_10_10_/_0.32)_22%,rgba(0,0,0,0.5)_48%,var(--surface-dark)_100%)]" />
+    <section id="chaos" className="relative z-[1] bg-white">
+      <div className="relative -mt-10 pt-6 md:-mt-14 md:pt-10">
+        <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-8 md:px-12 lg:px-16">
+          <div className="mt-[clamp(1rem,3vw,2.5rem)] overflow-hidden rounded-t-[24px] shadow-[0_4px_24px_rgba(0,0,0,0.08),0_24px_80px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.06]">
+            {/* Purple glow frame — mockup product panel */}
+            <div className="rounded-t-[20px] bg-gradient-to-br from-[var(--orchid)] via-[#9333ea] to-[var(--magenta)] p-[3px] shadow-[0_0_52px_rgba(124,58,237,0.42),0_0_100px_rgba(26,83,253,0.18)]">
+              <div className="relative min-h-[min(64vh,680px)] w-full overflow-hidden rounded-[17px] bg-neutral-950">
+                <Image
+                  src="/media/clutter.jpg"
+                  alt="Fragmented tools chaos"
+                  fill
+                  className="object-cover object-center"
+                  priority
+                  sizes="(max-width: 1400px) 100vw, 1400px"
+                />
+                <div
+                  className="pointer-events-none absolute inset-0 z-[1]"
+                  style={{
+                    background: `
+                      linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.32) 24%, rgba(0,0,0,0.08) 44%, rgba(0,0,0,0) 60%),
+                      linear-gradient(to right, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0.06) 40%, rgba(0,0,0,0) 70%)
+                    `,
+                  }}
+                />
 
-        {/* Headline */}
-        <div className="relative z-[2] flex h-full min-h-[72vh] flex-col justify-end px-6 pb-16 md:px-14 md:pb-20">
-          <div className="mx-auto w-full max-w-6xl">
-            <MotionReveal>
-              <h2 className="font-[family-name:var(--font-display)] text-[clamp(2.75rem,8vw,7rem)] font-semibold leading-[1.04] tracking-tight text-[#e8c84a]">
-                How you currently
-                <br />
-                start your day.
-              </h2>
-            </MotionReveal>
-            <MotionReveal delay={0.12}>
-              <p className="mt-4 font-[family-name:var(--font-sans)] text-[clamp(1rem,2vw,1.25rem)] font-semibold text-white/80">
-                Work was never supposed to feel this complicated.
-              </p>
-            </MotionReveal>
+                <div className="absolute inset-0 z-[2] flex min-h-[min(64vh,680px)] flex-col justify-end items-start px-6 pb-10 text-left sm:px-10 sm:pb-12 md:px-12 md:pb-14 lg:px-14 lg:pb-16">
+                  <div className="w-full max-w-[min(520px,90vw)]">
+                    <MotionReveal>
+                      <h2
+                        className="font-[family-name:var(--font-display)] font-extrabold leading-[1.02] tracking-[-0.03em] text-[#d4a853]"
+                        style={{
+                          fontSize: "clamp(1.65rem, 3.6vw, 3rem)",
+                          textShadow:
+                            "0 0 24px rgba(212,168,83,0.4), 0 2px 8px rgba(0,0,0,0.8), 0 4px 18px rgba(0,0,0,0.55)",
+                        }}
+                      >
+                        How you currently
+                        <br />
+                        start your day.
+                      </h2>
+                    </MotionReveal>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <MotionStagger className="grid grid-cols-1 overflow-hidden rounded-b-2xl border-t border-black/[0.07] bg-white md:grid-cols-2 lg:grid-cols-4">
+              {chaosStats.map((s) => (
+                <MotionStaggerItem key={s.label}>
+                  <div className="border-b border-black/[0.07] bg-white px-8 py-10 transition-colors hover:bg-neutral-50 md:border-b-0 md:border-r md:border-black/[0.07] md:last:border-r-0 lg:border-b-0">
+                    <p className="font-[family-name:var(--font-display)] text-[clamp(2.5rem,5vw,3.5rem)] font-extrabold leading-none tracking-[-0.01em] text-neutral-900">
+                      {s.n}
+                    </p>
+                    <p className="mt-3 font-[family-name:var(--font-display)] text-[15px] font-bold tracking-[-0.01em] text-neutral-900">
+                      {s.label}
+                    </p>
+                    <p className="mt-2 font-[family-name:var(--font-sans)] text-[13px] font-normal leading-relaxed text-neutral-600">
+                      {s.desc}
+                    </p>
+                  </div>
+                </MotionStaggerItem>
+              ))}
+            </MotionStagger>
           </div>
         </div>
-      </div>
 
-      {/* Stats row */}
-      <div className="px-6 pb-16 pt-0 md:px-14 md:pb-20">
-        <div className="mx-auto w-full max-w-6xl">
-          <MotionStagger className="grid grid-cols-1 overflow-hidden rounded-2xl border border-white/10 md:grid-cols-2 lg:grid-cols-4">
-            {chaosStats.map((s) => (
-              <MotionStaggerItem key={s.label}>
-                <div className="border-b border-white/10 bg-white/[0.03] px-8 py-10 transition-colors hover:bg-white/[0.05] md:border-b-0 md:border-r md:last:border-r-0 lg:border-b-0">
-                  <p className="font-[family-name:var(--font-display)] text-[clamp(2.5rem,5vw,3.5rem)] font-semibold leading-none text-white">
-                    {s.n}
-                  </p>
-                  <p className="mt-3 font-[family-name:var(--font-display)] text-base font-semibold text-white/90">
-                    {s.label}
-                  </p>
-                  <p className="mt-2 font-[family-name:var(--font-sans)] text-sm leading-relaxed text-white/50">
-                    {s.desc}
-                  </p>
-                </div>
-              </MotionStaggerItem>
-            ))}
-          </MotionStagger>
-        </div>
+        <div
+          className="section-feather-light-to-dark pointer-events-none mt-0 h-[clamp(11rem,42vh,26rem)] w-full"
+          aria-hidden
+        />
       </div>
     </section>
   );

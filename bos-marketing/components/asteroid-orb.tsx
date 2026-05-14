@@ -8,6 +8,10 @@ interface AsteroidOrbProps {
   /** If true, rotation is driven by page scroll. Otherwise auto-rotates. */
   scrollSpin?: boolean;
   style?: React.CSSProperties;
+  /** 0 = purple (default), 1 = fully white/energised */
+  energyLevel?: number;
+  /** Use silver/gray palette instead of purple */
+  silver?: boolean;
 }
 
 function pseudoNoise(x: number, y: number, z: number): number {
@@ -23,10 +27,17 @@ export function AsteroidOrb({
   className = "",
   scrollSpin = false,
   style,
+  energyLevel = 0,
+  silver = false,
 }: AsteroidOrbProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef<number>(0);
   const cleanupRef = useRef<(() => void) | null>(null);
+  const energyRef = useRef(energyLevel);
+  const silverRef = useRef(silver);
+
+  useEffect(() => { energyRef.current = energyLevel; }, [energyLevel]);
+  useEffect(() => { silverRef.current = silver; }, [silver]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -111,9 +122,33 @@ export function AsteroidOrb({
         window.addEventListener("scroll", onScroll, { passive: true });
       }
 
+      const lerpN = (a: number, b: number, t: number) => a + (b - a) * t;
+
       const animate = () => {
         frameRef.current = requestAnimationFrame(animate);
         time += 0.012;
+
+        // Lerp material colors based on energyLevel + silver mode
+        const e = Math.max(0, Math.min(1, energyRef.current));
+        if (silverRef.current) {
+          // Gray body, near-white lines — dark slate → medium gray
+          mat.color.setRGB(lerpN(0x14 / 255, 0x70 / 255, e), lerpN(0x14 / 255, 0x72 / 255, e), lerpN(0x1c / 255, 0x7e / 255, e));
+          mat.emissive.setRGB(lerpN(0x20 / 255, 0x50 / 255, e), lerpN(0x20 / 255, 0x50 / 255, e), lerpN(0x28 / 255, 0x60 / 255, e));
+          mat.emissiveIntensity = lerpN(0.5, 0.9, e);
+          lineMat.color.setRGB(lerpN(0xaa / 255, 1, e), lerpN(0xaa / 255, 1, e), lerpN(0xbb / 255, 1, e));
+          lineMat.opacity = lerpN(0.65, 0.85, e);
+          keyLight.color.setRGB(1, 1, 1);
+          keyLight.intensity = lerpN(8, 14, e);
+        } else {
+          // Purple → white
+          mat.color.setRGB(lerpN(0x0e / 255, 1, e), lerpN(0x08 / 255, 1, e), lerpN(0x20 / 255, 1, e));
+          mat.emissive.setRGB(lerpN(0x2a / 255, 0.9, e), lerpN(0x06 / 255, 0.9, e), lerpN(0x55 / 255, 1, e));
+          mat.emissiveIntensity = lerpN(0.6, 2.2, e);
+          lineMat.color.setRGB(lerpN(0x90 / 255, 1, e), lerpN(0x50 / 255, 1, e), lerpN(0xee / 255, 1, e));
+          lineMat.opacity = lerpN(0.55, 1, e);
+          keyLight.color.setRGB(lerpN(0x90 / 255, 1, e), lerpN(0x60 / 255, 1, e), 1);
+          keyLight.intensity = lerpN(12, 22, e);
+        }
 
         if (scrollSpin) {
           currentRotY += (targetRotY - currentRotY) * 0.06;

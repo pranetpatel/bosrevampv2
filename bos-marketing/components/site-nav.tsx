@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useLenis } from "lenis/react";
+import { useCallback, useEffect, useState } from "react";
 
 const links = [
   { href: "/product", label: "Product" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/mba", label: "MBA" },
-  { href: "/resources", label: "Resources" },
   { href: "/pricing", label: "Pricing" },
 ] as const;
 
@@ -18,6 +18,12 @@ const links = [
 export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
   const [scrollBasedSolid, setScrollBasedSolid] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const lenis = useLenis();
+
+  const scrollToTop = useCallback(() => {
+    if (lenis) lenis.scrollTo(0, { duration: 0.9 });
+    else window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [lenis]);
 
   useEffect(() => {
     if (alwaysSolid) return;
@@ -65,16 +71,40 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
           priority
         />
       </Link>
-      <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
-        {links.map((l) => (
-          <Link
-            key={l.href}
-            href={l.href}
-            className="font-[family-name:var(--font-ui)] text-[11px] font-semibold uppercase tracking-[0.14em] text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] md:text-[12px]"
+      <nav className="flex items-center gap-6 md:gap-8" aria-label="Main">
+        <button
+          type="button"
+          title="Back to top"
+          aria-label="Back to top"
+          onClick={scrollToTop}
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)]"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 10 10"
+            fill="none"
+            aria-hidden
+            className="shrink-0"
           >
-            {l.label}
-          </Link>
-        ))}
+            <path
+              d="M5 1L1 4.5V9h2.5V6.5h3V9H9V4.5L5 1Z"
+              fill="currentColor"
+              fillOpacity="0.9"
+            />
+          </svg>
+        </button>
+        <div className="hidden items-center gap-8 md:flex">
+          {links.map((l) => (
+            <Link
+              key={l.label}
+              href={l.href}
+              className="font-[family-name:var(--font-ui)] text-[11px] font-semibold uppercase tracking-[0.14em] text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] md:text-[12px]"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </div>
       </nav>
       <div className="flex items-center gap-2 sm:gap-3">
         <Link
@@ -114,7 +144,7 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
           <nav className="flex flex-col gap-1" aria-label="Mobile main">
             {links.map((l) => (
               <Link
-                key={l.href}
+                key={l.label}
                 href={l.href}
                 className="rounded-md px-3 py-3 font-[family-name:var(--font-ui)] text-sm font-semibold uppercase tracking-[0.12em] text-white/90 hover:bg-white/[0.06] hover:text-[var(--cyan)]"
                 onClick={() => setMenuOpen(false)}

@@ -29,28 +29,14 @@ export function ChapterTensionSection() {
   return (
     <section
       id="tension"
-      className="chapter-rule-top section-grain relative z-[1] flex min-h-0 flex-1 flex-col bg-[var(--surface-dark)] px-6 pb-12 pt-8 md:px-14 md:pb-16 md:pt-10"
+      className="chapter-rule-top section-grain relative z-[1] -mt-px flex min-h-0 flex-1 flex-col bg-[var(--surface-dark)] px-6 pb-12 pt-[calc(2rem+1px)] md:px-14 md:pb-16 md:pt-[calc(2.5rem+1px)]"
     >
       <div className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col space-y-10 md:space-y-12">
         <MotionReveal>
-          <p className="flex justify-center gap-3 font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--cyan)]">
-            <span className="h-px w-5 self-center bg-[var(--cyan)]/80" aria-hidden />
-            Friction
-          </p>
-          <h2 className="mt-6 text-center font-[family-name:var(--font-display)] text-[clamp(1.75rem,4.5vw,3.75rem)] font-semibold leading-[1.06] tracking-tight text-white">
-            The sprawl isn&apos;t your fault.{" "}
-            <em className="not-italic text-white/45">The architecture is.</em>
-          </h2>
-          <p className="mx-auto mt-4 max-w-lg text-center font-[family-name:var(--font-sans)] text-sm text-white/40">
-            Click the glowing nodes or the cards below to clear each source of operational drag.
-          </p>
-        </MotionReveal>
-
-        <MotionReveal delay={0.05}>
           <GapFrictionDissolve cleared={cleared} onClear={onClear} />
         </MotionReveal>
 
-        <MotionReveal delay={0.08}>
+        <MotionReveal delay={0.05}>
           <GapFrictionInteractive cleared={cleared} onToggle={onToggle} compact />
         </MotionReveal>
 

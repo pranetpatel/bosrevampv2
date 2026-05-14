@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "sync:legacy": "node scripts/sync-legacy-public.mjs",
+    "predev": "node scripts/sync-legacy-public.mjs",
+    "prebuild": "node scripts/sync-legacy-public.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

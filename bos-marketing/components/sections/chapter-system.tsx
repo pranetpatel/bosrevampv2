@@ -1,7 +1,7 @@
 import { BosOrbital } from "@/components/bos-orbital";
 import { MotionClipReveal, MotionReveal } from "@/components/motion-reveal";
 
-const ORBITAL_SURFACE_NAMES = [
+const MODULE_SURFACE_NAMES = [
   "AI Execution",
   "Workflow",
   "Team OPS",
@@ -33,9 +33,9 @@ export function ChapterSystemSection() {
           </h2>
           <p
             className="mx-auto mt-8 max-w-4xl text-center font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase leading-relaxed tracking-[0.18em] text-white/55 md:text-[11px] md:tracking-[0.2em]"
-            aria-label="BOS surfaces in the orbital"
+            aria-label="BOS product surfaces"
           >
-            {ORBITAL_SURFACE_NAMES.map((name, i) => (
+            {MODULE_SURFACE_NAMES.map((name, i) => (
               <span key={name} className="inline-block">
                 {i > 0 ? (
                   <span className="mx-2 text-white/25 md:mx-2.5" aria-hidden>
@@ -53,7 +53,7 @@ export function ChapterSystemSection() {
         </MotionReveal>
 
         <p className="text-center font-[family-name:var(--font-display)] text-[9px] font-semibold uppercase tracking-[0.22em] text-white/45">
-          Hover · then click a surface to explore
+          Each card is a live slice of the product
         </p>
       </div>
     </section>

@@ -248,7 +248,7 @@ export default function MbaPage() {
               },
             ].map((item, i) => (
               <div
-                key={i}
+                key={item.n}
                 className={`p-10 ${i < 2 ? "border-b md:border-b-0 md:border-r border-[rgba(244,240,232,0.12)]" : ""}`}
               >
                 <p className="font-[family-name:var(--font-dm-mono)] text-[11px] tracking-[0.2em] uppercase text-[#C9A84C] mb-5">
@@ -318,7 +318,7 @@ export default function MbaPage() {
               ["Memorize case studies", "Acquire real customers"],
               ["Graduate. Then figure it out.", "Graduate operating."],
             ].map(([old, next], i) => (
-              <React.Fragment key={i}>
+              <React.Fragment key={old}>
                 <div className="border-t border-[rgba(244,240,232,0.12)] py-4 pr-4">
                   <p
                     className="font-[family-name:var(--font-playfair)] font-normal leading-[34px] text-[rgba(244,240,232,0.3)] line-through"
@@ -429,7 +429,7 @@ export default function MbaPage() {
               { title: "Amplified", sub: "Agents do the work" },
             ].map((item, i) => (
               <div
-                key={i}
+                key={item.title}
                 className={`py-8 px-6 ${
                   i % 2 === 0
                     ? "border-b md:border-b-0 border-r border-[rgba(244,240,232,0.12)]"
@@ -490,7 +490,7 @@ export default function MbaPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border border-[rgba(244,240,232,0.12)]">
             {phases.map((item, i) => (
               <div
-                key={i}
+                key={item.phase}
                 className={`p-8 flex flex-col ${
                   i < 3
                     ? "border-b lg:border-b-0 lg:border-r border-[rgba(244,240,232,0.12)]"
@@ -551,7 +551,7 @@ export default function MbaPage() {
 
             {weeks.map((item, i) => (
               <div
-                key={i}
+                key={item.week}
                 className="relative flex gap-6 md:gap-12 bg-[rgba(201,168,76,0.03)] mb-0"
               >
                 {/* Glowing dot */}

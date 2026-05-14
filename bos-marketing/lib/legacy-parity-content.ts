@@ -4,7 +4,7 @@
  * copy is aligned with PROJECT-BRIEF positioning and existing inner routes.
  *
  * Section → implementation map:
- * - strips: `components/sections/home-marquee-strips.tsx`
+ * - strips (icon marquees): removed — homepage goes hero → chaos panel.
  * - bridge + stats (inside gap): `components/sections/problem-bridge-stats.tsx` (used by chapter-tension)
  * - operational-weight nodes (inside gap): `components/gap-friction-dissolve.tsx` (used by chapter-tension)
  * - friction field + cards (inside gap): `components/gap-friction-interactive.tsx` (used by chapter-tension)
@@ -16,7 +16,7 @@
  * - deep modules: `app/product/page.tsx` anchors
  */
 
-/** @deprecated Homepage `#strips` uses icon marquees in `components/icons/bos-strip-icons.tsx`. */
+/** @deprecated Text-only strip labels; icon marquees removed from homepage. */
 export const marqueeItems = [
   "Execution layer",
   "Orchestration",

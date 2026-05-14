@@ -8,7 +8,7 @@ const WORDS = ["Work", "Business", "Operations", "Execution"] as const;
 const LONGEST = [...WORDS].reduce((a, b) => (b.length > a.length ? b : a));
 
 const wordClass =
-  "font-[family-name:var(--font-display)] text-[clamp(3rem,11vw,9.25rem)] font-semibold leading-[1.4] tracking-tight";
+  "font-[family-name:var(--font-display)] text-[clamp(3rem,11vw,9.25rem)] font-extrabold leading-none tracking-[-0.03em]";
 
 function sleep(ms: number) {
   return new Promise<void>((resolve) => {

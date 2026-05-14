@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# Generated from repo-root legacy/ (see scripts/sync-legacy-public.mjs)
+/public/legacy/
+
 # production
 /build
 

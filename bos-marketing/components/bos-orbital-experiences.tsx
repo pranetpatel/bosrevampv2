@@ -123,218 +123,115 @@ function MiniTerm({
   );
 }
 
-/** AI Execution “number line” — five jewel orbs + dust + constellation (legacy card 1). */
+/** AI Execution — static friction-style layout: hub + scattered nodes, faint spokes (no orbit ring). */
 const AI_ORBS = [
-  { hex: "#B47AEA", glow: "rgba(180,122,234,0.55)" }, // purple
-  { hex: "#5B9CF8", glow: "rgba(91,156,248,0.5)" }, // blue
-  { hex: "#E8C66D", glow: "rgba(232,198,109,0.62)" }, // gold
-  { hex: "#4ADE80", glow: "rgba(74,222,128,0.48)" }, // green
-  { hex: "#2DD4BF", glow: "rgba(45,212,191,0.52)" }, // teal
+  { hex: "#B47AEA" }, // purple
+  { hex: "#5B9CF8" }, // blue
+  { hex: "#7DD3FC" }, // sky
+  { hex: "#4ADE80" }, // green
+  { hex: "#2DD4BF" }, // teal
 ] as const;
 
+const AI_EXEC_HUB = [160, 52] as const;
+
+/** Fixed scatter, viewBox 320×104 — asymmetric like the friction hero panel. */
+const AI_EXEC_NODE_XY: readonly [number, number][] = [
+  [42, 28],
+  [86, 78],
+  [138, 22],
+  [238, 34],
+  [262, 72],
+];
+
+/** A few extra faint chords between satellites (network, not a closed orbit). */
+const AI_EXEC_PEER_EDGES: readonly [number, number][] = [
+  [0, 2],
+  [1, 4],
+  [2, 3],
+];
+
+/** Static speck field (no motion). */
+const AI_EXEC_SPECKS: readonly { x: number; y: number; r: number; c: string }[] = [
+  { x: 18, y: 56, r: 0.5, c: "rgba(125,211,252,0.18)" },
+  { x: 28, y: 18, r: 0.45, c: "rgba(180,122,234,0.16)" },
+  { x: 54, y: 94, r: 0.4, c: "rgba(45,212,191,0.14)" },
+  { x: 112, y: 58, r: 0.35, c: "rgba(91,156,248,0.12)" },
+  { x: 176, y: 68, r: 0.45, c: "rgba(180,122,234,0.1)" },
+  { x: 196, y: 14, r: 0.4, c: "rgba(74,222,128,0.12)" },
+  { x: 224, y: 88, r: 0.5, c: "rgba(125,211,252,0.12)" },
+  { x: 288, y: 22, r: 0.45, c: "rgba(218,52,241,0.1)" },
+  { x: 300, y: 62, r: 0.35, c: "rgba(45,212,191,0.14)" },
+  { x: 8, y: 82, r: 0.4, c: "rgba(100,100,120,0.12)" },
+  { x: 152, y: 96, r: 0.35, c: "rgba(180,122,234,0.11)" },
+  { x: 72, y: 44, r: 0.3, c: "rgba(255,255,255,0.08)" },
+];
+
 function ExperienceAiExecution({ reduced }: { reduced: boolean }) {
-  const ref = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (reduced) return;
-    const c = ref.current;
-    if (!c) return;
-    const ctx = c.getContext("2d");
-    if (!ctx) return;
-    let raf = 0;
-    let t = 0;
-    let cancelled = false;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    // Seeded pseudo-random for stable layout
-    const rnd = (() => {
-      let s = 901237;
-      return () => {
-        s = (s * 16807) % 2147483647;
-        return (s - 1) / 2147483646;
-      };
-    })();
-
-    type Pt = { x: number; y: number };
-    let bgPts: Pt[] = [];
-    let bgEdges: [number, number][] = [];
-    let dust: { x: number; y: number; vx: number; vy: number; r: number; phase: number; nearCenter: number }[] = [];
-    let layoutW = 0;
-    let layoutH = 0;
-
-    function rebuildLayout(w: number, h: number) {
-      if (w === layoutW && h === layoutH && bgPts.length) return;
-      layoutW = w;
-      layoutH = h;
-      bgPts = [];
-      for (let i = 0; i < 22; i++) {
-        bgPts.push({ x: rnd() * w, y: rnd() * h * 0.92 });
-      }
-      bgEdges = [];
-      for (let i = 0; i < bgPts.length; i++) {
-        for (let j = i + 1; j < bgPts.length; j++) {
-          const dx = bgPts[i].x - bgPts[j].x;
-          const dy = bgPts[i].y - bgPts[j].y;
-          if (dx * dx + dy * dy < 110 * 110) bgEdges.push([i, j]);
-        }
-      }
-      dust = [];
-      const midY = h * 0.52;
-      for (let i = 0; i < 42; i++) {
-        const nearCenter = rnd() < 0.45 ? 0.35 + rnd() * 0.35 : rnd() * 0.92;
-        const x = w * (0.06 + nearCenter * 0.88);
-        const y = midY + (rnd() - 0.5) * 26 * (0.4 + rnd());
-        dust.push({
-          x,
-          y,
-          vx: (rnd() - 0.5) * 4,
-          vy: (rnd() - 0.5) * 3,
-          r: 0.6 + rnd() * 1.4,
-          phase: rnd() * Math.PI * 2,
-          nearCenter: Math.abs(x / w - 0.52) < 0.18 ? 1 : 0,
-        });
-      }
-    }
-
-    const draw = () => {
-      if (cancelled) return;
-      const w = c.clientWidth;
-      const h = c.clientHeight;
-      if (w < 8) {
-        raf = requestAnimationFrame(draw);
-        return;
-      }
-      rebuildLayout(w, h);
-
-      c.width = w * dpr;
-      c.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, w, h);
-      t += 0.022;
-
-      const x0 = w * 0.08;
-      const x1 = w * 0.92;
-      const midY = h * 0.55;
-      const pulseU = (t * 0.38) % 1;
-
-      // Constellation (very faint)
-      for (const [a, b] of bgEdges) {
-        const p = bgPts[a];
-        const q = bgPts[b];
-        ctx.strokeStyle = `rgba(80,80,95,${0.04 + 0.03 * Math.sin(t * 0.4 + a)})`;
-        ctx.lineWidth = 0.55;
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(q.x, q.y);
-        ctx.stroke();
-      }
-
-      // Baseline
-      ctx.strokeStyle = "rgba(55,55,62,0.55)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(x0, midY);
-      ctx.lineTo(x1, midY);
-      ctx.stroke();
-
-      // Main five orbs — evenly spaced
-      const orbU = [0.1, 0.3, 0.5, 0.7, 0.9] as const;
-      const orbX = orbU.map((u) => x0 + (x1 - x0) * u);
-
-      // Dust motes (gold), stronger near center gold orb
-      for (const d of dust) {
-        d.x += d.vx * 0.012 + Math.sin(t * 0.7 + d.phase) * 0.15;
-        d.y += d.vy * 0.012 + Math.cos(t * 0.55 + d.phase) * 0.12;
-        if (d.x < x0 - 4) d.x = x1 + 4;
-        if (d.x > x1 + 4) d.x = x0 - 4;
-        if (d.y < 4) d.y = h - 8;
-        if (d.y > h - 4) d.y = 8;
-        const du = Math.abs(d.x / w - 0.5);
-        const goldBoost = d.nearCenter ? 0.35 : 0.12;
-        const tw = 0.35 + 0.35 * Math.sin(t * 2.2 + d.phase);
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, d.r * (0.85 + tw * 0.25), 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(232,198,109,${0.08 + goldBoost * tw * (1 - du)})`;
-        ctx.fill();
-      }
-
-      // Traveling pulse along the axis (affects main orbs)
-      for (let k = 0; k < AI_ORBS.length; k++) {
-        const u = orbU[k];
-        let du = Math.abs(u - pulseU);
-        du = Math.min(du, 1 - du);
-        const pulse = Math.exp(-du * du * 55);
-        const x = orbX[k];
-        const bob = Math.sin(t * 1.1 + k * 0.6) * 2.2 * (0.4 + pulse);
-        const y = midY + bob;
-        const baseR = 5 + pulse * 5.5;
-        const { hex, glow } = AI_ORBS[k];
-
-        const g = ctx.createRadialGradient(x, y, 0, x, y, baseR * 3.2);
-        g.addColorStop(0, hex + "EE");
-        g.addColorStop(0.35, glow);
-        g.addColorStop(1, "transparent");
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(x, y, baseR * 3.2, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(x, y, baseR * 0.55, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255,255,255,0.22)";
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(x, y, baseR * 0.35, 0, Math.PI * 2);
-        ctx.fillStyle = hex;
-        ctx.fill();
-      }
-
-      // Faint connectors between adjacent main orbs
-      ctx.strokeStyle = "rgba(100,100,120,0.12)";
-      ctx.lineWidth = 0.75;
-      for (let k = 0; k < AI_ORBS.length - 1; k++) {
-        ctx.beginPath();
-        ctx.moveTo(orbX[k], midY);
-        ctx.lineTo(orbX[k + 1], midY);
-        ctx.stroke();
-      }
-
-      // Floating white dot — above line, right of center
-      const fx = x0 + (x1 - x0) * 0.68;
-      const fy = midY - h * 0.26 + Math.sin(t * 1.4) * 3;
-      ctx.shadowColor = "rgba(255,255,255,0.9)";
-      ctx.shadowBlur = 8;
-      ctx.beginPath();
-      ctx.arc(fx, fy, 3.2, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255,255,255,0.95)";
-      ctx.fill();
-      ctx.shadowBlur = 0;
-
-      raf = requestAnimationFrame(draw);
-    };
-    raf = requestAnimationFrame(draw);
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf);
-    };
-  }, [reduced]);
+  const uid = useId().replace(/:/g, "");
 
   return (
     <div className="mt-5 space-y-4">
       <VizPanel className="h-[104px]">
-        {reduced ? (
-          <div className="flex h-[104px] items-center justify-center gap-5 px-4" aria-hidden>
-            {AI_ORBS.map((o) => (
-              <span
-                key={o.hex}
-                className="h-2.5 w-2.5 rounded-full shadow-lg"
-                style={{ background: o.hex, boxShadow: `0 0 14px ${o.glow}` }}
+        <div
+          className="relative flex h-[104px] w-full items-center justify-center"
+          style={{
+            background:
+              "radial-gradient(ellipse 65% 65% at 50% 50%, rgba(28,26,24,0.95), #0a0a0a 58%, #050505 100%)",
+          }}
+          aria-hidden
+        >
+          <svg className="h-full w-full max-w-[400px]" viewBox="0 0 320 104" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <filter id={`ai-node-glow-${uid}`} x="-80%" y="-80%" width="260%" height="260%">
+                <feGaussianBlur stdDeviation="1.4" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            {AI_EXEC_SPECKS.map((s, i) => (
+              <circle key={`s-${i}`} cx={s.x} cy={s.y} r={s.r} fill={s.c} />
+            ))}
+            {AI_EXEC_NODE_XY.map(([x, y], i) => (
+              <line
+                key={`spoke-${i}`}
+                x1={AI_EXEC_HUB[0]}
+                y1={AI_EXEC_HUB[1]}
+                x2={x}
+                y2={y}
+                stroke="rgba(100,98,96,0.11)"
+                strokeWidth="0.65"
               />
             ))}
-          </div>
-        ) : (
-          <canvas ref={ref} className="block h-[104px] w-full" aria-hidden />
-        )}
+            {AI_EXEC_PEER_EDGES.map(([ia, ib], i) => {
+              const [x0, y0] = AI_EXEC_NODE_XY[ia]!;
+              const [x1, y1] = AI_EXEC_NODE_XY[ib]!;
+              return (
+                <line
+                  key={`peer-${i}`}
+                  x1={x0}
+                  y1={y0}
+                  x2={x1}
+                  y2={y1}
+                  stroke="rgba(100,98,96,0.08)"
+                  strokeWidth="0.55"
+                />
+              );
+            })}
+            {AI_EXEC_NODE_XY.map(([x, y], i) => {
+              const o = AI_ORBS[i]!;
+              return (
+                <g key={`n-${i}`} filter={reduced ? undefined : `url(#ai-node-glow-${uid})`}>
+                  <circle cx={x} cy={y} r="9.5" fill={o.hex} opacity="0.3" />
+                  <circle cx={x} cy={y} r="2.35" fill={o.hex} opacity="0.95" />
+                </g>
+              );
+            })}
+            <circle cx={AI_EXEC_HUB[0]} cy={AI_EXEC_HUB[1]} r="14" fill="rgba(255,255,255,0.08)" />
+            <circle cx={AI_EXEC_HUB[0]} cy={AI_EXEC_HUB[1]} r="3" fill="rgba(255,255,255,0.96)" />
+          </svg>
+        </div>
       </VizPanel>
       <MiniTerm
         lines={[

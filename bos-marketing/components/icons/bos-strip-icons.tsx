@@ -298,6 +298,65 @@ export function IconRooms(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Vibe / mood — smile */
+export function IconSmiley(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBox {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="9" cy="10" r={1} fill="currentColor" stroke="none" />
+      <circle cx="15" cy="10" r={1} fill="currentColor" stroke="none" />
+      <path d="M8.5 14.5c1.3 1.9 2.6 3 3.5 3s2.2-1.1 3.5-3" strokeLinecap="round" />
+    </IconBox>
+  );
+}
+
+/** Brainstorm / ideas */
+export function IconLightbulb(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBox {...props}>
+      <path d="M9 19h6M10 22h4" strokeLinecap="round" />
+      <path
+        d="M12 3a5.5 5.5 0 014.2 8.9c-.5.6-.9 1.3-1.1 2.1H8.9c-.2-.8-.6-1.5-1.1-2.1A5.5 5.5 0 1112 3z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </IconBox>
+  );
+}
+
+/** Single user — avatars / profile */
+export function IconUser(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBox {...props}>
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M6 20.5v-1.4a4.5 4.5 0 014.5-4.5h3a4.5 4.5 0 014.5 4.5v1.4" strokeLinecap="round" />
+    </IconBox>
+  );
+}
+
+/** Workflows — branching steps */
+export function IconWorkflow(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBox {...props}>
+      <circle cx="6" cy="6" r="2.25" />
+      <circle cx="18" cy="6" r="2.25" />
+      <circle cx="12" cy="18" r="2.25" />
+      <path d="M8.2 6h7.6M12 8.2v7.1M9.8 18h4.4" strokeLinecap="round" />
+    </IconBox>
+  );
+}
+
+/** Goals — target */
+export function IconTarget(props: SVGProps<SVGSVGElement>) {
+  return (
+    <IconBox {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="5" />
+      <circle cx="12" cy="12" r="1.25" fill="currentColor" stroke="none" />
+    </IconBox>
+  );
+}
+
 export type StripAccent = "orchid" | "magenta" | "cyan" | "hot";
 
 export type StripIconEntry = {
@@ -452,6 +511,42 @@ export const stripIconsConnectors: StripIconEntry[] = [
     Icon: IconSync,
     brandIcon: BrandConnectorBridge,
   },
+];
+
+/** Homepage connector ticker: same order as marketing mockup, then Stack for a seamless loop seam. */
+export const stripIconsHomeConnectorTicker: StripIconEntry[] = [
+  ...stripIconsConnectors,
+  stripIconsBosApps[0]!,
+];
+
+/** Homepage capability strip — copy matches marketing checklist. */
+export const stripIconsHomeCapabilityMarquee: StripIconEntry[] = [
+  { key: "vibe-design", label: "Vibe design", word: "Vibe Design", accent: "magenta", Icon: IconSmiley },
+  { key: "communicate", label: "Communicate", word: "Communicate", accent: "cyan", Icon: IconChat },
+  { key: "brainstorm", label: "Brainstorm", word: "Brainstorm", accent: "hot", Icon: IconLightbulb },
+  { key: "research", label: "Research", word: "Research", accent: "orchid", Icon: IconSearch },
+  { key: "build", label: "Build", word: "Build", accent: "orchid", Icon: IconProjects },
+  { key: "ai-agents", label: "AI agents", word: "AI Agents", accent: "magenta", Icon: IconAgents },
+  { key: "avatars", label: "Avatars", word: "Avatars", accent: "cyan", Icon: IconUser },
+  { key: "analytics", label: "Analytics", word: "Analytics", accent: "orchid", Icon: IconAnalytics },
+  {
+    key: "integrations",
+    label: "Integrations",
+    word: "Integrations",
+    accent: "orchid",
+    Icon: IconIntegrations,
+  },
+  { key: "workflows", label: "Workflows", word: "Workflows", accent: "cyan", Icon: IconWorkflow },
+  { key: "people", label: "People", word: "People", accent: "magenta", Icon: IconUsers },
+  { key: "compliance", label: "Compliance", word: "Compliance", accent: "hot", Icon: IconShield },
+  {
+    key: "automation",
+    label: "Automation",
+    word: "Automation",
+    accent: "orchid",
+    Icon: IconAutomations,
+  },
+  { key: "goals", label: "Goals", word: "Goals", accent: "cyan", Icon: IconTarget },
 ];
 
 /** One scrolling row after Welcome: product surfaces + work tools + connectors. */

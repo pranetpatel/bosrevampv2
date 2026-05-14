@@ -1,285 +1,154 @@
 "use client";
 
-import { MotionReveal } from "@/components/motion-reveal";
-import { usePrefersReducedMotion } from "@/components/use-prefers-reduced-motion";
-import { gsap, registerScrollTrigger, ScrollTrigger } from "@/lib/gsap-client";
+import { useRef, useEffect } from "react";
 import { audienceCards, trustBadges } from "@/lib/legacy-parity-content";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-
-function TrustPosturePanel() {
-  return (
-    <div className="flex h-full w-[min(86vw,640px)] shrink-0 flex-col justify-center px-6 md:w-[min(80vw,720px)] md:px-12">
-      <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--cyan)]">
-        Trust posture
-      </p>
-      <h3 className="mt-4 font-[family-name:var(--font-display)] text-[clamp(1.75rem,3.6vw,2.5rem)] font-semibold leading-[1.08] tracking-tight text-white">
-        Built for teams that can&rsquo;t afford to wing it.
-      </h3>
-      <p className="mt-4 max-w-md font-[family-name:var(--font-ui)] text-sm leading-relaxed text-white/55">
-        Guardrails, isolation, and audit trails baked into the orchestration spine &mdash; not
-        bolted on later.
-      </p>
-      <ul className="mt-8 grid grid-cols-2 gap-3">
-        {trustBadges.map((b) => (
-          <li
-            key={b.label}
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-medium text-white/55"
-          >
-            <span className="text-[var(--cyan)]" aria-hidden>
-              {b.icon}
-            </span>
-            {b.label}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
 
 export function ChapterAudienceSection() {
-  const reduced = usePrefersReducedMotion();
-  const triggerRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLElement | null)[]>([]);
-  const [inView, setInView] = useState<Record<number, boolean>>({});
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const velocity = useRef(0);
+  const lastX = useRef(0);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (reduced) {
-      setInView(Object.fromEntries(audienceCards.map((_, i) => [i, true])));
-      return;
-    }
-    const obs = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          const idx = cardRefs.current.indexOf(e.target as HTMLElement);
-          if (idx >= 0) {
-            setInView((prev) => ({ ...prev, [idx]: e.isIntersecting }));
-          }
-        }
-      },
-      { threshold: 0.35, rootMargin: "0px 0px -10% 0px" },
-    );
-    const t = window.setTimeout(() => {
-      for (const el of cardRefs.current) {
-        if (el) obs.observe(el);
-      }
-    }, 0);
-    return () => {
-      window.clearTimeout(t);
-      obs.disconnect();
-    };
-  }, [reduced]);
-
-  useLayoutEffect(() => {
-    if (reduced) return;
-    registerScrollTrigger();
-    const trigger = triggerRef.current;
     const track = trackRef.current;
-    if (!trigger || !track) return;
+    if (!track) return;
 
-    const ctx = gsap.context(() => {
-      gsap.to(track, {
-        x: () => -(track.scrollWidth - trigger.clientWidth),
-        ease: "none",
-        scrollTrigger: {
-          trigger,
-          start: "top top",
-          end: () => `+=${Math.max(track.scrollWidth - trigger.clientWidth, 1)}`,
-          pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-    }, trigger);
+    function onPointerDown(e: PointerEvent) {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      isDragging.current = true;
+      startX.current = e.clientX;
+      lastX.current = e.clientX;
+      scrollLeft.current = track!.scrollLeft;
+      velocity.current = 0;
+      track!.setPointerCapture(e.pointerId);
+      track!.style.cursor = "grabbing";
+    }
 
-    const onLoad = () => ScrollTrigger.refresh();
-    window.addEventListener("load", onLoad);
-    void document.fonts.ready.then(() => ScrollTrigger.refresh());
+    function onPointerMove(e: PointerEvent) {
+      if (!isDragging.current) return;
+      const dx = e.clientX - startX.current;
+      velocity.current = e.clientX - lastX.current;
+      lastX.current = e.clientX;
+      track!.scrollLeft = scrollLeft.current - dx;
+    }
+
+    function onPointerUp() {
+      if (!isDragging.current) return;
+      isDragging.current = false;
+      track!.style.cursor = "grab";
+      let v = -velocity.current * 2;
+      function momentum() {
+        if (Math.abs(v) < 0.5) return;
+        track!.scrollLeft += v;
+        v *= 0.92;
+        rafRef.current = requestAnimationFrame(momentum);
+      }
+      momentum();
+    }
+
+    track.addEventListener("pointerdown", onPointerDown);
+    track.addEventListener("pointermove", onPointerMove);
+    track.addEventListener("pointerup", onPointerUp);
+    track.addEventListener("pointercancel", onPointerUp);
 
     return () => {
-      window.removeEventListener("load", onLoad);
-      ctx.revert();
+      track.removeEventListener("pointerdown", onPointerDown);
+      track.removeEventListener("pointermove", onPointerMove);
+      track.removeEventListener("pointerup", onPointerUp);
+      track.removeEventListener("pointercancel", onPointerUp);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [reduced]);
-
-  if (reduced) {
-    return (
-      <section
-        id="tribe"
-        className="chapter-rule-top section-grain relative z-[1] overflow-hidden bg-[var(--surface-dark)] px-6 py-28 md:px-14"
-      >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(26,83,253,0.18),transparent_52%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_80%_85%,rgba(218,52,241,0.1),transparent_45%)]" />
-
-        <div className="relative mx-auto max-w-6xl">
-          <h2 className="font-[family-name:var(--font-display)] text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[1.04] tracking-tight text-white">
-            The next generation{" "}
-            <span className="bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] bg-clip-text text-transparent">
-              of companies.
-            </span>
-          </h2>
-          <p className="mt-6 max-w-lg font-[family-name:var(--font-ui)] text-base leading-relaxed text-white/55">
-            Lean teams. Fast operators. Modern businesses that need speed, clarity, and execution
-            &mdash; not another dashboard. Metrics below are illustrative of the orchestration
-            story, not guarantees.
-          </p>
-
-          <div className="audience-scroll mt-14 flex gap-6 overflow-x-auto pb-4 pt-2 md:gap-8">
-            {audienceCards.map((c, i) => (
-              <AudienceCardArticle
-                key={c.tag}
-                card={c}
-                index={i}
-                inView={inView[i] ?? true}
-                setRef={(el) => {
-                  cardRefs.current[i] = el;
-                }}
-                variant="stacked"
-              />
-            ))}
-          </div>
-
-          <div className="mt-16 border-t border-white/10 pt-10">
-            <p className="mb-6 text-center font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.22em] text-white/35">
-              Trust posture
-            </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              {trustBadges.map((b) => (
-                <span
-                  key={b.label}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs text-white/50"
-                >
-                  <span aria-hidden>{b.icon}</span>
-                  {b.label}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  }, []);
 
   return (
     <section
-      ref={triggerRef}
       id="tribe"
-      className="chapter-rule-top section-grain relative z-[1] overflow-hidden bg-[var(--surface-dark)]"
+      className="chapter-rule-top section-grain relative z-[1] bg-[var(--surface-dark)] py-20 md:py-28"
       aria-label="Who runs on BOS"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(26,83,253,0.18),transparent_52%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_80%_85%,rgba(218,52,241,0.1),transparent_45%)]" />
 
-      <div className="relative flex h-[100dvh] w-full items-center overflow-hidden">
-        <div
-          ref={trackRef}
-          data-horizontal-track
-          className="flex h-full w-max items-center gap-6 pl-6 pr-[20vw] will-change-transform md:gap-10 md:pl-14"
-        >
-          <MotionReveal className="flex h-full w-[min(90vw,560px)] shrink-0 flex-col justify-center md:w-[min(70vw,640px)]">
-            <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--cyan)]">
-              Chapter &mdash; The next generation
+      {/* Centered heading */}
+      <div className="relative mx-auto max-w-3xl px-6 text-center">
+        <h2 className="font-[family-name:var(--font-display)] text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[1.04] tracking-tight text-white">
+          The next generation{" "}
+          <span className="bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] bg-clip-text text-transparent italic">
+            of companies.
+          </span>
+        </h2>
+        <p className="mt-5 font-[family-name:var(--font-ui)] text-base leading-relaxed text-white/55">
+          Lean teams. Fast operators. Modern businesses that need speed, clarity, and execution
+          &mdash; not another dashboard.
+        </p>
+      </div>
+
+      {/* Horizontally draggable card track */}
+      <div
+        ref={trackRef}
+        className="relative mt-12 flex cursor-grab select-none gap-4 overflow-x-auto px-6 pb-4 md:px-14"
+        style={{ scrollbarWidth: "none" }}
+      >
+        {audienceCards.map((c, i) => (
+          <article
+            key={c.tag}
+            data-card-index={i}
+            className={`flex w-[clamp(190px,17vw,240px)] shrink-0 flex-col rounded-xl border p-5 backdrop-blur-md transition duration-300 ${
+              c.featured
+                ? "border-[var(--orchid)]/40 bg-[var(--orchid)]/[0.08] hover:border-[var(--cyan)]/45"
+                : "border-white/10 bg-white/[0.05] hover:border-[var(--orchid)]/30 hover:bg-[var(--orchid)]/[0.08]"
+            }`}
+          >
+            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--cyan)]">
+              {c.tag}
             </p>
-            <h2 className="mt-4 font-[family-name:var(--font-display)] text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-[1.04] tracking-tight text-white">
-              The next generation{" "}
-              <span className="bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] bg-clip-text text-transparent">
-                of companies.
+            <h3 className="mt-3 font-[family-name:var(--font-display)] text-base font-semibold leading-[1.15] text-white">
+              {c.hed}
+            </h3>
+            <p className="mt-2 font-[family-name:var(--font-sans)] text-[12px] leading-relaxed text-white/50">
+              {c.txt}
+            </p>
+            <div className="mt-auto pt-5 flex items-baseline gap-1.5">
+              <span className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--orchid)]">
+                {c.metricN}
               </span>
-            </h2>
-            <p className="mt-6 max-w-md font-[family-name:var(--font-ui)] text-base leading-relaxed text-white/55">
-              Lean teams. Fast operators. Modern businesses that need speed, clarity, and execution
-              &mdash; not another dashboard. Metrics below are illustrative of the orchestration
-              story, not guarantees.
+              <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-white/35">
+                {c.metricL}
+              </span>
+            </div>
+            <div className="mt-2 h-[3px] overflow-hidden rounded-full bg-white/10" aria-hidden>
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)]"
+                style={{ width: `${c.barPct}%` }}
+              />
+            </div>
+            <p className="mt-2 font-[family-name:var(--font-sans)] text-[10px] italic text-white/30">
+              {c.before}
             </p>
-            <p className="mt-8 inline-flex items-center gap-2 font-[family-name:var(--font-ui)] text-[11px] font-medium uppercase tracking-[0.22em] text-white/35">
-              <span aria-hidden>&rarr;</span>
-              Scroll to explore
-            </p>
-          </MotionReveal>
+          </article>
+        ))}
+      </div>
 
-          {audienceCards.map((c, i) => (
-            <AudienceCardArticle
-              key={c.tag}
-              card={c}
-              index={i}
-              inView={inView[i] ?? false}
-              setRef={(el) => {
-                cardRefs.current[i] = el;
-              }}
-              variant="panel"
-            />
+      {/* Trust badges */}
+      <div className="relative mx-auto mt-14 max-w-6xl border-t border-white/10 px-6 pt-10 md:px-14">
+        <p className="mb-6 text-center font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.22em] text-white/35">
+          Enterprise-grade security, built in from day one.
+        </p>
+        <div className="flex flex-wrap justify-center gap-3">
+          {trustBadges.map((b) => (
+            <span
+              key={b.label}
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs text-white/50"
+            >
+              <span aria-hidden>{b.icon}</span>
+              {b.label}
+            </span>
           ))}
-
-          <TrustPosturePanel />
         </div>
       </div>
     </section>
-  );
-}
-
-type AudienceCard = (typeof audienceCards)[number];
-
-function AudienceCardArticle({
-  card,
-  index,
-  inView,
-  setRef,
-  variant,
-}: {
-  card: AudienceCard;
-  index: number;
-  inView: boolean;
-  setRef: (el: HTMLElement | null) => void;
-  variant: "panel" | "stacked";
-}) {
-  const isPanel = variant === "panel";
-  return (
-    <article
-      ref={setRef}
-      data-card-index={index}
-      className={`${
-        isPanel
-          ? "flex h-[min(78vh,560px)] w-[min(86vw,360px)] shrink-0 flex-col justify-center rounded-2xl border p-9 backdrop-blur-md md:w-[360px] md:p-10"
-          : "group min-w-[280px] shrink-0 rounded-2xl border p-9 backdrop-blur-md md:min-w-[300px]"
-      } transition duration-300 ${
-        card.featured
-          ? "border-[var(--orchid)]/40 bg-[var(--orchid)]/[0.08] hover:border-[var(--cyan)]/45"
-          : "border-white/10 bg-white/[0.05] hover:border-[var(--orchid)]/30 hover:bg-[var(--orchid)]/[0.08]"
-      }`}
-    >
-      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--cyan)]">
-        {card.tag}
-      </p>
-      <h3 className="mt-6 font-[family-name:var(--font-display)] text-xl font-semibold leading-[1.1] text-white md:text-2xl">
-        {card.hed}
-      </h3>
-      <p className="mt-3 font-[family-name:var(--font-sans)] text-sm leading-relaxed text-white/50">
-        {card.txt}
-      </p>
-      <div className="mt-6 flex items-baseline gap-2">
-        <span className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--orchid)]">
-          {card.metricN}
-        </span>
-        <span className="text-[11px] font-medium uppercase tracking-[0.12em] text-white/35">
-          {card.metricL}
-        </span>
-      </div>
-      <div
-        className="mt-3 h-1 overflow-hidden rounded-full bg-white/10"
-        role="presentation"
-        aria-hidden
-      >
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)] transition-[width] duration-[1400ms] ease-out"
-          style={{
-            width: inView ? `${card.barPct}%` : "0%",
-          }}
-        />
-      </div>
-      <p className="mt-3 font-[family-name:var(--font-sans)] text-[11px] italic text-white/30">
-        {card.before}
-      </p>
-    </article>
   );
 }

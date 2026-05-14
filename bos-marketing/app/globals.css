@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --display: "Jura", system-ui, sans-serif;
-  --sans: var(--font-plus-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
-  --ui: var(--font-plus-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
+  /* Legacy homepage stack — `public/legacy/index.html` */
+  --display: var(--font-plus-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
+  --sans: var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
+  --ui: var(--font-inter), "Inter", system-ui, sans-serif;
+  --mono: var(--font-bebas), "Bebas Neue", impact, system-ui, sans-serif;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Official brand */
@@ -23,15 +25,19 @@
   /* App-wide dark shell */
   --background: #0a0a0a;
   --foreground: #f4f4f5;
+  /* Light marketing panels — warm paper, not pure white (avoids “glow” on long ramps). */
+  --surface-paper: #ebe8e2;
+  --surface-paper-raised: #f3f1ec;
   /* Alpha-0 of shell dark — use in gradients instead of `transparent` (avoids OKLab “white” bands). */
   --surface-dark-clear: rgb(10 10 10 / 0);
 }
 
 @theme inline {
-  --font-display: var(--font-jura), system-ui, sans-serif;
-  --font-sans: var(--font-plus-jakarta), system-ui, sans-serif;
-  --font-ui: var(--font-plus-jakarta), system-ui, sans-serif;
-  --font-headline: var(--font-jura), system-ui, sans-serif;
+  --font-display: var(--font-plus-jakarta), system-ui, sans-serif;
+  --font-sans: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-ui: var(--font-inter), system-ui, sans-serif;
+  --font-headline: var(--font-plus-jakarta), system-ui, sans-serif;
+  --font-mono: var(--font-bebas), impact, system-ui, sans-serif;
   --color-bos-orchid: #1a53fd;
   --color-bos-magenta: #da34f1;
   --color-bos-cyan: #04d1e0;
@@ -44,9 +50,10 @@ html {
   /* Lenis already smooths wheel scroll; `smooth` here doubled motion on anchor/TAB jumps. */
   position: relative;
   scroll-behavior: auto;
-  --font-display: var(--font-jura);
-  --font-sans: var(--font-plus-jakarta);
-  --font-ui: var(--font-plus-jakarta);
+  --font-display: var(--font-plus-jakarta);
+  --font-sans: var(--font-space-grotesk);
+  --font-ui: var(--font-inter);
+  --font-mono: var(--font-bebas);
   color-scheme: dark;
 }
 
@@ -123,23 +130,57 @@ body.custom-cursor-root .bos-cursor-dot.bos-cursor-big {
   }
 }
 
+/* Legacy hero: airy top → deep bottom (enterprise, not brand-wash). */
 .hero-video-scrim::after {
   content: "";
   position: absolute;
   inset: 0;
   background:
     radial-gradient(
-      ellipse 85% 65% at 50% 40%,
-      rgba(26, 83, 253, 0.12) 0%,
-      var(--surface-dark-clear) 55%
+      ellipse 80% 60% at 50% 50%,
+      rgba(245, 243, 238, 0.05) 0%,
+      transparent 62%
     ),
     linear-gradient(
       to bottom,
-      rgba(218, 52, 241, 0.06) 0%,
-      rgba(10, 10, 10, 0.62) 100%
+      rgba(245, 243, 238, 0.09) 0%,
+      rgba(245, 243, 238, 0.04) 28%,
+      rgba(10, 10, 10, 0.14) 54%,
+      rgba(10, 10, 10, 0.4) 80%,
+      rgba(10, 10, 10, 0.5) 100%
     );
   z-index: 1;
   pointer-events: none;
+}
+
+/**
+ * Long vertical ramps — hero → white mid / chaos; ends on `--surface-dark`.
+ */
+.section-feather-hero-to-light {
+  background: linear-gradient(
+    to bottom,
+    rgb(10 10 10 / 0) 0%,
+    rgb(10 10 10 / 0) 20%,
+    rgb(255 255 255 / 0.05) 40%,
+    rgb(255 255 255 / 0.2) 56%,
+    rgb(255 255 255 / 0.62) 78%,
+    rgb(255 255 255 / 0.97) 94%,
+    #ffffff 100%
+  );
+}
+
+.section-feather-light-to-dark {
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    #f7f7f5 12%,
+    #e4e4e1 28%,
+    #b9b9b4 44%,
+    #6f6f6b 60%,
+    #2a2a28 76%,
+    #121211 90%,
+    #0a0a0a 100%
+  );
 }
 
 .audience-scroll {
@@ -233,6 +274,136 @@ body.custom-cursor-root .bos-cursor-dot.bos-cursor-big {
   .animate-marquee,
   .animate-marquee-reverse {
     animation: none;
+    transform: none;
+  }
+}
+
+/* ─── Micro-interaction keyframes ────────────────────────────────────────── */
+
+/* Shimmer sweep — for primary CTA buttons */
+@keyframes bos-shimmer {
+  0%   { transform: translateX(-120%) skewX(-18deg); }
+  100% { transform: translateX(220%) skewX(-18deg); }
+}
+
+/* Gentle float for decorative orb elements */
+@keyframes bos-float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50%       { transform: translateY(-18px) scale(1.04); }
+}
+
+/* Slow spin for ring/halo decorations */
+@keyframes bos-spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Pulsing ring glow */
+@keyframes bos-ring-pulse {
+  0%, 100% { opacity: 0.18; transform: scale(1); }
+  50%       { opacity: 0.36; transform: scale(1.06); }
+}
+
+/* Fade + drift in from below */
+@keyframes bos-drift-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Horizontal drift for floating lines */
+@keyframes bos-drift-x {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(12px); }
+}
+
+/* ─── Shimmer button utility ─────────────────────────────────────────────── */
+
+/*
+ * Add .bos-shimmer-btn to any <button> or <a> to get the legacy gold-sheen
+ * sweep on hover. Works by an ::after pseudo inset overlay.
+ */
+.bos-shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.bos-shimmer-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 80%
+  );
+  transform: translateX(-120%) skewX(-18deg);
+  pointer-events: none;
+}
+
+.bos-shimmer-btn:hover::after {
+  animation: bos-shimmer 0.65s var(--ease) forwards;
+}
+
+/* ─── Decorative floating dot/orb elements ───────────────────────────────── */
+
+.bos-float-orb {
+  position: fixed;
+  border-radius: 9999px;
+  pointer-events: none;
+  animation: bos-float linear infinite;
+  will-change: transform;
+  filter: blur(1px);
+  z-index: 1;
+}
+
+/* ─── Interactive link micro-feedback ────────────────────────────────────── */
+
+/*
+ * Subtle orchid underline that grows from the left on hover.
+ * Add .bos-link to inline <a> tags inside dark sections.
+ */
+.bos-link {
+  position: relative;
+  text-decoration: none;
+}
+
+.bos-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(to right, var(--orchid), var(--magenta));
+  transition: width 0.3s var(--ease);
+}
+
+.bos-link:hover::after {
+  width: 100%;
+}
+
+/* ─── Card hover lift ────────────────────────────────────────────────────── */
+
+.bos-card-lift {
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.bos-card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(26, 83, 253, 0.12), 0 4px 16px rgba(218, 52, 241, 0.06);
+}
+
+/* ─── Reduce motion overrides ────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .bos-shimmer-btn::after,
+  .bos-float-orb {
+    animation: none !important;
+  }
+  .bos-card-lift:hover {
     transform: none;
   }
 }

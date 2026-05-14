@@ -55,7 +55,7 @@ export function HeroVideo() {
         <video
           ref={videoRef}
           className="absolute inset-0 h-full w-full object-cover object-center"
-          style={{ filter: "saturate(0.82) brightness(0.68)" }}
+          style={{ filter: "saturate(0.85) brightness(0.72)" }}
           autoPlay
           muted
           playsInline
@@ -63,6 +63,8 @@ export function HeroVideo() {
           poster={SITE_MEDIA.heroPoster}
         >
           <source src="/video/hero.mp4" type="video/mp4" />
+          {/* Fallback when short hero clip is not in repo (run extract script or add hero.mp4). */}
+          <source src="/video/bos-web-hero-v1.mp4" type="video/mp4" />
         </video>
       </motion.div>
     </div>

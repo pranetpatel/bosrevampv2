@@ -2,75 +2,365 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { SiteNav } from "@/components/site-nav";
-import { SiteFooter } from "@/components/site-footer";
+import { useEffect, useRef, useState } from "react";
 import { AsteroidOrb } from "@/components/asteroid-orb";
 import { MeetBosSection } from "@/components/sections/meet-bos-section";
+import { SiteNav } from "@/components/site-nav";
 
-const featureTags = [
-  "User-friendly dashboard",
-  "Visual reports",
-  "Smart Keyword Generator",
-  "Content evaluation",
-  "SEO goal setting",
-  "Automated alerts",
-  "Actionable SEO Tips",
-  "Regular SEO Goal Setting",
-  "Link Optimization Wizard",
+function useScrollSectionProgress(
+  ref: React.RefObject<HTMLElement | null>,
+  factor = 0.8
+): number {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const el = ref.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      const h = el.offsetHeight;
+      setProgress(Math.max(0, Math.min(1, -top / (h * factor))));
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [ref, factor]);
+  return progress;
+}
+
+function SpinningRings({
+  progress,
+  orbSize,
+  color = "rgba(255,255,255,0.065)",
+}: {
+  progress: number;
+  orbSize: number;
+  color?: string;
+}) {
+  // Vertical coin-spin: rings stand upright, rotate around Y-axis (Z in screen space)
+  const rings = [
+    { scale: 1.6, phase: 0, speed: 1.0 },
+    { scale: 2.1, phase: 55, speed: -0.7 },
+    { scale: 2.65, phase: 110, speed: 0.9 },
+  ];
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 flex items-center justify-center"
+      aria-hidden
+    >
+      {rings.map((ring, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            width: orbSize * ring.scale,
+            height: orbSize * ring.scale,
+            border: `1px solid ${color}`,
+            transform: `perspective(900px) rotateY(${ring.phase + progress * 360 * ring.speed}deg)`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function OrbHeroSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const progress = useScrollSectionProgress(sectionRef, 0.75);
+
+  const beamOpacity = Math.max(0, 1 - progress * 2.8);
+  const beamScaleY = Math.max(0.08, 1 - progress * 0.92);
+  const ORB_SIZE = 148;
+
+  return (
+    <section
+      ref={sectionRef}
+      id="welcome"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden pt-[72px]"
+      style={{ background: "#0c0b1a" }}
+    >
+      {/* Ambient glow */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_60%,rgba(100,60,220,0.28),transparent_70%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_50%_55%,rgba(140,80,255,0.18),transparent_60%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_40%_at_20%_80%,rgba(30,20,100,0.5),transparent_60%)]" />
+
+      {/* Energy beam – shrinks into orb as user scrolls */}
+      <div
+        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 origin-top"
+        style={{
+          opacity: beamOpacity,
+          transform: `translateX(-50%) scaleY(${beamScaleY})`,
+          transformOrigin: "top center",
+        }}
+        aria-hidden
+      >
+        <div
+          style={{
+            width: 18,
+            height: 480,
+            borderRadius: 9999,
+            background:
+              "linear-gradient(to bottom, rgba(230,190,255,1) 0%, rgba(180,110,255,0.85) 30%, rgba(130,70,240,0.35) 65%, transparent 100%)",
+            boxShadow:
+              "0 0 40px 20px rgba(170,100,255,0.7), 0 0 100px 50px rgba(130,70,230,0.4), 0 0 180px 80px rgba(100,50,200,0.2)",
+            filter: "blur(1px)",
+          }}
+        />
+      </div>
+
+      {/* Orb + rings container */}
+      <div className="relative flex items-center justify-center" style={{ width: ORB_SIZE * 2.8, height: ORB_SIZE * 2.8 }}>
+        <SpinningRings progress={progress} orbSize={ORB_SIZE} />
+        <div
+          className="relative z-10"
+          style={{
+            filter: `drop-shadow(0 0 ${30 + progress * 60}px rgba(${
+              Math.round(150 - progress * 50)
+            },${Math.round(90 - progress * 90)},${Math.round(255 - progress * 55)},${0.65 + progress * 0.35}))`,
+          }}
+        >
+          <AsteroidOrb size={ORB_SIZE} scrollSpin energyLevel={progress} />
+        </div>
+      </div>
+
+      {/* Text content */}
+      <div className="relative z-10 flex flex-col items-center gap-5 text-center -mt-8">
+        <h1
+          className="text-[clamp(3.5rem,9vw,7rem)] font-bold tracking-tight text-white"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          BOS
+        </h1>
+
+        <p
+          className="text-xl text-white/60"
+          style={{ fontFamily: "var(--font-sans)" }}
+        >
+          Welcome
+        </p>
+
+        <Link
+          href="/get-started"
+          className="mt-4 inline-flex items-center gap-3 rounded-full border border-white/25 bg-white/5 px-8 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition hover:border-white/45 hover:bg-white/10"
+          style={{ fontFamily: "var(--font-ui)" }}
+        >
+          Get Started <span aria-hidden>→</span>
+        </Link>
+      </div>
+
+      <div className="pointer-events-none absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[#080814] to-transparent" />
+    </section>
+  );
+}
+
+
+/** Pill labels for the “infrastructure layer” band (replaces placeholder SEO copy). */
+const infrastructureTags = [
+  "Authentication",
+  "Authorization",
+  "Database",
+  "Edge functions",
+  "Event bus",
+  "Webhooks",
+  "API gateway",
+  "Observability",
+  "Distributed tracing",
+  "Message queues",
+  "Cache layer",
+  "Object storage",
+  "Secrets management",
+  "KMS",
+  "IdP & SSO",
+  "RBAC",
+  "Audit logs",
+  "Data pipeline",
+  "Vector store",
+  "Embeddings",
+  "LLM routing",
+  "Agent runtime",
+  "Workflow engine",
+  "Real-time sync",
+  "Multi-tenant",
+  "Usage metering",
+  "Notifications",
+  "Search indexing",
+  "CDN",
+  "WAF",
+  "IaC",
+  "Containers",
+  "Service mesh",
+  "Cron & jobs",
+  "Rate limiting",
+  "Idempotency",
+  "Schema registry",
+  "Feature flags",
+  "Backups",
+  "DR failover",
 ];
 
 const PILL_GRID_ROWS = 8;
 const PILL_GRID_COLS = 18;
 
-function WireframeRockGraphic({ className }: { className?: string }) {
+function LegacyProductFooter() {
+  const year = new Date().getFullYear();
+  const col = (title: string, items: { href: string; label: string }[]) => (
+    <div className="flex flex-col gap-2 text-sm">
+      <span className="font-semibold text-white">{title}</span>
+      {items.map((item) => (
+        <Link key={item.label} href={item.href} className="text-white/60 hover:text-white">
+          {item.label}
+        </Link>
+      ))}
+    </div>
+  );
+
   return (
-    <svg
-      viewBox="0 0 200 220"
-      className={className}
-      fill="none"
-      aria-hidden
-    >
-      <g
-        stroke="currentColor"
-        strokeOpacity={0.92}
-        strokeWidth={1}
-        strokeLinejoin="round"
-        className="text-white"
-        style={{ filter: "drop-shadow(0 0 20px rgba(200, 130, 255, 0.55))" }}
-      >
-        <path d="M100 18 158 52 172 118 138 188 62 198 28 128 44 58Z" />
-        <path d="M100 18 138 188M158 52 62 198M172 118 28 128M44 58 172 118M28 128 158 52M62 198 44 58" />
-        <path d="M100 18 44 58M100 18 28 128M100 18 138 188" opacity={0.45} />
-        <path d="M100 92 172 118M100 92 44 58M100 92 138 188M100 92 62 198" opacity={0.55} />
-        <path d="M115 48 62 198M85 165 158 52" opacity={0.4} />
-      </g>
+    <footer className="relative z-[1] border-t border-white/10 bg-[var(--surface-dark)] px-6 py-16 md:px-14">
+      <div className="mx-auto flex max-w-6xl flex-col gap-12 lg:flex-row lg:flex-wrap lg:justify-between">
+        <div className="max-w-sm">
+          <Link href="/" className="inline-flex items-center">
+            <Image
+              src="/BOS Branding/FullLogoNoBackground.svg"
+              alt="BOS"
+              width={96}
+              height={31}
+            />
+          </Link>
+          <p className="mt-4 font-[family-name:var(--font-sans)] text-sm text-white/60">
+            Business Orchestration System — the infrastructure layer for intent, execution, and
+            continuous context across teams and agents.
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 lg:gap-12">
+          {col("Product", [
+            { href: "/how-it-works", label: "Features" },
+            { href: "/technology", label: "Roadmap" },
+            { href: "/resources", label: "Docs" },
+            { href: "/pricing", label: "Pricing" },
+          ])}
+          {col("Company", [
+            { href: "/story", label: "About" },
+            { href: "/partners", label: "Careers" },
+            { href: "/resources", label: "Blog" },
+            { href: "/get-started", label: "Contact" },
+          ])}
+          {col("Resources", [
+            { href: "/get-started", label: "Community" },
+            { href: "/get-started", label: "Support" },
+            { href: "/technology", label: "Security" },
+            { href: "/manifesto", label: "Terms" },
+          ])}
+          {col("Social", [
+            { href: "https://discord.com", label: "Discord" },
+            { href: "https://twitter.com", label: "Twitter" },
+            { href: "https://github.com", label: "GitHub" },
+            { href: "https://youtube.com", label: "YouTube" },
+          ])}
+        </div>
+      </div>
+      <p className="mx-auto mt-14 max-w-6xl text-center text-xs text-white/45">
+        © 2023–{year} BOS. All rights reserved.
+      </p>
+    </footer>
+  );
+}
+
+function DiscordIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 shrink-0" fill="currentColor" aria-hidden>
+      <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
     </svg>
   );
 }
 
-function AssistiveHeroGraphic() {
+function XIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" fill="currentColor" aria-hidden>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
+function GitHubIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 shrink-0" fill="currentColor" aria-hidden>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12 2C6.477 2 2 6.463 2 11.97c0 4.404 2.865 8.14 6.839 9.458.5.092.682-.216.682-.481 0-.237-.009-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.481A10.019 10.019 0 0022 11.969C22 6.463 17.522 2 12 2z"
+      />
+    </svg>
+  );
+}
+
+function YouTubeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 shrink-0" fill="currentColor" aria-hidden>
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    </svg>
+  );
+}
+
+function RedditIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 shrink-0" fill="currentColor" aria-hidden>
+      <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52 4.51 4.51 0 0 1-4.505 4.505 4.475 4.475 0 0 1-2.8-.984 4.475 4.475 0 0 1-5.6 0 4.51 4.51 0 0 1-6.305-6.305 4.475 4.475 0 0 1 5.6-5.6 4.475 4.475 0 0 1 2.8.984 4.51 4.51 0 0 1 4.505-4.505c.698 0 1.355.16 1.943.444l.895-4.183c.034-.17.172-.295.337-.295.068 0 .134.02.191.056l2.66 1.11c.16.067.273.219.295.395a.42.42 0 0 1-.045.251l-1.123 2.385zm-.971 9.942a1.145 1.145 0 1 0 0-2.29 1.145 1.145 0 0 0 0 2.29zm-7.402 0a1.145 1.145 0 1 0-.001-2.29 1.145 1.145 0 0 0 .001 2.29z" />
+    </svg>
+  );
+}
+
+function TelegramIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 shrink-0" fill="currentColor" aria-hidden>
+      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+    </svg>
+  );
+}
+
+function MediumIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 shrink-0" fill="currentColor" aria-hidden>
+      <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z" />
+    </svg>
+  );
+}
+
+function GitBookIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 shrink-0" fill="currentColor" aria-hidden>
+      <path d="M10.802 17.394a.731.731 0 01-.713-.567l-3.114-14.2a.695.695 0 01.713-.832h6.628a.7.7 0 01.674.515l4.114 13.99a.712.712 0 01-.444.832l-7.562 2.272zM19.371 18.713l-2.267-8.053a.713.713 0 00-.686-.515H7.11a.7.7 0 00-.674.515L2.322 18.713a.712.712 0 00.444.832l7.562 2.272a.731.731 0 00.713-.567l1.84-8.4a.695.695 0 01.686-.567h4.804a.7.7 0 01.674.515l1.84 8.4a.712.712 0 00.444.832l.713-.832z" />
+    </svg>
+  );
+}
+
+const integrationTiles = [
+  { key: "discord", label: "Discord", href: "https://discord.com", icon: <DiscordIcon /> },
+  { key: "x", label: "Twitter", href: "https://twitter.com", icon: <XIcon /> },
+  { key: "github", label: "GitHub", href: "https://github.com", icon: <GitHubIcon /> },
+  { key: "youtube", label: "YouTube", href: "https://youtube.com", icon: <YouTubeIcon /> },
+  { key: "reddit", label: "Reddit", href: "https://reddit.com", icon: <RedditIcon /> },
+  { key: "telegram", label: "Telegram", href: "https://telegram.org", icon: <TelegramIcon /> },
+  { key: "medium", label: "Medium", href: "https://medium.com", icon: <MediumIcon /> },
+  { key: "gitbook", label: "GitBook", href: "https://gitbook.com", icon: <GitBookIcon /> },
+] as const;
+
+function AssistiveHeroGraphic({ scrollProgress }: { scrollProgress: number }) {
+  const ORB_SIZE = 200;
   return (
     <div
       className="relative mx-auto flex h-[min(340px,55vw)] w-full max-w-[520px] items-center justify-end md:h-[min(440px,48vw)] md:max-w-none"
       aria-hidden
     >
-      <div className="absolute right-[-8%] top-1/2 w-[min(520px,90vw)] -translate-y-1/2">
-        {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-          <div
-            key={i}
-            className="absolute top-1/2 rounded-full border border-white/[0.06]"
-            style={{
-              width: `${(i + 1) * 68}px`,
-              height: `${(i + 1) * 68}px`,
-              right: 0,
-              transform: "translate(35%, -50%)",
-            }}
-          />
-        ))}
-      </div>
-      <div className="relative z-10 drop-shadow-[0_0_40px_rgba(150,90,255,0.55)]">
-        <AsteroidOrb size={200} scrollSpin />
+      <div
+        className="relative flex items-center justify-center"
+        style={{ width: ORB_SIZE * 2.8, height: ORB_SIZE * 2.8, marginRight: "-10%" }}
+      >
+        <SpinningRings
+          progress={scrollProgress}
+          orbSize={ORB_SIZE}
+          color="rgba(255,255,255,0.055)"
+        />
+        <div className="relative z-10 drop-shadow-[0_0_40px_rgba(180,180,210,0.35)]">
+          <AsteroidOrb size={ORB_SIZE} scrollSpin silver />
+        </div>
       </div>
     </div>
   );
@@ -98,7 +388,7 @@ function FeaturePillGrid() {
             }`}
           >
             {Array.from({ length: PILL_GRID_COLS }, (_, i) => {
-              const label = featureTags[(row + i) % featureTags.length];
+              const label = infrastructureTags[(row + i) % infrastructureTags.length];
               return (
                 <span
                   key={`${row}-${i}`}
@@ -137,239 +427,48 @@ function FeaturePillGrid() {
   );
 }
 
-function TeslaLogo() {
-  return (
-    <svg viewBox="0 0 342 35" fill="currentColor" className="h-5 w-auto">
-      <path d="M0 .1a9.7 9.7 0 0 0 7 7h11l.5.5v27h6.8V7.6l.5-.5h11a9.7 9.7 0 0 0 7-7H0z" />
-      <path d="M188.4 0c-16 0-25.6 10.4-25.6 17.5 0 7 9.6 17.5 25.6 17.5s25.6-10.5 25.6-17.5S204.4 0 188.4 0zm0 28.8c-9.8 0-18.8-7-18.8-11.3s9-11.3 18.8-11.3 18.8 7 18.8 11.3-9 11.3-18.8 11.3z" />
-      <path d="M84.3 7.8V0H57.5a9.7 9.7 0 0 0-7 7l16.7.1 12.3 12.3-12.3 12.3-16.7.1a9.7 9.7 0 0 0 7 7h26.8v-7.8H70.6l7.7-7.8h-.1l7.7-7.7 7.7 7.7-.1.1 7.7 7.7H87.5v7.8h26.8a9.7 9.7 0 0 0 7-7l-16.7-.1-12.3-12.3 12.3-12.3 16.7-.1a9.7 9.7 0 0 0-7-7H87.5v7.8h13.6L93.4 15.6h.1l-7.7 7.7-7.7-7.7.1-.1-7.7-7.7h13.8z" />
-      <path d="M241 .1a9.7 9.7 0 0 0-7 7H255v27.8h6.8V7.1h21a9.7 9.7 0 0 0-7-7H241z" />
-      <path d="M316.2 0c-16 0-25.6 10.4-25.6 17.5 0 9.6 13 17.5 25.6 17.5l4.4-.3c11.6-.9 21.2-8.8 21.2-17.2C341.8 10.4 332.2 0 316.2 0zm12.7 25.2a19.4 19.4 0 0 1-12.7 3.6c-9.8 0-18.8-7-18.8-11.3s9-11.3 18.8-11.3a19.4 19.4 0 0 1 12.7 3.6L336 15.5l-7.1 9.7z" />
-    </svg>
-  );
-}
-
-function LinkedInLogo() {
-  return (
-    <svg viewBox="0 0 84 21" fill="currentColor" className="h-5 w-auto">
-      <rect x="0" y="0" width="16" height="16" rx="3" />
-      <rect x="2" y="6" width="3" height="10" fill="#13131f" />
-      <rect x="7" y="8" width="3" height="8" fill="#13131f" />
-      <circle cx="3.5" cy="3.5" r="1.8" fill="#13131f" />
-      <rect x="10" y="6" width="3" height="2" rx="1" fill="#13131f" />
-      <text x="22" y="13" fontSize="11" fontWeight="700" fontFamily="system-ui" fill="currentColor">LinkedIn</text>
-    </svg>
-  );
-}
-
-function TinderLogo() {
-  return (
-    <div className="flex items-center gap-2">
-      <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-        <path d="M8.21 10.08c-.02 0-.04 0-.06.01C8.07 8.68 7.78 6.41 7.2 5.2c-1.66 3.36-3.3 5.8-3.3 8.11C3.9 17.09 7.14 20 12 20c3.86 0 7.5-2.87 7.5-7.05 0-4.5-2.87-8.7-7.5-12 .48 3.55-1.1 7.57-3.79 9.13z" />
-      </svg>
-      <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-ui)" }}>Tinder</span>
-    </div>
-  );
-}
-
-function MiraclePlusLogo() {
-  return (
-    <div className="flex items-center gap-2">
-      <svg viewBox="0 0 30 24" fill="currentColor" className="h-5 w-auto">
-        <rect x="0" y="12" width="4" height="12" rx="1" />
-        <rect x="5.5" y="7" width="4" height="17" rx="1" />
-        <rect x="11" y="2" width="4" height="22" rx="1" />
-        <rect x="16.5" y="5" width="4" height="19" rx="1" />
-        <rect x="22" y="0" width="4" height="24" rx="1" />
-      </svg>
-      <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-ui)" }}>Miracleplus</span>
-    </div>
-  );
-}
-
-function CohereLogo() {
-  return (
-    <div className="flex items-center gap-2">
-      <svg viewBox="0 0 28 20" fill="currentColor" className="h-4 w-auto">
-        <rect x="0" y="0" width="18" height="12" rx="6" />
-        <rect x="8" y="8" width="18" height="10" rx="5" opacity="0.45" />
-      </svg>
-      <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-ui)" }}>Cohere</span>
-    </div>
-  );
-}
-
-function LarkLogo() {
-  return (
-    <div className="flex items-center gap-2">
-      <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-        <path d="M12 3c-1.4 2.5-2.2 4.8-2.2 7 0 1.3.3 2.4.9 3.3.6-1.4 1.6-2.7 2.8-3.8C13 7.8 12.4 5.6 12 3zM7 13.5c0 2.8 2.2 5 5 5s5-2.2 5-5c0-.5-.1-1-.2-1.4-1.3 1.1-2.2 2.4-2.7 3.8-.1.2-.4.3-.6.1-.6-.9-.9-2-.9-3.2 0-1.1.3-2.3.7-3.4C11 10.2 7 11.7 7 13.5z" />
-      </svg>
-      <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-ui)" }}>Lark</span>
-    </div>
-  );
-}
-
-const logoTiles = [
-  {
-    key: "tesla",
-    content: (
-      <div className="flex items-center gap-2">
-        <svg
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="h-6 w-6 shrink-0"
-          aria-hidden
-        >
-          <path d="M12 5.362l-.636 2.033C9.337 7.737 7.8 8.33 6.165 8.462L5.33 7.17A12.64 12.64 0 0 0 12 5.362zm0 0l.636 2.033c2.027.342 3.564.935 5.199 1.067l.835-1.292A12.64 12.64 0 0 0 12 5.362zm-.69 2.29L12 18.638l.69-10.986a16.52 16.52 0 0 0-1.38 0zm-4.99-.358l.847 13.573c1.22.693 2.575 1.01 4.833 1.01s3.613-.317 4.833-1.01l.847-13.573c-1.681.855-3.54 1.18-5.68 1.18s-3.999-.325-5.68-1.18z" />
-        </svg>
-        <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-ui)" }}>Tesla</span>
-      </div>
-    ),
-  },
-  {
-    key: "linkedin",
-    content: (
-      <div className="flex items-center gap-2">
-        <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-        </svg>
-        <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-ui)" }}>LinkedIn</span>
-      </div>
-    ),
-  },
-  {
-    key: "tinder",
-    content: <TinderLogo />,
-  },
-  {
-    key: "dcode",
-    content: (
-      <span
-        className="text-sm font-bold tracking-wide"
-        style={{ fontFamily: "var(--font-display)", letterSpacing: "0.06em" }}
-      >
-        D/.CODE
-      </span>
-    ),
-  },
-  {
-    key: "lark",
-    content: <LarkLogo />,
-  },
-  {
-    key: "miracleplus",
-    content: <MiraclePlusLogo />,
-  },
-  {
-    key: "cohere",
-    content: <CohereLogo />,
-  },
-  {
-    key: "jambo",
-    content: (
-      <span
-        className="text-sm font-black tracking-widest"
-        style={{ fontFamily: "var(--font-display)", letterSpacing: "0.12em" }}
-      >
-        𝐉AMBO
-      </span>
-    ),
-  },
-];
-
 export default function ProductPage() {
   const [email, setEmail] = useState("");
+  const assistiveSectionRef = useRef<HTMLElement>(null);
+  const assistiveProgress = useScrollSectionProgress(assistiveSectionRef, 0.6);
 
   return (
     <>
-      <SiteNav />
+      <SiteNav alwaysSolid />
 
       {/* ── HERO ── */}
-      <section
-        id="welcome"
-        className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
-        style={{ background: "#0c0b1a" }}
-      >
-        {/* Ominous ambient glow */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_60%,rgba(100,60,220,0.28),transparent_70%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_50%_55%,rgba(140,80,255,0.18),transparent_60%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_40%_at_20%_80%,rgba(30,20,100,0.5),transparent_60%)]" />
+      <OrbHeroSection />
 
-        {/* Purple beam from top */}
-        <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2">
-          <div
-            style={{
-              width: 4,
-              height: 440,
-              borderRadius: 9999,
-              background:
-                "linear-gradient(to bottom, rgba(210,170,255,1) 0%, rgba(160,100,255,0.7) 35%, rgba(120,70,220,0.2) 70%, transparent 100%)",
-              boxShadow: "0 0 70px 22px rgba(150,90,255,0.35)",
-            }}
-          />
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 flex flex-col items-center gap-5 text-center">
-          <div className="drop-shadow-[0_0_50px_rgba(150,90,255,0.65)]">
-            <AsteroidOrb size={148} scrollSpin />
-          </div>
-
-          <h1
-            className="text-[clamp(3.5rem,9vw,7rem)] font-bold tracking-tight text-white"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            BOS
-          </h1>
-
-          <p
-            className="text-xl text-white/60"
-            style={{ fontFamily: "var(--font-sans)" }}
-          >
-            Welcome
-          </p>
-
-          <Link
-            href="/get-started"
-            className="mt-4 inline-flex items-center gap-3 rounded-full border border-white/25 bg-white/5 px-8 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition hover:border-white/45 hover:bg-white/10"
-            style={{ fontFamily: "var(--font-ui)" }}
-          >
-            Get Started
-            <span aria-hidden className="text-base">→</span>
-          </Link>
-        </div>
-
-        {/* Bottom fade to next section */}
-        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[#080814] to-transparent" />
-      </section>
-
-      {/* ── SOCIAL PROOF ── */}
+      {/* ── COMMUNITY GRID ── */}
       <section className="bg-[#080814] py-16 px-6">
         <p
           className="mb-8 text-center text-sm text-white/40"
           style={{ fontFamily: "var(--font-ui)" }}
         >
-          Trusted by individuals and teams from
+          Join the community on
         </p>
-        <div className="mx-auto grid max-w-3xl grid-cols-4 gap-3">
-          {logoTiles.map((tile) => (
-            <div
+        <div className="mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+          {integrationTiles.map((tile) => (
+            <a
               key={tile.key}
-              className="flex items-center justify-center rounded-xl bg-[#13131f] px-5 py-5 text-white"
+              href={tile.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 rounded-xl bg-[#13131f] px-4 py-5 text-white transition hover:bg-[#1a1a28]"
             >
-              {tile.content}
-            </div>
+              {tile.icon}
+              <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-ui)" }}>
+                {tile.label}
+              </span>
+            </a>
           ))}
         </div>
       </section>
 
-      {/* ── MEET BOS ── */}
       <MeetBosSection />
 
-      {/* ── Assistive Intelligence + pill grid + infrastructure (reference layout) ── */}
-      <section className="relative overflow-hidden bg-[#0d0d1a] px-6 pb-4 pt-20 md:px-14 md:pt-28">
+      {/* ── Assistive Intelligence + infrastructure layer ── */}
+      <section ref={assistiveSectionRef} className="relative overflow-hidden bg-[#0d0d1a] px-6 pb-4 pt-20 md:px-14 md:pt-28">
         <div className="mx-auto flex max-w-7xl flex-col items-stretch gap-10 md:flex-row md:items-center md:gap-14 lg:gap-20">
           <div className="max-w-xl flex-1">
             <h2
@@ -390,7 +489,7 @@ export default function ProductPage() {
             </h2>
           </div>
           <div className="relative min-h-[200px] flex-1 md:min-h-[320px]">
-            <AssistiveHeroGraphic />
+            <AssistiveHeroGraphic scrollProgress={assistiveProgress} />
           </div>
         </div>
 
@@ -405,19 +504,15 @@ export default function ProductPage() {
           </h2>
           <div className="mt-7 md:mt-9">
             <Link
-              href="/get-started"
+              href="/technology"
               className="inline-flex items-center gap-2.5 rounded-full border border-white/22 bg-white/[0.06] px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-white/38 hover:bg-white/[0.1]"
               style={{ fontFamily: "var(--font-ui)" }}
             >
-              Launch BOS
-              <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/28 text-[12px] font-light leading-none text-white/95">
-                +
-              </span>
+              Learn more
             </Link>
           </div>
         </div>
 
-        {/* Hero image with ellipse fade */}
         <div className="relative w-full">
           <div className="relative overflow-hidden">
             <Image
@@ -427,7 +522,6 @@ export default function ProductPage() {
               height={1080}
               className="w-full object-cover"
             />
-            {/* Blurred duplicate of image for elliptical blur effect */}
             <div
               className="absolute inset-x-0 bottom-0 overflow-hidden"
               style={{
@@ -444,7 +538,6 @@ export default function ProductPage() {
                 className="object-cover object-bottom"
                 style={{ filter: "blur(22px)", transform: "scale(1.06)" }}
               />
-              {/* Dark gradient at the very bottom */}
               <div
                 className="absolute inset-x-0 bottom-0"
                 style={{
@@ -458,20 +551,23 @@ export default function ProductPage() {
       </section>
 
       {/* ── EARLY ACCESS ── */}
-      <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center" style={{ background: "#0d0b1e" }}>
-        {/* Ominous ambient glow */}
+      <section
+        className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-24 text-center"
+        style={{ background: "#0d0b1e" }}
+      >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(100,60,200,0.22),transparent_70%)]" />
 
-        {/* Purple beam */}
         <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2">
           <div
             style={{
-              width: 4,
+              width: 18,
               height: 520,
               borderRadius: 9999,
               background:
-                "linear-gradient(to bottom, rgba(210,170,255,1) 0%, rgba(160,100,255,0.65) 40%, transparent 100%)",
-              boxShadow: "0 0 80px 28px rgba(150,90,255,0.32)",
+                "linear-gradient(to bottom, rgba(230,190,255,1) 0%, rgba(180,110,255,0.85) 30%, rgba(130,70,240,0.35) 65%, transparent 100%)",
+              boxShadow:
+                "0 0 40px 20px rgba(170,100,255,0.7), 0 0 100px 50px rgba(130,70,230,0.4), 0 0 180px 80px rgba(100,50,200,0.2)",
+              filter: "blur(1px)",
             }}
           />
         </div>
@@ -488,16 +584,20 @@ export default function ProductPage() {
             className="mt-6 text-lg text-white/65"
             style={{ fontFamily: "var(--font-sans)" }}
           >
-            <strong className="font-semibold text-white">This is the new playbook.</strong>{" "}
-            Get Early Access.
+            Join the waitlist for the latest updates and news.
           </p>
 
-          {/* Email form */}
           <div className="mt-10 flex items-center gap-3 rounded-full border border-white/15 bg-white/5 p-2 pl-5 backdrop-blur-md">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--orchid)] to-[var(--magenta)]">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
                 <circle cx="7" cy="7" r="5.5" stroke="white" strokeWidth="1.5" />
-                <path d="M4.5 7l2 2 3-3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M4.5 7l2 2 3-3"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </div>
             <input
@@ -510,10 +610,10 @@ export default function ProductPage() {
             />
             <Link
               href={`/get-started${email ? `?email=${encodeURIComponent(email)}` : ""}`}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-sm font-bold text-[#0d0b1e] transition hover:bg-white/90"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-6 py-2.5 text-sm font-bold text-[#0d0b1e] transition hover:bg-white/90"
               style={{ fontFamily: "var(--font-ui)" }}
             >
-              Get Started <span aria-hidden>→</span>
+              Join the waitlist <span aria-hidden>→</span>
             </Link>
           </div>
 
@@ -531,7 +631,7 @@ export default function ProductPage() {
         </div>
       </section>
 
-      <SiteFooter />
+      <LegacyProductFooter />
     </>
   );
 }

@@ -61,7 +61,7 @@ function getActivePinnedHorizontalRail(): HTMLElement | null {
 /** Order matches scroll order on the homepage (not "importance" rank — use step numbers for that). */
 const CHAPTERS = [
   { id: "welcome", step: 1, label: "Welcome" },
-  { id: "strips", step: 2, label: "Signal" },
+  { id: "chaos", step: 2, label: "Chaos" },
   { id: "tension", step: 3, label: "Friction" },
   { id: "manifesto", step: 4, label: "Principles" },
   { id: "introduce", step: 5, label: "BOS" },
@@ -196,6 +196,21 @@ export function ChapterNav() {
       aria-label="On this page"
     >
       <div className="pointer-events-auto max-h-[min(88vh,52rem)] w-[min(6.25rem,calc(100vw-1.25rem))] overflow-hidden rounded-l-lg border border-white/[0.08] border-r-0 bg-black/35 py-2 shadow-[-12px_0_40px_rgba(0,0,0,0.35)] backdrop-blur-md supports-[backdrop-filter]:bg-black/25">
+        {/* Home button */}
+        <button
+          type="button"
+          title="Back to top"
+          className="group flex w-full items-center justify-end px-2 pb-1.5 pt-1 transition-colors hover:bg-white/[0.06]"
+          onClick={() => {
+            if (lenis) lenis.scrollTo(0, { duration: 0.9 });
+            else window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
+          <span className="font-[family-name:var(--font-ui)] text-[7px] font-medium uppercase tracking-[0.1em] text-zinc-500 group-hover:text-zinc-300 sm:text-[8px]">
+            Home
+          </span>
+        </button>
+        <div className="mx-2 mb-1 h-px bg-white/[0.06]" />
         <div
           ref={trackRef}
           className="relative flex max-h-[min(88vh,52rem)] overflow-y-auto overflow-x-hidden py-1 pl-1 pr-1.5 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.12)_transparent]"
