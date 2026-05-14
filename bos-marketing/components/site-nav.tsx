@@ -72,28 +72,30 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
         />
       </Link>
       <nav className="flex items-center gap-6 md:gap-8" aria-label="Main">
-        <button
-          type="button"
-          title="Back to top"
-          aria-label="Back to top"
-          onClick={scrollToTop}
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)]"
-        >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 10 10"
-            fill="none"
-            aria-hidden
-            className="shrink-0"
+        {alwaysSolid ? (
+          <Link
+            href="/"
+            title="Home"
+            aria-label="Home"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)]"
           >
-            <path
-              d="M5 1L1 4.5V9h2.5V6.5h3V9H9V4.5L5 1Z"
-              fill="currentColor"
-              fillOpacity="0.9"
-            />
-          </svg>
-        </button>
+            <svg width="14" height="14" viewBox="0 0 10 10" fill="none" aria-hidden className="shrink-0">
+              <path d="M5 1L1 4.5V9h2.5V6.5h3V9H9V4.5L5 1Z" fill="currentColor" fillOpacity="0.9" />
+            </svg>
+          </Link>
+        ) : (
+          <button
+            type="button"
+            title="Back to top"
+            aria-label="Back to top"
+            onClick={scrollToTop}
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)]"
+          >
+            <svg width="14" height="14" viewBox="0 0 10 10" fill="none" aria-hidden className="shrink-0">
+              <path d="M5 1L1 4.5V9h2.5V6.5h3V9H9V4.5L5 1Z" fill="currentColor" fillOpacity="0.9" />
+            </svg>
+          </button>
+        )}
         <div className="hidden items-center gap-8 md:flex">
           {links.map((l) => (
             <Link
