@@ -7,7 +7,10 @@
       "Read(//mnt/c/Users/prane/BOS-RevampV2/**)",
       "Bash(npx tsc *)",
       "Bash(python scripts/trim-white-borders.py)",
-      "PowerShell(cd \"c:\\\\Users\\\\prane\\\\BOS-RevampV2\\\\bos-marketing\"; npx tsc --noEmit 2>&1 | Where-Object { $_ -notmatch \"chapter-bos-mba\" })"
+      "PowerShell(cd \"c:\\\\Users\\\\prane\\\\BOS-RevampV2\\\\bos-marketing\"; npx tsc --noEmit 2>&1 | Where-Object { $_ -notmatch \"chapter-bos-mba\" })",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }

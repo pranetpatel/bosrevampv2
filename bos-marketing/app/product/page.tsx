@@ -216,7 +216,12 @@ const logoTiles = [
     key: "tesla",
     content: (
       <div className="flex items-center gap-2">
-        <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+        <svg
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="h-6 w-6 shrink-0"
+          aria-hidden
+        >
           <path d="M12 5.362l-.636 2.033C9.337 7.737 7.8 8.33 6.165 8.462L5.33 7.17A12.64 12.64 0 0 0 12 5.362zm0 0l.636 2.033c2.027.342 3.564.935 5.199 1.067l.835-1.292A12.64 12.64 0 0 0 12 5.362zm-.69 2.29L12 18.638l.69-10.986a16.52 16.52 0 0 0-1.38 0zm-4.99-.358l.847 13.573c1.22.693 2.575 1.01 4.833 1.01s3.613-.317 4.833-1.01l.847-13.573c-1.681.855-3.54 1.18-5.68 1.18s-3.999-.325-5.68-1.18z" />
         </svg>
         <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-ui)" }}>Tesla</span>

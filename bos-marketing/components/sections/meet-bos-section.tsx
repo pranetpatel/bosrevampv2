@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { AsteroidOrb } from "@/components/asteroid-orb";
 
 // ── Activity card data ──────────────────────────────────────────────────────
@@ -114,8 +115,8 @@ function SlackCard({ card }: { card: Extract<ActivityCard, { type: "slack" }> })
       </div>
       <div className="px-3.5 py-3 space-y-2">
         <div className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-[9px] font-bold text-white shrink-0">
-            B
+          <div className="h-6 w-6 rounded overflow-hidden shrink-0">
+            <Image src="/BOS Branding/logo.svg" alt="BOS" width={24} height={24} className="h-6 w-6" />
           </div>
           <div>
             <span className="text-[11px] font-semibold text-violet-300" style={{ fontFamily: "var(--font-ui)" }}>BOS</span>
