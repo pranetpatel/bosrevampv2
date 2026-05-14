@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
 import { MbaProblemVideo } from "@/components/mba-problem-video";
+import { SiteNav } from "@/components/site-nav";
+import { SiteFooter } from "@/components/site-footer";
 
 export const metadata: Metadata = {
   title: "BOS MBA — The New Playbook",
@@ -71,6 +73,7 @@ const weeks = [
 export default function MbaPage() {
   return (
     <div className="bg-[#0A0A0A] text-[#F4F0E8] overflow-x-hidden">
+      <SiteNav alwaysSolid />
       {/* ─── SECTION 1: HERO ─── */}
       <section className="relative min-h-screen flex flex-col overflow-hidden border-b border-[rgba(244,240,232,0.12)]">
         {/* Radial gold glow background */}
@@ -604,28 +607,7 @@ export default function MbaPage() {
         </div>
       </section>
 
-      {/* ─── FOOTER ─── */}
-      <footer className="border-t border-[rgba(244,240,232,0.12)] px-8 md:px-16 py-8">
-        <div className="mx-auto max-w-[1072px] flex flex-wrap items-center justify-between gap-4">
-          <p className="font-[family-name:var(--font-dm-mono)] text-[12px] tracking-[0.25em] uppercase text-[#C9A84C]">
-            BOS MBA
-          </p>
-          <nav className="flex flex-wrap gap-6">
-            {["About BOS", "Curriculum", "Contact", "Privacy"].map((label) => (
-              <Link
-                key={label}
-                href="#"
-                className="font-[family-name:var(--font-dm-sans)] text-[12px] tracking-[0.08em] uppercase text-[rgba(244,240,232,0.3)] hover:text-[rgba(244,240,232,0.6)] transition-colors"
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
-          <p className="font-[family-name:var(--font-dm-mono)] text-[12px] text-[rgba(244,240,232,0.2)]">
-            2025 BOS. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
