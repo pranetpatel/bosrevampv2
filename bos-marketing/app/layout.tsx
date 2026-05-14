@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Jura, Plus_Jakarta_Sans } from "next/font/google";
+import { Jura, Plus_Jakarta_Sans, DM_Mono, DM_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { OptionalCursor } from "@/components/optional-cursor";
 import { SITE_MEDIA } from "@/lib/site-media";
@@ -14,6 +14,25 @@ const jura = Jura({
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-plus-jakarta",
+  display: "swap",
+});
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-dm-mono",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
   display: "swap",
 });
 
@@ -57,7 +76,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${jura.variable} ${plusJakarta.variable} h-full`}>
+    <html lang="en" className={`${jura.variable} ${plusJakarta.variable} ${dmMono.variable} ${dmSans.variable} ${playfair.variable} h-full`}>
       <body className="min-h-full antialiased">
         <OptionalCursor />
         {children}
