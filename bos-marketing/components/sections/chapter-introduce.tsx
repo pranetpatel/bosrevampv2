@@ -4,7 +4,18 @@ import { MotionReveal } from "@/components/motion-reveal";
 
 export function ChapterIntroduceSection() {
   return (
-    <section id="introduce" className="relative z-[1] bg-[var(--surface-dark)] px-6 py-20 md:px-14 md:py-28">
+    <section id="introduce" className="relative z-[1] overflow-hidden bg-[var(--surface-dark)] px-6 py-20 md:px-14 md:py-28">
+      {/* Section Background Image */}
+      <div className="pointer-events-none absolute inset-0 z-[-1]">
+        <Image
+          src="/media/BOSProduct-background.png"
+          alt=""
+          fill
+          className="object-cover opacity-40"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface-dark)] via-transparent to-[var(--surface-dark)]" />
+      </div>
       <div className="mx-auto max-w-6xl">
         {/* Text block */}
         <MotionReveal>
@@ -26,31 +37,18 @@ export function ChapterIntroduceSection() {
           </p>
         </MotionReveal>
 
-        {/* Image card with button overlay */}
+        {/* Replaced with new banner image as requested */}
         <MotionReveal delay={0.14} className="relative mt-14 overflow-hidden rounded-2xl border border-white/10">
-          <Image
-            src="/media/BOSTrial.png"
-            alt="BOS — one unified workspace in action"
-            width={1280}
-            height={720}
-            className="w-full object-cover"
-            priority={false}
-          />
-          {/* Only a thin bottom fade so the image stays crisp */}
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_60%,rgba(0,0,0,0.45)_100%)]" />
-
-          {/* Centered CTA */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Link
-              href="/get-started"
-              className="group inline-flex items-center gap-3 rounded-full bg-[var(--orchid)] px-6 py-3.5 sm:px-10 sm:py-5 font-[family-name:var(--font-ui)] text-sm sm:text-base font-bold uppercase tracking-[0.14em] text-white shadow-[0_12px_48px_rgba(124,58,237,0.65)] transition-all duration-200 hover:scale-[1.03] hover:bg-[var(--magenta)] hover:shadow-[0_12px_56px_rgba(218,52,241,0.65)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/60"
-            >
-              Request Trial Run
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/25 transition-transform duration-200 group-hover:translate-x-0.5">
-                →
-              </span>
-            </Link>
-          </div>
+          <Link href="/get-started" className="block cursor-pointer transition-transform duration-300 hover:scale-[1.01]">
+            <Image
+              src="/media/BOSChatxbanner.png"
+              alt="Request a Trial"
+              width={1280}
+              height={720}
+              className="w-full object-cover"
+              priority
+            />
+          </Link>
         </MotionReveal>
       </div>
     </section>
