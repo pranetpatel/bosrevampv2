@@ -9,7 +9,7 @@ const blinkKeyframes = `
   }
 `;
 
-const words = ["Work", "Business", "Scaling", "Teams", "Operations"];
+const words = ["Work", "People", "Projects", "Pricing", "Business"];
 
 export function TypewriterHeading() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);

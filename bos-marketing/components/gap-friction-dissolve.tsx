@@ -145,8 +145,8 @@ export function GapFrictionDissolve({ cleared, onClear }: Props) {
                   shiftRefs.current.set(n.id, el);
                 }}
                 className={[
-                  "group/node flex flex-col items-center transition duration-500 ease-out will-change-transform",
-                  gone ? "pointer-events-none scale-50 opacity-0 blur-sm" : "opacity-100",
+                  "group/node flex flex-col items-center transition duration-700 ease-out will-change-transform",
+                  gone ? "pointer-events-none opacity-20 grayscale saturate-0" : "opacity-100",
                 ].join(" ")}
               >
                 <button

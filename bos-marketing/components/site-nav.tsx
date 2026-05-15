@@ -64,11 +64,20 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
     >
       <Link href="/" className="flex shrink-0 items-center drop-shadow-[0_1px_12px_rgba(0,0,0,0.5)]">
         <Image
+          src="/bos-icon.svg"
+          alt="BOS"
+          width={32}
+          height={32}
+          priority
+          className={`rounded-lg transition-all duration-300 ${solidBar ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none absolute"}`}
+        />
+        <Image
           src="/BOS Branding/FullLogoNoBackground.svg"
           alt="BOS"
           width={80}
           height={26}
           priority
+          className={`transition-all duration-300 ${solidBar ? "opacity-0 scale-75 pointer-events-none absolute" : "opacity-100 scale-100"}`}
         />
       </Link>
       <nav className="flex items-center gap-6 md:gap-8" aria-label="Main">
