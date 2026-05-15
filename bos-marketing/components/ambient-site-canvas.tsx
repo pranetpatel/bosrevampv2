@@ -3,93 +3,200 @@
 import { usePrefersReducedMotion } from "@/components/use-prefers-reduced-motion";
 import { useEffect, useRef } from "react";
 
+const NODE_COUNT   = 28;
+const SHAPE_N      = 5;      // nodes that form the polygon
+const CONNECT_DIST = 90;
+const SHAPE_STR    = 0.002;  // very slow float toward target
+const DRIFT_STR    = 0.0008;
+const FRICTION     = 0.97;
+const MAX_SPEED    = 0.9;
+const IDLE_MS      = 500;
+const WRAP_PAD     = 320;    // nodes wrap at this distance off-screen, keeping them invisible
+
+interface Node {
+  x: number; y: number;
+  vx: number; vy: number;
+  r: number;
+  alpha: number;
+  phase: number;
+  freq: number;
+  shapeIdx: number | null;
+  tx: number | null;
+  ty: number | null;
+}
+
+// Generate SHAPE_N irregular polygon vertices around (cx, cy)
+function polygonTargets(cx: number, cy: number, count: number): [number, number][] {
+  const baseR = 28 + Math.random() * 36; // 28–64 px
+  const pts: [number, number][] = [];
+  for (let i = 0; i < count; i++) {
+    const angle = (i / count) * Math.PI * 2 - Math.PI / 2
+                + (Math.random() - 0.5) * (0.9 / count) * Math.PI * 2;
+    const r = baseR * (0.55 + Math.random() * 0.9);
+    pts.push([cx + Math.cos(angle) * r, cy + Math.sin(angle) * r]);
+  }
+  return pts;
+}
+
 export function AmbientSiteCanvas() {
-  const ref = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: -1, y: -1 });
-  const reduced = usePrefersReducedMotion();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef  = useRef({ x: -9999, y: -9999 });
+  const movingRef = useRef(false);
+  const reduced   = usePrefersReducedMotion();
 
   useEffect(() => {
     if (reduced) return;
-    const c = ref.current;
-    if (!c) return;
-    const ctx = c.getContext("2d");
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    let raf = 0;
-    let t = 0;
-    let cancelled = false;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
-    let lerpX = -1;
-    let lerpY = -1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let raf = 0;
+    let cancelled = false;
+    let w = window.innerWidth;
+    let h = window.innerHeight;
+    let t = 0;
+    let idleTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const resize = () => {
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+
+    // Nodes start scattered including well off-screen
+    const nodes: Node[] = Array.from({ length: NODE_COUNT }, () => ({
+      x:        (Math.random() - 0.1) * (w + WRAP_PAD * 2) - WRAP_PAD,
+      y:        (Math.random() - 0.1) * (h + WRAP_PAD * 2) - WRAP_PAD,
+      vx:       (Math.random() - 0.5) * 0.5,
+      vy:       (Math.random() - 0.5) * 0.5,
+      r:        1.2 + Math.random() * 1.6,
+      alpha:    0.18 + Math.random() * 0.2,
+      phase:    Math.random() * Math.PI * 2,
+      freq:     0.0001 + Math.random() * 0.0003,
+      shapeIdx: null,
+      tx:       null,
+      ty:       null,
+    }));
+
+    const clearShape = () => {
+      for (const n of nodes) {
+        n.shapeIdx = null; n.tx = null; n.ty = null;
+      }
+    };
+
+    const assignShape = () => {
+      const { x: mx, y: my } = mouseRef.current;
+      if (mx < -1000) return;
+      clearShape();
+      const targets = polygonTargets(mx, my, SHAPE_N);
+      // Closest SHAPE_N nodes (even if off-screen — they'll float in)
+      const sorted = [...nodes].sort((a, b) =>
+        (a.x-mx)**2+(a.y-my)**2 - ((b.x-mx)**2+(b.y-my)**2)
+      );
+      for (let i = 0; i < SHAPE_N; i++) {
+        sorted[i].shapeIdx = i;
+        sorted[i].tx = targets[i][0];
+        sorted[i].ty = targets[i][1];
+      }
+    };
 
     const draw = () => {
-      if (cancelled || document.visibilityState !== "visible") {
-        raf = requestAnimationFrame(draw);
-        return;
-      }
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      c.width = w * dpr;
-      c.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (cancelled) return;
+      if (document.visibilityState !== "visible") { raf = requestAnimationFrame(draw); return; }
+      t++;
       ctx.clearRect(0, 0, w, h);
-      t += 0.003;
 
-      if (lerpX < 0) { lerpX = w * 0.5; lerpY = h * 0.4; }
+      const mx  = mouseRef.current.x;
+      const my  = mouseRef.current.y;
 
-      const mx = mouseRef.current.x < 0 ? w * 0.5 : mouseRef.current.x;
-      const my = mouseRef.current.y < 0 ? h * 0.4 : mouseRef.current.y;
-      lerpX += (mx - lerpX) * 0.02;
-      lerpY += (my - lerpY) * 0.02;
+      for (const n of nodes) {
+        if (n.shapeIdx !== null && n.tx !== null && n.ty !== null) {
+          // Float slowly toward polygon vertex
+          n.vx += (n.tx - n.x) * SHAPE_STR;
+          n.vy += (n.ty - n.y) * SHAPE_STR;
+          const dd = Math.hypot(n.tx - n.x, n.ty - n.y);
+          if (dd < 2) { n.vx += (Math.random()-0.5)*0.02; n.vy += (Math.random()-0.5)*0.02; }
+        } else {
+          // Gentle sinusoidal drift
+          n.vx += Math.sin(t * n.freq + n.phase) * DRIFT_STR;
+          n.vy += Math.cos(t * n.freq * 1.3 + n.phase) * DRIFT_STR;
 
-      // Primary orchid blob — slow drift
-      const bx = w * (0.5 + 0.1 * Math.sin(t));
-      const by = h * (0.35 + 0.06 * Math.cos(t * 0.7));
-      const g1 = ctx.createRadialGradient(bx, by, 0, w * 0.5, h * 0.4, Math.max(w, h) * 0.6);
-      g1.addColorStop(0, "rgba(26,83,253,0.18)");
-      g1.addColorStop(0.4, "rgba(26,83,253,0.04)");
-      g1.addColorStop(1, "rgba(10,10,10,0)");
-      ctx.fillStyle = g1;
-      ctx.fillRect(0, 0, w, h);
+          // Wrap far off-screen so they stay invisible
+          const pad = WRAP_PAD;
+          if (n.x < -pad) n.x = w + pad;
+          else if (n.x > w + pad) n.x = -pad;
+          if (n.y < -pad) n.y = h + pad;
+          else if (n.y > h + pad) n.y = -pad;
+        }
 
-      // Cursor-following magenta glow
-      if (mouseRef.current.x >= 0) {
-        const g2 = ctx.createRadialGradient(lerpX, lerpY, 0, lerpX, lerpY, Math.max(w, h) * 0.3);
-        g2.addColorStop(0, "rgba(218,52,241,0.14)");
-        g2.addColorStop(0.5, "rgba(26,83,253,0.05)");
-        g2.addColorStop(1, "rgba(10,10,10,0)");
-        ctx.fillStyle = g2;
-        ctx.fillRect(0, 0, w, h);
+        n.vx *= FRICTION; n.vy *= FRICTION;
+        const spd = Math.hypot(n.vx, n.vy);
+        if (spd > MAX_SPEED) { n.vx = (n.vx/spd)*MAX_SPEED; n.vy = (n.vy/spd)*MAX_SPEED; }
+        n.x += n.vx; n.y += n.vy;
       }
 
-      // Secondary wandering cyan
-      const cx2 = w * (0.5 + 0.14 * Math.cos(t * 0.55 + 1.2));
-      const cy2 = h * (0.65 + 0.08 * Math.sin(t * 0.8 + 2.4));
-      const g3 = ctx.createRadialGradient(cx2, cy2, 0, cx2, cy2, Math.max(w, h) * 0.38);
-      g3.addColorStop(0, "rgba(4,209,224,0.1)");
-      g3.addColorStop(0.6, "rgba(4,209,224,0.02)");
-      g3.addColorStop(1, "rgba(10,10,10,0)");
-      ctx.fillStyle = g3;
-      ctx.fillRect(0, 0, w, h);
+      // Draw all nodes currently on-screen (shape nodes + any drifting through)
+      const visible = nodes.filter(n => n.x > -20 && n.x < w+20 && n.y > -20 && n.y < h+20);
+
+      // Lines between nearby visible nodes
+      ctx.lineWidth = 0.6;
+      for (let i = 0; i < visible.length; i++) {
+        for (let j = i + 1; j < visible.length; j++) {
+          const a = visible[i], b = visible[j];
+          const d = Math.hypot(a.x-b.x, a.y-b.y);
+          if (d < CONNECT_DIST) {
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(255,255,255,${((1 - d/CONNECT_DIST)*0.18).toFixed(3)})`;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Dots — shape nodes slightly brighter
+      for (const n of visible) {
+        const inShape = n.shapeIdx !== null;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, inShape ? n.r * 1.3 : n.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(255,255,255,${(inShape ? Math.min(n.alpha+0.35, 0.75) : n.alpha).toFixed(3)})`;
+        ctx.fill();
+      }
 
       raf = requestAnimationFrame(draw);
     };
 
-    const onMove = (e: MouseEvent) => { mouseRef.current = { x: e.clientX, y: e.clientY }; };
-    const onLeave = () => { mouseRef.current = { x: -1, y: -1 }; };
-    const onVis = () => { if (document.visibilityState === "visible") t = 0; };
+    const onMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+      movingRef.current = true;
+      clearShape();
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        movingRef.current = false;
+        assignShape();
+      }, IDLE_MS);
+    };
 
-    document.addEventListener("visibilitychange", onVis);
-    window.addEventListener("mousemove", onMove, { passive: true });
+    const onLeave = () => {
+      mouseRef.current = { x: -9999, y: -9999 };
+      movingRef.current = false;
+      clearShape();
+      if (idleTimer) clearTimeout(idleTimer);
+    };
+
+    window.addEventListener("mousemove", onMove,  { passive: true });
     window.addEventListener("mouseleave", onLeave);
+    window.addEventListener("resize", resize,     { passive: true });
     raf = requestAnimationFrame(draw);
 
     return () => {
       cancelled = true;
       cancelAnimationFrame(raf);
-      document.removeEventListener("visibilitychange", onVis);
+      if (idleTimer) clearTimeout(idleTimer);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseleave", onLeave);
+      window.removeEventListener("resize", resize);
     };
   }, [reduced]);
 
@@ -97,8 +204,8 @@ export function AmbientSiteCanvas() {
 
   return (
     <canvas
-      ref={ref}
-      className="pointer-events-none fixed inset-0 z-[0]"
+      ref={canvasRef}
+      className="pointer-events-none fixed inset-0 z-[195]"
       aria-hidden
     />
   );

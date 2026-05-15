@@ -1,7 +1,6 @@
 "use client";
 
 import { ChapterNav } from "@/components/chapter-nav";
-import { MouseParticleField } from "@/components/mouse-particle-field";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
 import { ChapterAudienceSection } from "@/components/sections/chapter-audience";
@@ -24,7 +23,6 @@ import { HomeMidStrip } from "@/components/sections/home-mid-strip";
 export function HomeScrollyExperience() {
   return (
     <>
-      <MouseParticleField />
       <SiteNav />
       <ChapterNav />
       <main className="relative z-[1] text-[var(--foreground)] md:pr-28">
