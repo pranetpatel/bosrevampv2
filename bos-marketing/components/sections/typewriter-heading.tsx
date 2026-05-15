@@ -51,21 +51,23 @@ export function TypewriterHeading() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: blinkKeyframes }} />
-      <h1 className="flex flex-wrap items-end justify-center gap-x-[0.08em] text-center font-[family-name:var(--font-display)] text-[clamp(2.75rem,10vw,8.5rem)] font-extrabold leading-[0.98] tracking-[-0.03em] text-white drop-shadow-[0_2px_40px_rgba(0,0,0,0.25)]">
-      <span className="whitespace-nowrap">
-        <span className="text-white">{currentText}</span>
-        <span 
-          className="ml-1 inline-block h-[0.75em] w-[0.05em] translate-y-[0.12em] bg-[var(--orchid)] shadow-[0_0_15px_var(--orchid)]" 
-          style={{ animation: "blink 1s step-end infinite" }}
-          aria-hidden 
-        />
-        {" "}Made Simple
-      </span>
-      <span
-        className="mb-[0.14em] inline-block h-[0.26em] min-h-[9px] w-[0.26em] min-w-[9px] rounded-[3px] bg-gradient-to-br from-[var(--orchid)] to-[var(--magenta)] shadow-[0_0_28px_rgba(147,51,234,0.55)] sm:mb-[0.2em]"
-        aria-hidden
-      />
-    </h1>
+      <h1 className="flex flex-col items-center justify-center gap-y-[0.05em] text-center font-[family-name:var(--font-display)] text-[clamp(2.75rem,10vw,8.5rem)] font-extrabold leading-[0.98] tracking-[-0.03em] text-white drop-shadow-[0_2px_40px_rgba(0,0,0,0.25)]">
+        <span className="whitespace-nowrap">
+          <span className="text-white">{currentText}</span>
+          <span
+            className="ml-1 inline-block h-[0.75em] w-[0.05em] translate-y-[0.12em] bg-[var(--orchid)] shadow-[0_0_15px_var(--orchid)]"
+            style={{ animation: "blink 1s step-end infinite" }}
+            aria-hidden
+          />
+        </span>
+        <span className="whitespace-nowrap">
+          Made Simple
+          <span
+            className="ml-[0.18em] mb-[0.14em] inline-block h-[0.26em] min-h-[9px] w-[0.26em] min-w-[9px] rounded-[3px] bg-gradient-to-br from-[var(--orchid)] to-[var(--magenta)] shadow-[0_0_28px_rgba(147,51,234,0.55)] sm:mb-[0.2em]"
+            aria-hidden
+          />
+        </span>
+      </h1>
     </>
   );
 }

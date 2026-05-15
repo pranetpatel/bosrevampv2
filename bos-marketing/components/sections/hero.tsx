@@ -21,7 +21,7 @@ export function HeroSection() {
             width={220}
             height={72}
             priority
-            className="mx-auto mb-8 h-10 w-auto max-w-[min(280px,85vw)] md:h-14 invisible"
+            className="mx-auto mb-8 h-10 w-auto max-w-[min(280px,85vw)] md:h-14"
           />
         </div>
         <p
