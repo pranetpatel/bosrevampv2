@@ -17,6 +17,192 @@ import {
   type CompareCell,
 } from "@/lib/studio-pricing-data";
 
+function CommVisual() {
+  return (
+    <div className="hidden w-[200px] shrink-0 flex-col justify-center gap-3 border-l border-white/[0.07] bg-gradient-to-b from-purple-950/50 to-transparent p-4 md:flex">
+      <div className="flex flex-col gap-2">
+        <div className="flex items-end gap-1.5">
+          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-purple-800 text-[8px] font-bold text-purple-200">A</div>
+          <div className="max-w-[110px] rounded-xl rounded-bl-sm bg-purple-900/70 px-2.5 py-1.5">
+            <div className="mb-1 h-1 w-14 rounded bg-purple-500/50" />
+            <div className="h-1 w-9 rounded bg-purple-600/40" />
+          </div>
+        </div>
+        <div className="flex items-end justify-end gap-1.5">
+          <div className="max-w-[110px] rounded-xl rounded-br-sm bg-[var(--orchid)] px-2.5 py-1.5">
+            <div className="mb-1 h-1 w-12 rounded bg-white/40" />
+            <div className="h-1 w-8 rounded bg-white/25" />
+          </div>
+          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--orchid)] text-[8px] font-bold text-white">Y</div>
+        </div>
+        <div className="flex items-end gap-1.5">
+          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-purple-800 text-[8px] font-bold text-purple-200">B</div>
+          <div className="max-w-[110px] rounded-xl rounded-bl-sm bg-purple-900/70 px-2.5 py-1.5">
+            <div className="h-1 w-16 rounded bg-purple-500/50" />
+          </div>
+        </div>
+      </div>
+      <div className="flex gap-1.5">
+        <div className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.04] py-2 text-center">
+          <div className="text-xs font-bold text-[var(--orchid)]">0</div>
+          <div className="text-[8px] uppercase tracking-wide text-white/35">Slack bills</div>
+        </div>
+        <div className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.04] py-2 text-center">
+          <div className="text-xs font-bold text-white">1</div>
+          <div className="text-[8px] uppercase tracking-wide text-white/35">Inbox</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ExecVisual() {
+  return (
+    <div className="hidden w-[200px] shrink-0 flex-col justify-center gap-3 border-l border-white/[0.07] bg-gradient-to-b from-emerald-950/50 to-transparent p-4 md:flex">
+      <div className="grid grid-cols-2 gap-1.5">
+        <div className="rounded-lg border border-emerald-500/20 bg-emerald-950/60 p-2">
+          <div className="mb-1.5 text-[8px] font-bold uppercase tracking-wide text-emerald-400">Done</div>
+          <div className="mb-1 h-1 rounded bg-emerald-700/60" />
+          <div className="mb-1 h-1 w-[70%] rounded bg-emerald-800/60" />
+          <div className="h-1 w-[50%] rounded bg-emerald-800/60" />
+        </div>
+        <div className="rounded-lg border border-[var(--orchid)]/20 bg-purple-950/60 p-2">
+          <div className="mb-1.5 text-[8px] font-bold uppercase tracking-wide text-[var(--orchid)]">Active</div>
+          <div className="mb-1 h-1 rounded bg-purple-700/60" />
+          <div className="h-1 w-[80%] rounded bg-purple-800/60" />
+        </div>
+      </div>
+      <div className="flex gap-1.5">
+        <div className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.04] py-2 text-center">
+          <div className="text-xs font-bold text-emerald-400">94%</div>
+          <div className="text-[8px] uppercase tracking-wide text-white/35">On track</div>
+        </div>
+        <div className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.04] py-2 text-center">
+          <div className="text-xs font-bold text-white">0</div>
+          <div className="text-[8px] uppercase tracking-wide text-white/35">Missed</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ClientVisual() {
+  return (
+    <div className="hidden w-[200px] shrink-0 flex-col justify-center gap-3 border-l border-white/[0.07] bg-gradient-to-b from-blue-950/50 to-transparent p-4 md:flex">
+      <div className="rounded-xl border border-blue-500/20 bg-blue-950/60 p-2.5">
+        <div className="mb-2 flex items-center gap-2">
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-800 text-[9px] font-bold text-blue-200">AC</div>
+          <div>
+            <div className="mb-1 h-1.5 w-16 rounded bg-blue-600/50" />
+            <div className="h-1 w-12 rounded bg-blue-800/50" />
+          </div>
+        </div>
+        <div className="mb-2 flex flex-wrap gap-1">
+          <span className="rounded-full border border-blue-500/30 bg-blue-900/50 px-1.5 py-0.5 text-[8px] font-bold text-blue-300">7 tasks</span>
+          <span className="rounded-full border border-blue-500/30 bg-blue-900/50 px-1.5 py-0.5 text-[8px] font-bold text-blue-300">4 docs</span>
+          <span className="rounded-full border border-emerald-500/30 bg-emerald-900/50 px-1.5 py-0.5 text-[8px] font-bold text-emerald-300">Active</span>
+        </div>
+        <div className="mb-1 h-1 rounded bg-blue-800/50" />
+        <div className="h-1 w-[70%] rounded bg-blue-800/50" />
+      </div>
+      <div className="flex gap-1.5">
+        <div className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.04] py-2 text-center">
+          <div className="text-xs font-bold text-sky-400">Full</div>
+          <div className="text-[8px] uppercase tracking-wide text-white/35">History</div>
+        </div>
+        <div className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.04] py-2 text-center">
+          <div className="text-xs font-bold text-white">1</div>
+          <div className="text-[8px] uppercase tracking-wide text-white/35">Source</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DocsVisual() {
+  return (
+    <div className="hidden w-[200px] shrink-0 flex-col justify-center gap-3 border-l border-white/[0.07] bg-gradient-to-b from-amber-950/50 to-transparent p-4 md:flex">
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-center gap-2 rounded-lg border border-amber-500/20 bg-amber-950/60 px-2 py-1.5">
+          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded border border-amber-500/30 bg-amber-900/50 text-[10px]">📄</div>
+          <div className="flex-1">
+            <div className="mb-1 h-1 w-[80%] rounded bg-amber-600/50" />
+            <div className="h-1 w-[55%] rounded bg-amber-800/50" />
+          </div>
+          <span className="rounded border border-amber-500/30 bg-amber-900/50 px-1 py-0.5 text-[8px] font-bold text-amber-300">PDF</span>
+        </div>
+        <div className="flex items-center gap-2 rounded-lg border border-amber-500/20 bg-amber-950/60 px-2 py-1.5">
+          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded border border-amber-500/30 bg-amber-900/50 text-[10px]">📝</div>
+          <div className="flex-1">
+            <div className="mb-1 h-1 w-[65%] rounded bg-amber-600/50" />
+            <div className="h-1 w-[40%] rounded bg-amber-800/50" />
+          </div>
+          <span className="rounded border border-amber-500/30 bg-amber-900/50 px-1 py-0.5 text-[8px] font-bold text-amber-300">Draft</span>
+        </div>
+      </div>
+      <div className="flex gap-1.5">
+        <div className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.04] py-2 text-center">
+          <div className="text-xs font-bold text-amber-400">10GB</div>
+          <div className="text-[8px] uppercase tracking-wide text-white/35">Drive</div>
+        </div>
+        <div className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.04] py-2 text-center">
+          <div className="text-xs font-bold text-white">AI</div>
+          <div className="text-[8px] uppercase tracking-wide text-white/35">Search</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AIVisual() {
+  return (
+    <div className="hidden w-[200px] shrink-0 flex-col justify-center gap-3 border-l border-white/[0.07] bg-gradient-to-b from-purple-950/50 to-transparent p-4 md:flex">
+      <div className="rounded-xl border border-purple-500/20 bg-purple-950/60 p-2.5">
+        <div className="mb-2 flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-wide text-purple-400">
+          <div className="h-1.5 w-1.5 rounded-full bg-purple-400" />
+          Agents working now
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center gap-1.5">
+            <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-purple-800 text-[7px] font-bold text-purple-200">S</div>
+            <div className="h-1 flex-1 rounded bg-purple-700/60" />
+            <span className="rounded border border-purple-500/30 bg-purple-900/50 px-1 py-0.5 text-[7px] font-bold text-purple-300">Drafting</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-900 text-[7px] font-bold text-emerald-300">C</div>
+            <div className="h-1 flex-1 rounded bg-emerald-700/60" />
+            <span className="rounded border border-emerald-500/30 bg-emerald-900/50 px-1 py-0.5 text-[7px] font-bold text-emerald-300">Done</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-purple-800 text-[7px] font-bold text-purple-200">O</div>
+            <div className="h-1 w-[70%] rounded bg-purple-700/60" />
+            <span className="rounded border border-purple-500/30 bg-purple-900/50 px-1 py-0.5 text-[7px] font-bold text-purple-300">Routing</span>
+          </div>
+        </div>
+      </div>
+      <div className="flex gap-1.5">
+        <div className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.04] py-2 text-center">
+          <div className="text-xs font-bold text-[var(--magenta)]">3</div>
+          <div className="text-[8px] uppercase tracking-wide text-white/35">Agents live</div>
+        </div>
+        <div className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.04] py-2 text-center">
+          <div className="text-xs font-bold text-white">0</div>
+          <div className="text-[8px] uppercase tracking-wide text-white/35">Extra tabs</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LayerVisual({ num }: { num: string }) {
+  if (num === "01") return <CommVisual />;
+  if (num === "02") return <ExecVisual />;
+  if (num === "03") return <ClientVisual />;
+  if (num === "04") return <DocsVisual />;
+  if (num === "05") return <AIVisual />;
+  return null;
+}
+
 function Cell({ cell }: { cell: CompareCell }) {
   if (cell.kind === "yes")
     return <span className="text-lg font-bold text-[var(--cyan)]">✓</span>;
@@ -100,7 +286,7 @@ export default function StudioPlansPricing() {
   }, []);
 
   return (
-    <div className="text-[var(--foreground)]">
+    <div className="pt-[4.5rem] text-[var(--foreground)]">
       <style dangerouslySetInnerHTML={{ __html: `@keyframes studio-ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}` }} />
 
       {showBar ? (
@@ -140,10 +326,10 @@ export default function StudioPlansPricing() {
           Power Up
         </h1>
         <p className="mx-auto mt-5 max-w-lg font-[family-name:var(--font-sans)] text-lg leading-relaxed text-white/65">
-          The Business Orchestration System that makes fragmented SaaS stacks simple to run. One
-          license. One intelligence layer.{" "}
+          The Business Orchestration System that overrules your fragmented SaaS stack. One license.
+          One intelligence layer.{" "}
           <mark className="rounded bg-gradient-to-r from-[var(--orchid)]/30 to-[var(--magenta)]/25 px-1.5 py-0.5 font-semibold text-white">
-            Work made simple
+            One stop shop for work
           </mark>
         </p>
       </div>
@@ -285,46 +471,50 @@ export default function StudioPlansPricing() {
             Every problem you&apos;ve been patching with five tools, made simpler to run.
           </p>
         </div>
-        <div className="mt-12 flex flex-col gap-4">
-          {FIVE_LAYERS.map((layer) => (
-            <article
-              key={layer.num}
-              className="flex overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] transition hover:border-white/20"
-            >
-              <div className={`w-1 shrink-0 bg-gradient-to-b ${accentBar[layer.accent]}`} aria-hidden />
-              <div className="flex flex-1 flex-col gap-4 p-6 md:flex-row md:items-start md:justify-between md:p-8">
-                <div className="min-w-0 flex-1">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">Layer {layer.num}</p>
-                  <p className="mt-2 text-[11px] font-semibold uppercase tracking-wide text-red-400/90">
-                    {layer.pain}
-                  </p>
-                  <h3 className="mt-3 font-[family-name:var(--font-display)] text-xl font-bold text-white md:text-2xl">
-                    {layer.title}
-                  </h3>
-                  <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/60">{layer.desc}</p>
-                  <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
-                    <div className="flex flex-wrap gap-2">
-                      {layer.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded-full border border-white/15 bg-white/[0.06] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white/80"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                    <p className="text-[11px] text-white/35">
-                      <em className="not-italic text-white/50">Overrules</em>{" "}
-                      {layer.replaces.map((r) => (
-                        <span key={r} className="ml-1 line-through decoration-red-500/40">
-                          {r}
-                        </span>
-                      ))}
+        <div className="mt-12 flex flex-col">
+          {FIVE_LAYERS.map((layer, idx) => (
+            <Fragment key={layer.num}>
+              <article className="flex overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] transition hover:border-white/20">
+                <div className={`w-1 shrink-0 bg-gradient-to-b ${accentBar[layer.accent]}`} aria-hidden />
+                <div className="flex flex-1 flex-col gap-4 p-6 md:flex-row md:items-start md:justify-between md:p-8">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">Layer {layer.num}</p>
+                    <p className="mt-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-red-400/90">
+                      <span className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-red-500/70" aria-hidden />
+                      {layer.pain}
                     </p>
+                    <h3 className="mt-3 font-[family-name:var(--font-display)] text-xl font-bold text-white md:text-2xl">
+                      {layer.title}
+                    </h3>
+                    <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/60">{layer.desc}</p>
+                    <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
+                      <div className="flex flex-wrap gap-2">
+                        {layer.tags.map((t) => (
+                          <span
+                            key={t}
+                            className="rounded-full border border-white/15 bg-white/[0.06] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white/80"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="text-[11px] text-white/35">
+                        <em className="not-italic text-white/50">Overrules</em>{" "}
+                        {layer.replaces.map((r) => (
+                          <span key={r} className="ml-1 line-through decoration-red-500/40">
+                            {r}
+                          </span>
+                        ))}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
+                <LayerVisual num={layer.num} />
+              </article>
+              {idx < FIVE_LAYERS.length - 1 && (
+                <div className="mx-auto h-4 w-px bg-gradient-to-b from-white/20 to-white/5" aria-hidden />
+              )}
+            </Fragment>
           ))}
         </div>
       </div>
