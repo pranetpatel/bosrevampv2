@@ -60,6 +60,8 @@ export function GapFrictionDissolve({ cleared, onClear }: Props) {
   const shiftRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
   const [activeCards, setActiveCards] = useState<ReadonlySet<string>>(() => new Set());
   const activeCardsRef = useRef(activeCards);
+  const [everClicked, setEverClicked] = useState<ReadonlySet<string>>(() => new Set());
+  const [topCardId, setTopCardId] = useState<string | null>(null);
 
   useEffect(() => {
     activeCardsRef.current = activeCards;
@@ -90,9 +92,16 @@ export function GapFrictionDissolve({ cleared, onClear }: Props) {
     };
   }, [reduced]);
 
-  const remaining = NODES.length - cleared.size;
+  const allClicked = everClicked.size === NODES.length;
 
   const handleNodeClick = (id: string) => {
+    setEverClicked((prev) => {
+      if (prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+    setTopCardId(id);
     setActiveCards((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -232,7 +241,8 @@ export function GapFrictionDissolve({ cleared, onClear }: Props) {
               {isActive && (
                 <div
                   className={[
-                    "absolute z-[10] w-56 pointer-events-auto",
+                    "absolute w-56 pointer-events-auto",
+                    n.id === topCardId ? "z-[30]" : "z-[10]",
                     popupAbove ? "bottom-[calc(100%+0.75rem)]" : "top-[calc(100%+0.75rem)]",
                     popupRight ? "left-0 -translate-x-[10%]" : "right-0 translate-x-[10%]",
                   ].join(" ")}
@@ -316,16 +326,32 @@ export function GapFrictionDissolve({ cleared, onClear }: Props) {
         {reduced ? "Tap a node to reveal it" : "Click each node to reveal the drag"}
       </p>
 
-      {remaining === 0 ? (
-        <p className="pointer-events-none absolute bottom-14 left-0 right-0 z-[2] text-center font-[family-name:var(--font-display)] text-sm font-semibold tracking-wide text-[var(--cyan)]/90 md:bottom-16 md:text-base">
-          Operational weight cleared
-        </p>
-      ) : null}
+      {allClicked && (
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-14 z-[20] flex justify-center px-4 md:bottom-16"
+          style={{ animation: "clearedBannerIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both" }}
+        >
+          <div className="flex items-center gap-3 rounded-full border border-[var(--cyan)]/35 bg-[#050e1a]/90 px-5 py-3 shadow-[0_0_40px_rgba(4,209,224,0.25),0_8px_32px_rgba(0,0,0,0.6)] backdrop-blur-md">
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--cyan)]/15">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
+                <path d="M2 6.5l2.8 2.8L10 3.5" stroke="var(--cyan)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <span className="font-[family-name:var(--font-display)] text-sm font-semibold tracking-wide text-[var(--cyan)]">
+              Operational weight cleared
+            </span>
+          </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes frictionCardIn {
           from { opacity: 0; transform: scale(0.88) translateY(6px); }
           to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes clearedBannerIn {
+          from { opacity: 0; transform: translateY(16px) scale(0.92); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
         }
       `}</style>
     </div>

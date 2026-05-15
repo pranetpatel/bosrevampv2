@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CtaOrbitCanvas } from "@/components/cta-orbit-canvas";
-import { MotionClipReveal, MotionReveal } from "@/components/motion-reveal";
+import { MotionReveal } from "@/components/motion-reveal";
+import { TypewriterHeading } from "./typewriter-heading";
 
 export function FinalCtaSection() {
   return (
@@ -15,10 +16,7 @@ export function FinalCtaSection() {
         <p className="font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.26em] text-white/55">
           The future isn&apos;t more software
         </p>
-        <h2 className="mt-8 font-[family-name:var(--font-display)] text-[clamp(2.5rem,6vw,5.5rem)] font-semibold leading-[1.04] tracking-tight text-white">
-          <MotionClipReveal delay={0.1} as="span">Work Made</MotionClipReveal>
-          <MotionClipReveal delay={0.22} as="span">Simple.</MotionClipReveal>
-        </h2>
+        <TypewriterHeading as="h2" className="mt-8 !text-[clamp(2.5rem,6vw,5.5rem)] !font-semibold" />
         <p className="mx-auto mt-8 max-w-lg font-[family-name:var(--font-display)] text-xl font-semibold leading-[1.15] text-white/78 md:text-2xl">
           Run your business on BOS
         </p>

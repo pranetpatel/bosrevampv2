@@ -77,7 +77,6 @@ function EmailCard({ card }: { card: Extract<ActivityCard, { type: "email" }> })
         </div>
         <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-medium" style={{ fontFamily: "var(--font-ui)" }}>
           <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
           </span>
           {card.status}
@@ -316,30 +315,9 @@ export function MeetBosSection() {
       {/* ── Mobile: centered orb only ── */}
       <div className="md:hidden flex flex-col items-center gap-4 py-8">
         <div className="relative">
-          {/* Concentric ring glows */}
-          {[320, 240, 160, 100].map((d, i) => (
-            <div
-              key={d}
-              className="absolute rounded-full border border-white/[0.06] pointer-events-none -translate-x-1/2 -translate-y-1/2"
-              style={{
-                width: d,
-                height: d,
-                top: "50%",
-                left: "50%",
-                opacity: 0.3 + i * 0.05,
-              }}
-            />
-          ))}
           <div className="relative flex flex-col items-center gap-4" style={{ width: 320, height: 320 }}>
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10">
               <div className="relative">
-                <div
-                  className="absolute inset-0 rounded-full"
-                  style={{
-                    boxShadow: "0 0 60px 20px rgba(120,50,255,0.35)",
-                    animation: "orb-pulse 2.8s ease-in-out infinite",
-                  }}
-                />
                 <AsteroidOrb size={100} />
               </div>
 
@@ -349,7 +327,6 @@ export function MeetBosSection() {
                 style={{ minWidth: 200 }}
               >
                 <span className="relative flex h-1.5 w-1.5 shrink-0">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-violet-400" />
                 </span>
                 <AnimatePresence mode="wait">
@@ -394,34 +371,11 @@ export function MeetBosSection() {
         </AnimatePresence>
       </div>
 
-      {/* ── Desktop: full floating-cards stage ── */}
       <div className="hidden md:block relative mx-auto" style={{ width: 520, height: 560 }}>
-
-        {/* Concentric ring glows */}
-        {[520, 400, 280, 160].map((d, i) => (
-          <div
-            key={d}
-            className="absolute rounded-full border border-white/[0.06] pointer-events-none"
-            style={{
-              width: d,
-              height: d,
-              top: (520 - d) / 2,
-              left: (520 - d) / 2,
-              opacity: 0.3 + i * 0.05,
-            }}
-          />
-        ))}
 
         {/* Orb center */}
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10">
           <div className="relative">
-            <div
-              className="absolute inset-0 rounded-full"
-              style={{
-                boxShadow: "0 0 60px 20px rgba(120,50,255,0.35)",
-                animation: "orb-pulse 2.8s ease-in-out infinite",
-              }}
-            />
             <AsteroidOrb size={120} />
           </div>
 
@@ -431,7 +385,6 @@ export function MeetBosSection() {
             style={{ minWidth: 220 }}
           >
             <span className="relative flex h-1.5 w-1.5 shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-violet-400" />
             </span>
             <AnimatePresence mode="wait">
@@ -475,13 +428,6 @@ export function MeetBosSection() {
         </AnimatePresence>
       </div>
 
-      {/* Pulse animation keyframes injected inline */}
-      <style>{`
-        @keyframes orb-pulse {
-          0%, 100% { opacity: 0.5; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.12); }
-        }
-      `}</style>
     </section>
   );
 }

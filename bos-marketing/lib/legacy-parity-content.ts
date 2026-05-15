@@ -295,7 +295,6 @@ export const audienceCards: AudienceCard[] = [
 
 export const trustBadges = [
   { icon: "◇", label: "Encryption in transit" },
-  { icon: "◎", label: "Tenant isolation" },
   { icon: "✦", label: "Audit-friendly trails" },
   { icon: "◈", label: "Role-based access" },
   { icon: "✧", label: "Human approvals" },

@@ -9,9 +9,15 @@ const blinkKeyframes = `
   }
 `;
 
-const words = ["Work", "People", "Projects", "Pricing", "Business"];
+const words = ["Work", "AI", "People", "Projects", "Business"];
 
-export function TypewriterHeading() {
+export function TypewriterHeading({ 
+  as: Component = "h1", 
+  className = "" 
+}: { 
+  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  className?: string;
+} = {}) {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentText, setCurrentText] = useState(words[0]);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -51,7 +57,7 @@ export function TypewriterHeading() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: blinkKeyframes }} />
-      <h1 className="flex flex-col items-center justify-center gap-y-[0.05em] text-center font-[family-name:var(--font-display)] text-[clamp(2.75rem,10vw,8.5rem)] font-extrabold leading-[0.98] tracking-[-0.03em] text-white drop-shadow-[0_2px_40px_rgba(0,0,0,0.25)]">
+      <Component className={`flex flex-col items-center justify-center gap-y-[0.05em] text-center font-[family-name:var(--font-display)] text-[clamp(2.75rem,10vw,8.5rem)] font-extrabold leading-[0.98] tracking-[-0.03em] text-white drop-shadow-[0_2px_40px_rgba(0,0,0,0.25)] ${className}`}>
         <span className="whitespace-nowrap">
           <span className="text-white">{currentText}</span>
           <span
@@ -67,7 +73,7 @@ export function TypewriterHeading() {
             aria-hidden
           />
         </span>
-      </h1>
+      </Component>
     </>
   );
 }

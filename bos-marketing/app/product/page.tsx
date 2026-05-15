@@ -109,14 +109,7 @@ function OrbHeroSection() {
       {/* Orb + rings container */}
       <div className="relative flex items-center justify-center" style={{ width: ORB_SIZE * 2.8, height: ORB_SIZE * 2.8 }}>
         <SpinningRings progress={progress} orbSize={ORB_SIZE} />
-        <div
-          className="relative z-10"
-          style={{
-            filter: `drop-shadow(0 0 ${30 + progress * 60}px rgba(${
-              Math.round(150 - progress * 50)
-            },${Math.round(90 - progress * 90)},${Math.round(255 - progress * 55)},${0.65 + progress * 0.35}))`,
-          }}
-        >
+        <div className="relative z-10">
           <AsteroidOrb size={ORB_SIZE} scrollSpin energyLevel={progress} />
         </div>
       </div>
@@ -358,7 +351,7 @@ function AssistiveHeroGraphic({ scrollProgress }: { scrollProgress: number }) {
           orbSize={ORB_SIZE}
           color="rgba(255,255,255,0.055)"
         />
-        <div className="relative z-10 drop-shadow-[0_0_40px_rgba(180,180,210,0.35)]">
+        <div className="relative z-10">
           <AsteroidOrb size={ORB_SIZE} scrollSpin silver />
         </div>
       </div>

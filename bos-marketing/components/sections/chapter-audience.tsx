@@ -3,6 +3,68 @@
 import { useRef, useEffect } from "react";
 import { audienceCards, trustBadges } from "@/lib/legacy-parity-content";
 
+const BADGE_ICONS: Record<string, React.ReactNode> = {
+  "Encryption in transit": (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <rect x="2.5" y="6" width="9" height="6.5" rx="1.5" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <circle cx="7" cy="9.25" r="1" fill="currentColor" />
+    </svg>
+  ),
+  "Tenant isolation": (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <rect x="1.5" y="8.5" width="11" height="3" rx="1" stroke="currentColor" strokeWidth="1.2" />
+      <rect x="3" y="5" width="8" height="3" rx="1" stroke="currentColor" strokeWidth="1.2" />
+      <rect x="4.5" y="1.5" width="5" height="3" rx="1" stroke="currentColor" strokeWidth="1.2" />
+    </svg>
+  ),
+  "Audit-friendly trails": (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <rect x="2" y="1.5" width="10" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2" />
+      <line x1="4.5" y1="5" x2="9.5" y2="5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="4.5" y1="7.5" x2="9.5" y2="7.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="4.5" y1="10" x2="7.5" y2="10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  ),
+  "Role-based access": (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <circle cx="5.5" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M1.5 12.5c0-2.21 1.79-4 4-4s4 1.79 4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <circle cx="10.5" cy="7" r="1.5" stroke="currentColor" strokeWidth="1.1" />
+      <line x1="10.5" y1="8.5" x2="10.5" y2="10" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+      <line x1="9.5" y1="10" x2="11.5" y2="10" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+    </svg>
+  ),
+  "Human approvals": (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M4.5 7l1.8 1.8L9.5 5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  "Agent guardrails": (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <path d="M7 1.5L2 3.5v4c0 2.5 2.2 4.7 5 5.5 2.8-.8 5-3 5-5.5v-4L7 1.5z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+      <path d="M4.5 7l1.8 1.8L9.5 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  "SOC2-ready posture": (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M5 7l1.5 1.5L9.5 5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7 1.5v1M7 11.5v1M1.5 7h1M11.5 7h1" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+    </svg>
+  ),
+  "EU data options": (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.2" />
+      <ellipse cx="7" cy="7" rx="2.5" ry="5.5" stroke="currentColor" strokeWidth="1.1" />
+      <line x1="1.5" y1="7" x2="12.5" y2="7" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+      <line x1="2.5" y1="4.5" x2="11.5" y2="4.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+      <line x1="2.5" y1="9.5" x2="11.5" y2="9.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+    </svg>
+  ),
+};
+
 export function ChapterAudienceSection() {
   const trackRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
@@ -158,13 +220,15 @@ export function ChapterAudienceSection() {
         <p className="mb-6 text-center font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.22em] text-white/35">
           Enterprise-grade security, built in from day one.
         </p>
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="flex items-center justify-center flex-nowrap overflow-x-auto pb-1 scrollbar-none divide-x divide-white/10">
           {trustBadges.map((b) => (
             <span
               key={b.label}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs text-white/50"
+              className="inline-flex shrink-0 items-center gap-1.5 px-5 text-[11px] text-white/45 first:pl-0 last:pr-0"
             >
-              <span aria-hidden>{b.icon}</span>
+              <span className="text-white/35 flex items-center" aria-hidden>
+                {BADGE_ICONS[b.label] ?? b.icon}
+              </span>
               {b.label}
             </span>
           ))}
