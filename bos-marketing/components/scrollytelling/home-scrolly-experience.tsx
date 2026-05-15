@@ -4,7 +4,6 @@ import { ChapterNav } from "@/components/chapter-nav";
 import { MouseParticleField } from "@/components/mouse-particle-field";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
-import { ScrollLogo } from "@/components/scroll-logo";
 import { ChapterAudienceSection } from "@/components/sections/chapter-audience";
 import { ChapterFlowPillarsSection } from "@/components/sections/chapter-flow-pillars";
 import { ChapterIntroduceSection } from "@/components/sections/chapter-introduce";
@@ -26,8 +25,7 @@ export function HomeScrollyExperience() {
   return (
     <>
       <MouseParticleField />
-      <SiteNav noLogo />
-      <ScrollLogo />
+      <SiteNav />
       <ChapterNav />
       <main className="relative z-[1] text-[var(--foreground)] md:pr-28">
         <HeroSection />
