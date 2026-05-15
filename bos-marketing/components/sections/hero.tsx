@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { HeroMicroCards } from "../hero-micro-cards";
 import { HeroVideo } from "../hero-video";
+import { TypewriterHeading } from "./typewriter-heading";
 
 export function HeroSection() {
   return (
@@ -34,13 +35,7 @@ export function HeroSection() {
         className="animate-fade-up relative z-[2]"
         style={{ animationDelay: "0.45s" }}
       >
-        <h1 className="flex flex-wrap items-end justify-center gap-x-[0.08em] text-center font-[family-name:var(--font-display)] text-[clamp(2.75rem,10vw,8.5rem)] font-extrabold leading-[0.98] tracking-[-0.03em] text-white drop-shadow-[0_2px_40px_rgba(0,0,0,0.25)]">
-          <span className="whitespace-nowrap">Work Made Simple</span>
-          <span
-            className="mb-[0.14em] inline-block h-[0.26em] min-h-[9px] w-[0.26em] min-w-[9px] rounded-[3px] bg-gradient-to-br from-[var(--orchid)] to-[var(--magenta)] shadow-[0_0_28px_rgba(147,51,234,0.55)] sm:mb-[0.2em]"
-            aria-hidden
-          />
-        </h1>
+        <TypewriterHeading />
       </div>
       <div
         className="animate-fade-up relative z-[2] mx-auto mt-9 max-w-2xl px-2"
