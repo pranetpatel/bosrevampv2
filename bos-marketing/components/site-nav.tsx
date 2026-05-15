@@ -62,32 +62,8 @@ export function SiteNav({ alwaysSolid = false, noLogo = false }: { alwaysSolid?:
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      {/* Left: home button + optional logo */}
+      {/* Left: logo anchor */}
       <div className="flex flex-1 items-center gap-3">
-        {alwaysSolid ? (
-          <Link
-            href="/"
-            title="Home"
-            aria-label="Home"
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)]"
-          >
-            <svg width="14" height="14" viewBox="0 0 10 10" fill="none" aria-hidden className="shrink-0">
-              <path d="M5 1L1 4.5V9h2.5V6.5h3V9H9V4.5L5 1Z" fill="currentColor" fillOpacity="0.9" />
-            </svg>
-          </Link>
-        ) : (
-          <button
-            type="button"
-            title="Back to top"
-            aria-label="Back to top"
-            onClick={scrollToTop}
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)]"
-          >
-            <svg width="14" height="14" viewBox="0 0 10 10" fill="none" aria-hidden className="shrink-0">
-              <path d="M5 1L1 4.5V9h2.5V6.5h3V9H9V4.5L5 1Z" fill="currentColor" fillOpacity="0.9" />
-            </svg>
-          </button>
-        )}
         {/* Anchor for scroll-driven logo end position */}
         {noLogo && <span id="nav-logo-target" className="inline-block" aria-hidden />}
         {!noLogo && (
@@ -109,6 +85,31 @@ export function SiteNav({ alwaysSolid = false, noLogo = false }: { alwaysSolid?:
         className="pointer-events-none absolute inset-x-0 hidden items-center justify-center gap-10 md:flex"
         aria-label="Main"
       >
+        {/* Home icon sits beside Product */}
+        {alwaysSolid ? (
+          <Link
+            href="/"
+            title="Home"
+            aria-label="Home"
+            className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)]"
+          >
+            <svg width="14" height="14" viewBox="0 0 10 10" fill="none" aria-hidden className="shrink-0">
+              <path d="M5 1L1 4.5V9h2.5V6.5h3V9H9V4.5L5 1Z" fill="currentColor" fillOpacity="0.9" />
+            </svg>
+          </Link>
+        ) : (
+          <button
+            type="button"
+            title="Back to top"
+            aria-label="Back to top"
+            onClick={scrollToTop}
+            className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)]"
+          >
+            <svg width="14" height="14" viewBox="0 0 10 10" fill="none" aria-hidden className="shrink-0">
+              <path d="M5 1L1 4.5V9h2.5V6.5h3V9H9V4.5L5 1Z" fill="currentColor" fillOpacity="0.9" />
+            </svg>
+          </button>
+        )}
         {links.map((l) => (
           <Link
             key={l.label}
@@ -157,6 +158,13 @@ export function SiteNav({ alwaysSolid = false, noLogo = false }: { alwaysSolid?:
           aria-label="Site menu"
         >
           <nav className="flex flex-col gap-1" aria-label="Mobile main">
+            <Link
+              href="/"
+              className="rounded-md px-3 py-3 font-[family-name:var(--font-ui)] text-sm font-semibold uppercase tracking-[0.12em] text-white/90 hover:bg-white/[0.06] hover:text-[var(--cyan)]"
+              onClick={() => setMenuOpen(false)}
+            >
+              Home
+            </Link>
             {links.map((l) => (
               <Link
                 key={l.label}
