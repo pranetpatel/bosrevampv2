@@ -66,7 +66,7 @@ export function ChapterAudienceSection() {
   return (
     <section
       id="tribe"
-      className="chapter-rule-top section-grain relative z-[1] bg-[var(--surface-dark)] py-20 md:py-28"
+      className="chapter-rule-top section-grain relative z-[1] bg-[var(--surface-dark)] pb-20 pt-10 md:pb-28 md:pt-16"
       aria-label="Who runs on BOS"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(26,83,253,0.18),transparent_52%)]" />
