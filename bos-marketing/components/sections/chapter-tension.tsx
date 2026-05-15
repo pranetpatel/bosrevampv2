@@ -2,7 +2,6 @@
 
 import { useCallback, useState } from "react";
 import { GapFrictionDissolve } from "@/components/gap-friction-dissolve";
-import { GapFrictionInteractive } from "@/components/gap-friction-interactive";
 import { MotionReveal } from "@/components/motion-reveal";
 
 export function ChapterTensionSection() {
@@ -17,27 +16,14 @@ export function ChapterTensionSection() {
     });
   }, []);
 
-  const onToggle = useCallback((id: string) => {
-    setCleared((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  }, []);
-
   return (
     <section
       id="tension"
       className="chapter-rule-top section-grain sticky top-0 z-[1] flex min-h-screen flex-col bg-[var(--surface-dark)] px-6 pb-12 pt-[calc(2rem+1px)] md:px-14 md:pb-16 md:pt-[calc(2.5rem+1px)]"
     >
-      <div className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col space-y-10 md:space-y-12">
-        <MotionReveal>
+      <div className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col">
+        <MotionReveal className="flex flex-1 flex-col">
           <GapFrictionDissolve cleared={cleared} onClear={onClear} />
-        </MotionReveal>
-
-        <MotionReveal delay={0.05}>
-          <GapFrictionInteractive cleared={cleared} onToggle={onToggle} compact />
         </MotionReveal>
 
         {/*
