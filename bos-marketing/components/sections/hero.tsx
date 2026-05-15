@@ -11,17 +11,15 @@ export function HeroSection() {
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-8 pb-24 pt-36 text-center"
     >
       <HeroVideo />
-      <div
-        className="animate-fade-up relative z-[2] mb-8"
-        style={{ animationDelay: "0.2s" }}
-      >
+      <div id="hero-logo-anchor" className="relative z-[2] mb-8">
         <Image
           src="/BOS Branding/FullLogoNoBackground.svg"
-          alt="BOS"
+          alt=""
+          aria-hidden
           width={220}
           height={72}
           priority
-          className="mx-auto mb-8 h-10 w-auto max-w-[min(280px,85vw)] drop-shadow-[0_2px_24px_rgba(0,0,0,0.55)] md:h-14"
+          className="mx-auto mb-8 h-10 w-auto max-w-[min(280px,85vw)] md:h-14 invisible"
         />
       </div>
       <p

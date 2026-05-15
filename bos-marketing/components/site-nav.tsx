@@ -15,7 +15,7 @@ const links = [
 /**
  * Home: glass bar appears after scrolling past hero. Inner pages: use alwaysSolid.
  */
-export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
+export function SiteNav({ alwaysSolid = false, noLogo = false }: { alwaysSolid?: boolean; noLogo?: boolean }) {
   const [scrollBasedSolid, setScrollBasedSolid] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const lenis = useLenis();
@@ -56,31 +56,14 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
 
   return (
     <header
-      className={`fixed left-0 right-0 top-0 z-[200] flex items-center justify-between gap-4 px-6 py-5 transition-colors duration-300 md:px-14 ${
+      className={`fixed left-0 right-0 top-0 z-[200] flex items-center justify-between px-6 py-5 transition-colors duration-300 md:px-14 ${
         solidBar
           ? "border-b border-white/10 bg-[var(--surface-dark)]/92 backdrop-blur-md"
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <Link href="/" className="flex shrink-0 items-center drop-shadow-[0_1px_12px_rgba(0,0,0,0.5)]">
-        <Image
-          src="/bos-icon.svg"
-          alt="BOS"
-          width={32}
-          height={32}
-          priority
-          className={`rounded-lg transition-all duration-300 ${solidBar ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none absolute"}`}
-        />
-        <Image
-          src="/BOS Branding/FullLogoNoBackground.svg"
-          alt="BOS"
-          width={80}
-          height={26}
-          priority
-          className={`transition-all duration-300 ${solidBar ? "opacity-0 scale-75 pointer-events-none absolute" : "opacity-100 scale-100"}`}
-        />
-      </Link>
-      <nav className="flex items-center gap-6 md:gap-8" aria-label="Main">
+      {/* Left: home button + optional logo */}
+      <div className="flex flex-1 items-center gap-3">
         {alwaysSolid ? (
           <Link
             href="/"
@@ -105,19 +88,48 @@ export function SiteNav({ alwaysSolid = false }: { alwaysSolid?: boolean }) {
             </svg>
           </button>
         )}
-        <div className="hidden items-center gap-8 md:flex">
-          {links.map((l) => (
-            <Link
-              key={l.label}
-              href={l.href}
-              className="font-[family-name:var(--font-ui)] text-[11px] font-semibold uppercase tracking-[0.14em] text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] md:text-[12px]"
-            >
-              {l.label}
-            </Link>
-          ))}
-        </div>
+        {/* Anchor for scroll-driven logo end position */}
+        {noLogo && <span id="nav-logo-target" className="inline-block" aria-hidden />}
+        {!noLogo && (
+          <Link href="/" className="flex shrink-0 items-center drop-shadow-[0_1px_12px_rgba(0,0,0,0.5)]">
+            <Image
+              src="/bos-icon.svg"
+              alt="BOS"
+              width={32}
+              height={32}
+              priority
+              className={`rounded-lg transition-all duration-300 ${solidBar ? "opacity-100 scale-100" : "opacity-0 scale-75 pointer-events-none absolute"}`}
+            />
+            <Image
+              src="/BOS Branding/FullLogoNoBackground.svg"
+              alt="BOS"
+              width={80}
+              height={26}
+              priority
+              className={`transition-all duration-300 ${solidBar ? "opacity-0 scale-75 pointer-events-none absolute" : "opacity-100 scale-100"}`}
+            />
+          </Link>
+        )}
+      </div>
+
+      {/* Center: nav links — absolutely centered across full header width */}
+      <nav
+        className="pointer-events-none absolute inset-x-0 hidden items-center justify-center gap-10 md:flex"
+        aria-label="Main"
+      >
+        {links.map((l) => (
+          <Link
+            key={l.label}
+            href={l.href}
+            className="pointer-events-auto font-[family-name:var(--font-ui)] text-[11px] font-semibold uppercase tracking-[0.14em] text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] md:text-[12px]"
+          >
+            {l.label}
+          </Link>
+        ))}
       </nav>
-      <div className="flex items-center gap-2 sm:gap-3">
+
+      {/* Right: CTA + mobile menu */}
+      <div className="flex flex-1 items-center justify-end gap-2 sm:gap-3">
         <Link
           href="/get-started"
           className="inline-flex shrink-0 font-[family-name:var(--font-ui)] bg-[var(--cyan)] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--surface-dark)] shadow-[0_0_20px_rgba(4,209,224,0.35)] transition hover:-translate-y-px hover:shadow-[0_0_32px_rgba(4,209,224,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--orchid)] sm:px-5 sm:text-[11px] sm:tracking-[0.12em]"
