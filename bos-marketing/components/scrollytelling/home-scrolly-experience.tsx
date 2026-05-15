@@ -12,7 +12,6 @@ import { ChaosIntroSection } from "@/components/sections/chaos-intro-section";
 import { BosMbaSection } from "@/components/sections/chapter-bos-mba";
 import { FinalCtaSection } from "@/components/sections/final-cta";
 import { HeroSection } from "@/components/sections/hero";
-import { HeroProductCard } from "@/components/sections/hero-product-card";
 import { HomeMidStrip } from "@/components/sections/home-mid-strip";
 
 /**
@@ -26,7 +25,6 @@ export function HomeScrollyExperience() {
       <SiteNav />
       <main className="relative z-[1] text-[var(--foreground)]">
         <HeroSection />
-        <HeroProductCard />
         <HomeMidStrip />
         <ChaosIntroSection />
 

@@ -220,11 +220,11 @@ export function ChapterAudienceSection() {
         <p className="mb-6 text-center font-[family-name:var(--font-ui)] text-[10px] font-bold uppercase tracking-[0.22em] text-white/35">
           Enterprise-grade security, built in from day one.
         </p>
-        <div className="flex items-center justify-center flex-nowrap overflow-x-auto pb-1 scrollbar-none divide-x divide-white/10">
+        <div className="flex items-center justify-center divide-x divide-white/10">
           {trustBadges.map((b) => (
             <span
               key={b.label}
-              className="inline-flex shrink-0 items-center gap-1.5 px-5 text-[11px] text-white/45 first:pl-0 last:pr-0"
+              className="inline-flex items-center gap-1.5 px-3 text-[10px] text-white/45 md:px-4 md:text-[11px]"
             >
               <span className="text-white/35 flex items-center" aria-hidden>
                 {BADGE_ICONS[b.label] ?? b.icon}

@@ -224,7 +224,6 @@ body.custom-cursor-root [contenteditable] {
   pointer-events: none;
 }
 
-
 /* Chapter card face: rounded top + depth shadow for the stacked deck look */
 .sticky-chapter-card {
   border-radius: 20px 20px 0 0;

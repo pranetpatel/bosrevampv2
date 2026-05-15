@@ -75,7 +75,7 @@ export function ScrollLogo() {
         width={220}
         height={72}
         priority
-        className="h-auto w-full drop-shadow-[0_2px_24px_rgba(0,0,0,0.55)]"
+        className="h-auto w-full"
       />
     </div>
   );

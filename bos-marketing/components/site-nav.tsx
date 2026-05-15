@@ -67,7 +67,7 @@ export function SiteNav({ alwaysSolid = false, noLogo = false }: { alwaysSolid?:
         {/* Anchor for scroll-driven logo end position */}
         {noLogo && <span id="nav-logo-target" className="inline-block" aria-hidden />}
         {!noLogo && (
-          <Link href="/" className="flex shrink-0 items-center drop-shadow-[0_1px_12px_rgba(0,0,0,0.5)]">
+          <Link href="/" className="flex shrink-0 items-center">
             <Image
               src="/media/BOSICONLIGHT.png"
               alt="BOS"

@@ -14,7 +14,6 @@ export function HeroVideo() {
     offset: ["start start", "end start"],
   });
 
-  // Subtle Ken-Burns zoom as the hero scrolls away; opacity fades the video out
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.07]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.42]);
 
