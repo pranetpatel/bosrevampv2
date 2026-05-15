@@ -81,6 +81,10 @@ body.custom-cursor-root {
   cursor: none;
 }
 
+body.custom-cursor-root *:not(input):not(textarea):not(select):not([contenteditable]) {
+  cursor: none !important;
+}
+
 body.custom-cursor-root .bos-cursor-dot {
   position: fixed;
   left: 0;
