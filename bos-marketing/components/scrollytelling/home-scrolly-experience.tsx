@@ -1,6 +1,5 @@
 "use client";
 
-import { ChapterNav } from "@/components/chapter-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
 import { ChapterAudienceSection } from "@/components/sections/chapter-audience";
@@ -24,8 +23,7 @@ export function HomeScrollyExperience() {
   return (
     <>
       <SiteNav />
-      <ChapterNav />
-      <main className="relative z-[1] text-[var(--foreground)] md:pr-28">
+      <main className="relative z-[1] text-[var(--foreground)]">
         <HeroSection />
         <HomeMidStrip />
         <ChaosIntroSection />

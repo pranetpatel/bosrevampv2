@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { HeroMicroCards } from "../hero-micro-cards";
 import { HeroVideo } from "../hero-video";
 import { SmartButton } from "../smart-button";
@@ -13,17 +12,6 @@ export function HeroSection() {
       <HeroVideo />
 
       <div className="relative z-[2] flex flex-col items-center justify-center">
-        <div id="hero-logo-anchor" className="mb-8">
-          <Image
-            src="/BOS Branding/FullLogoNoBackground.svg"
-            alt=""
-            aria-hidden
-            width={220}
-            height={72}
-            priority
-            className="mx-auto mb-8 h-10 w-auto max-w-[min(280px,85vw)] md:h-14"
-          />
-        </div>
         <p
           className="animate-fade-up mb-10 inline-flex items-center gap-2.5 font-[family-name:var(--font-sans)] text-[11px] font-bold uppercase tracking-[0.22em] text-violet-200/90"
           style={{ animationDelay: "0.3s" }}

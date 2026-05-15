@@ -68,27 +68,45 @@ const SPONSORS = [
 
 /* ─── Marquee ─────────────────────────────────────────────────────────── */
 
+const ROW_A = SPONSORS.slice(0, 3); // google, microsoft, nvidia  → left
+const ROW_B = SPONSORS.slice(2);    // nvidia, atlassian, aws     → right
+
+function MarqueeRow({
+  items,
+  direction,
+  duration,
+}: {
+  items: typeof SPONSORS;
+  direction: "left" | "right";
+  duration: number;
+}) {
+  const from = direction === "left" ? 0 : "-50%";
+  const to   = direction === "left" ? "-50%" : 0;
+  return (
+    <div className="flex w-max overflow-hidden">
+      <motion.div
+        className="flex items-center"
+        animate={{ x: [from, to] }}
+        transition={{ duration, repeat: Infinity, ease: "linear" }}
+      >
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="flex shrink-0 items-center">
+            {items.map((s) => (
+              <div key={s.key} className="flex w-[280px] shrink-0 items-center justify-center">
+                {s.logo}
+              </div>
+            ))}
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
 export function PartnerProgramMarquee() {
   return (
-    <div className="w-full overflow-hidden border-t border-black/5 bg-white py-12 mt-8">
-      <div className="flex w-max">
-        <motion.div
-          className="flex items-center"
-          animate={{ x: [0, "-50%"] }}
-          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-        >
-          {/* 4 sets → -50% always lands on an identical copy = seamless */}
-          {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="flex shrink-0 items-center">
-              {SPONSORS.map((s) => (
-                <div key={s.key} className="flex w-[280px] shrink-0 items-center justify-center">
-                  {s.logo}
-                </div>
-              ))}
-            </div>
-          ))}
-        </motion.div>
-      </div>
+    <div className="w-full overflow-hidden border-t border-black/5 bg-white py-10 mt-8">
+      <MarqueeRow items={SPONSORS} direction="right" duration={40} />
     </div>
   );
 }
