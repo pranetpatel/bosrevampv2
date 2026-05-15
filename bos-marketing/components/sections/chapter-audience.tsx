@@ -16,6 +16,22 @@ export function ChapterAudienceSection() {
     const track = trackRef.current;
     if (!track) return;
 
+    // Jump to the middle copy so we can scroll in both directions infinitely
+    const initMiddle = () => {
+      track.scrollLeft = track.scrollWidth / 3;
+    };
+    initMiddle();
+
+    // Seamlessly wrap scroll position when approaching either edge
+    function wrapScroll() {
+      const oneSet = track!.scrollWidth / 3;
+      if (track!.scrollLeft < oneSet * 0.15) {
+        track!.scrollLeft += oneSet;
+      } else if (track!.scrollLeft > oneSet * 1.85) {
+        track!.scrollLeft -= oneSet;
+      }
+    }
+
     function onPointerDown(e: PointerEvent) {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       isDragging.current = true;
@@ -33,6 +49,7 @@ export function ChapterAudienceSection() {
       velocity.current = e.clientX - lastX.current;
       lastX.current = e.clientX;
       track!.scrollLeft = scrollLeft.current - dx;
+      wrapScroll();
     }
 
     function onPointerUp() {
@@ -43,6 +60,7 @@ export function ChapterAudienceSection() {
       function momentum() {
         if (Math.abs(v) < 0.5) return;
         track!.scrollLeft += v;
+        wrapScroll();
         v *= 0.92;
         rafRef.current = requestAnimationFrame(momentum);
       }
@@ -93,44 +111,46 @@ export function ChapterAudienceSection() {
         className="relative mt-12 flex cursor-grab select-none gap-4 overflow-x-auto px-6 pb-4 md:px-14"
         style={{ scrollbarWidth: "none" }}
       >
-        {audienceCards.map((c, i) => (
-          <article
-            key={c.tag}
-            data-card-index={i}
-            className={`flex w-[clamp(190px,17vw,240px)] shrink-0 flex-col rounded-xl border p-5 backdrop-blur-md transition duration-300 ${
-              c.featured
-                ? "border-[var(--orchid)]/40 bg-[var(--orchid)]/[0.08] hover:border-[var(--cyan)]/45"
-                : "border-white/10 bg-white/[0.05] hover:border-[var(--orchid)]/30 hover:bg-[var(--orchid)]/[0.08]"
-            }`}
-          >
-            <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--cyan)]">
-              {c.tag}
-            </p>
-            <h3 className="mt-3 font-[family-name:var(--font-display)] text-base font-semibold leading-[1.15] text-white">
-              {c.hed}
-            </h3>
-            <p className="mt-2 font-[family-name:var(--font-sans)] text-[12px] leading-relaxed text-white/50">
-              {c.txt}
-            </p>
-            <div className="mt-auto pt-5 flex items-baseline gap-1.5">
-              <span className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--orchid)]">
-                {c.metricN}
-              </span>
-              <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-white/35">
-                {c.metricL}
-              </span>
-            </div>
-            <div className="mt-2 h-[3px] overflow-hidden rounded-full bg-white/10" aria-hidden>
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)]"
-                style={{ width: `${c.barPct}%` }}
-              />
-            </div>
-            <p className="mt-2 font-[family-name:var(--font-sans)] text-[10px] italic text-white/30">
-              {c.before}
-            </p>
-          </article>
-        ))}
+        {[0, 1, 2].flatMap((copy) =>
+          audienceCards.map((c, i) => (
+            <article
+              key={`${copy}-${i}`}
+              aria-hidden={copy !== 1}
+              className={`flex w-[clamp(190px,17vw,240px)] shrink-0 flex-col rounded-xl border p-5 backdrop-blur-md transition duration-300 ${
+                c.featured
+                  ? "border-[var(--orchid)]/40 bg-[var(--orchid)]/[0.08] hover:border-[var(--cyan)]/45"
+                  : "border-white/10 bg-white/[0.05] hover:border-[var(--orchid)]/30 hover:bg-[var(--orchid)]/[0.08]"
+              }`}
+            >
+              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--cyan)]">
+                {c.tag}
+              </p>
+              <h3 className="mt-3 font-[family-name:var(--font-display)] text-base font-semibold leading-[1.15] text-white">
+                {c.hed}
+              </h3>
+              <p className="mt-2 font-[family-name:var(--font-sans)] text-[12px] leading-relaxed text-white/50">
+                {c.txt}
+              </p>
+              <div className="mt-auto pt-5 flex items-baseline gap-1.5">
+                <span className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--orchid)]">
+                  {c.metricN}
+                </span>
+                <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-white/35">
+                  {c.metricL}
+                </span>
+              </div>
+              <div className="mt-2 h-[3px] overflow-hidden rounded-full bg-white/10" aria-hidden>
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[var(--magenta)] via-[var(--orchid)] to-[var(--cyan)]"
+                  style={{ width: `${c.barPct}%` }}
+                />
+              </div>
+              <p className="mt-2 font-[family-name:var(--font-sans)] text-[10px] italic text-white/30">
+                {c.before}
+              </p>
+            </article>
+          ))
+        )}
       </div>
 
       {/* Trust badges */}

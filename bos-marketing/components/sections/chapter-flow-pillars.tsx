@@ -28,7 +28,7 @@ export function ChapterFlowPillarsSection() {
     <section
       id="flow"
       aria-label="How execution, alignment, and momentum fit together"
-      className="overflow-x-clip overflow-y-visible bg-black px-6 py-12 md:px-14 md:py-20"
+      className="overflow-x-clip overflow-y-visible bg-black px-6 pt-12 pb-0 md:px-14 md:pt-20 md:pb-0"
     >
       <div className="mx-auto max-w-6xl">
         <MotionStagger className="group/pillars grid gap-6 md:grid-cols-3 md:gap-4">

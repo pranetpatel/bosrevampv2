@@ -6,7 +6,7 @@ export function FinalCtaSection() {
   return (
     <section
       id="close"
-      className="chapter-rule-top section-grain relative z-[1] overflow-hidden bg-[var(--surface-dark)] px-6 py-32 md:px-14"
+      className="chapter-rule-top section-grain sticky top-0 z-[2] flex min-h-screen flex-col items-center justify-center relative overflow-hidden bg-[var(--surface-dark)] px-6 md:px-14"
     >
       {/* Centered orchid glow */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(26,83,253,0.12),transparent_60%)]" />

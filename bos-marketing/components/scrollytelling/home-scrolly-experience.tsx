@@ -61,8 +61,11 @@ export function HomeScrollyExperience() {
         {/* Normal flow resumes here */}
         <ChapterFlowPillarsSection />
         <ChapterAudienceSection />
-        <BosMbaSection videoSrc="/video/BOSMBAHERO.mp4" />
-        <FinalCtaSection />
+        {/* Sticky cover-stack: BosMba (9) slides in, FinalCTA (10) covers it */}
+        <div className="relative">
+          <BosMbaSection videoSrc="/video/BOSMBAHERO.mp4" />
+          <FinalCtaSection />
+        </div>
       </main>
       <SiteFooter />
     </>
