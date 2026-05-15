@@ -98,35 +98,84 @@ body.custom-cursor-root .bos-cursor-dot {
   align-items: center;
   justify-content: center;
   transition:
-    width 0.3s var(--ease),
-    height 0.3s var(--ease),
-    margin 0.3s var(--ease),
-    transform 0.15s var(--ease),
-    opacity 0.3s var(--ease),
-    background-color 0.3s var(--ease);
+    width 0.28s var(--ease),
+    height 0.28s var(--ease),
+    margin 0.28s var(--ease),
+    background-color 0.28s var(--ease),
+    border-color 0.28s var(--ease),
+    opacity 0.2s var(--ease),
+    transform 0.12s var(--ease);
   will-change: transform, width, height;
 }
 
-body.custom-cursor-root .bos-cursor-dot.bos-cursor-big {
+/* Hover over interactive elements — large frosted ring */
+body.custom-cursor-root .bos-cursor-dot.bos-cursor-hover {
+  width: 56px;
+  height: 56px;
+  margin-left: -28px;
+  margin-top: -28px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  mix-blend-mode: normal;
+}
+
+/* Hover over links — tinted orchid ring */
+body.custom-cursor-root .bos-cursor-dot.bos-cursor-link {
+  width: 48px;
+  height: 48px;
+  margin-left: -24px;
+  margin-top: -24px;
+  background-color: rgba(26, 83, 253, 0.12);
+  border: 1.5px solid rgba(26, 83, 253, 0.5);
+  mix-blend-mode: normal;
+}
+
+/* Over CTA buttons — orchid fill */
+body.custom-cursor-root .bos-cursor-dot.bos-cursor-cta {
+  width: 60px;
+  height: 60px;
+  margin-left: -30px;
+  margin-top: -30px;
+  background-color: rgba(26, 83, 253, 0.18);
+  border: 1.5px solid rgba(26, 83, 253, 0.65);
+  mix-blend-mode: normal;
+}
+
+/* Over video / media — magenta tint */
+body.custom-cursor-root .bos-cursor-dot.bos-cursor-media {
   width: 64px;
   height: 64px;
   margin-left: -32px;
   margin-top: -32px;
-  background-color: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: rgba(218, 52, 241, 0.12);
+  border: 1.5px solid rgba(218, 52, 241, 0.5);
+  mix-blend-mode: normal;
+}
+
+/* Hidden — over text inputs (restore native text cursor) */
+body.custom-cursor-root .bos-cursor-dot.bos-cursor-hidden {
+  opacity: 0;
+}
+
+body.custom-cursor-root input,
+body.custom-cursor-root textarea,
+body.custom-cursor-root select,
+body.custom-cursor-root [contenteditable] {
+  cursor: text;
 }
 
 .bos-cursor-label {
-  font-family: var(--ui);
-  font-size: 10px;
+  font-family: var(--font-ui), var(--ui), sans-serif;
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: white;
   opacity: 0;
-  transition: opacity 0.2s var(--ease);
+  transition: opacity 0.18s var(--ease);
   pointer-events: none;
   white-space: nowrap;
+  mix-blend-mode: normal;
 }
 
 @keyframes fade-up {

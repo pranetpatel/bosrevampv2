@@ -9,9 +9,10 @@ interface SmartButtonProps {
   children: ReactNode;
   className?: string;
   primary?: boolean;
+  cursorLabel?: string;
 }
 
-export function SmartButton({ href, children, className, primary }: SmartButtonProps) {
+export function SmartButton({ href, children, className, primary, cursorLabel }: SmartButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
   
   const x = useMotionValue(0);
@@ -57,6 +58,7 @@ export function SmartButton({ href, children, className, primary }: SmartButtonP
         <Link
           href={href}
           className={className}
+          {...(cursorLabel ? { "data-cursor": cursorLabel } : {})}
         >
           {children}
         </Link>

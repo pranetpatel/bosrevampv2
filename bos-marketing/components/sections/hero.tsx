@@ -57,12 +57,14 @@ export function HeroSection() {
         >
           <SmartButton
             href="/get-started"
+            cursorLabel="get started"
             className="relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-[var(--orchid)] px-6 py-3.5 font-[family-name:var(--font-ui)] text-sm font-bold tracking-wide text-white shadow-[0_12px_40px_var(--purple-glow)] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--magenta)] sm:px-8 sm:py-4 md:px-10"
           >
             Request Trial Run +
           </SmartButton>
           <SmartButton
             href="/#introduce"
+            cursorLabel="watch"
             className="inline-flex items-center gap-2 rounded-full border border-white/35 px-6 py-3.5 font-[family-name:var(--font-ui)] text-sm font-semibold text-white/90 transition hover:border-white hover:text-white sm:px-8 sm:py-4"
           >
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-xs">

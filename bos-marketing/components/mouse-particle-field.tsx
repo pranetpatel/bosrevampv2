@@ -45,7 +45,7 @@ function sampleOutline(verts: [number, number][], count: number): [number, numbe
 
 const SHAPE_N = 22;   // More particles for a clearer shape
 const SHAPE_PTS = sampleOutline(CURSOR_VERTS, SHAPE_N);
-const IDLE_MS = 60;    // Faster response
+const IDLE_MS = 120;   // Significant delay before forming to feel "heavy"
 const N = 60;          // Slightly more particles overall
 const AVOID_PAD = 28; // px buffer around content elements
 
@@ -201,8 +201,8 @@ export function MouseParticleField() {
           const dy = ty - p.y;
           
           // Graceful, critically damped assembly
-          const strength = 0.006; // Dramatically lower tension for slower movement
-          const friction = 0.88;  // Adjusted damping for a smoother, heavier slide
+          const strength = 0.003; // Extreme low tension for very slow, liquid movement
+          const friction = 0.91;  // High damping for a slow, deliberate slide
           
           p.vx += dx * strength;
           p.vy += dy * strength;
@@ -210,8 +210,8 @@ export function MouseParticleField() {
           // Subtle organic "itching" when settled
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 4) {
-            p.vx += (Math.random() - 0.5) * 0.08;
-            p.vy += (Math.random() - 0.5) * 0.08;
+            p.vx += (Math.random() - 0.5) * 0.04; // Even less "itch"
+            p.vy += (Math.random() - 0.5) * 0.04;
             p.vx *= 0.5;
             p.vy *= 0.5;
           }
@@ -226,14 +226,14 @@ export function MouseParticleField() {
             const dy = my - p.y;
             const d2 = dx * dx + dy * dy;
             if (d2 < 300 * 300) {
-              const pull = (1 - Math.sqrt(d2) / 300) * 0.001;
+              const pull = (1 - Math.sqrt(d2) / 300) * 0.0005; // Halved pull
               p.vx += dx * pull;
               p.vy += dy * pull;
             }
           }
           // Sinusoidal drift
-          p.vx += Math.sin(t * p.freq + p.phase) * 0.0008;
-          p.vy += Math.cos(t * p.freq * 1.3 + p.phase) * 0.0008;
+          p.vx += Math.sin(t * p.freq + p.phase) * 0.0005; // Slower drift
+          p.vy += Math.cos(t * p.freq * 1.3 + p.phase) * 0.0005;
 
           // Repel from content element rects
           for (const rect of rects) {
