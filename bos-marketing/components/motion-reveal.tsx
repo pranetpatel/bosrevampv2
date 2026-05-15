@@ -81,10 +81,11 @@ export function MotionStaggerItem({
     <motion.div
       className={className}
       variants={{
-        hidden: { opacity: 0, y: 18 },
+        hidden: { opacity: 0, y: 18, scale: 0.95 },
         show: {
           opacity: 1,
           y: 0,
+          scale: 1,
           transition: { duration: 0.52, ease: EASE },
         },
       }}

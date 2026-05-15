@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import { MotionReveal, MotionStagger, MotionStaggerItem } from "@/components/motion-reveal";
+import { motion } from "framer-motion";
 
 const chaosStats = [
   {
@@ -24,6 +26,23 @@ const chaosStats = [
   },
 ] as const;
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 },
+  },
+};
+
+const statVariants = {
+  hidden: { opacity: 0, scale: 0.88, y: 18 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+  },
+};
+
 export function ChaosIntroSection() {
   return (
     <section id="chaos" className="relative z-[1] bg-white">
@@ -44,37 +63,42 @@ export function ChaosIntroSection() {
                 <div
                   className="pointer-events-none absolute inset-0 z-[1]"
                   style={{
-                    background: `
-                      linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.32) 24%, rgba(0,0,0,0.08) 44%, rgba(0,0,0,0) 60%),
-                      linear-gradient(to right, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0.06) 40%, rgba(0,0,0,0) 70%)
-                    `,
+                    background: `linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 40%)`,
                   }}
                 />
 
                 <div className="absolute inset-0 z-[2] flex min-h-[min(64vh,680px)] flex-col justify-end items-start px-6 pb-10 text-left sm:px-10 sm:pb-12 md:px-12 md:pb-14 lg:px-14 lg:pb-16">
                   <div className="w-full max-w-[min(520px,90vw)]">
-                    <MotionReveal>
-                      <h2
-                        className="font-[family-name:var(--font-display)] font-extrabold leading-[1.02] tracking-[-0.03em] text-[#d4a853]"
-                        style={{
-                          fontSize: "clamp(1.65rem, 3.6vw, 3rem)",
-                          textShadow:
-                            "0 0 24px rgba(212,168,83,0.4), 0 2px 8px rgba(0,0,0,0.8), 0 4px 18px rgba(0,0,0,0.55)",
-                        }}
-                      >
-                        How you currently
-                        <br />
-                        start your day.
-                      </h2>
-                    </MotionReveal>
+                    <motion.h2
+                      initial={{ opacity: 0, y: 16 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-80px" }}
+                      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                      className="font-[family-name:var(--font-display)] font-extrabold leading-[1.02] tracking-[-0.03em] text-[#d4a853]"
+                      style={{
+                        fontSize: "clamp(1.65rem, 3.6vw, 3rem)",
+                        textShadow:
+                          "0 0 24px rgba(212,168,83,0.4), 0 2px 8px rgba(0,0,0,0.8), 0 4px 18px rgba(0,0,0,0.55)",
+                      }}
+                    >
+                      How you currently
+                      <br />
+                      start your day.
+                    </motion.h2>
                   </div>
                 </div>
               </div>
             </div>
 
-            <MotionStagger className="grid grid-cols-1 overflow-hidden rounded-b-2xl border-t border-black/[0.07] bg-white md:grid-cols-2 lg:grid-cols-4">
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              className="grid grid-cols-1 overflow-hidden rounded-b-2xl border-t border-black/[0.07] bg-white md:grid-cols-2 lg:grid-cols-4"
+            >
               {chaosStats.map((s) => (
-                <MotionStaggerItem key={s.label}>
+                <motion.div key={s.label} variants={statVariants}>
                   <div className="border-b border-black/[0.07] bg-white px-8 py-10 transition-colors hover:bg-neutral-50 md:border-b-0 md:border-r md:border-black/[0.07] md:last:border-r-0 lg:border-b-0">
                     <p className="font-[family-name:var(--font-display)] text-[clamp(2.5rem,5vw,3.5rem)] font-extrabold leading-none tracking-[-0.01em] text-neutral-900">
                       {s.n}
@@ -86,16 +110,14 @@ export function ChaosIntroSection() {
                       {s.desc}
                     </p>
                   </div>
-                </MotionStaggerItem>
+                </motion.div>
               ))}
-            </MotionStagger>
+            </motion.div>
           </div>
         </div>
 
-        <div
-          className="section-feather-light-to-dark pointer-events-none mt-0 h-[clamp(11rem,42vh,26rem)] w-full"
-          aria-hidden
-        />
+        {/* Clean 40px white buffer — dark chapter stack slides over from here */}
+        <div className="h-10 bg-white" aria-hidden />
       </div>
     </section>
   );

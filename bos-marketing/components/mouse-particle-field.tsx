@@ -43,10 +43,10 @@ function sampleOutline(verts: [number, number][], count: number): [number, numbe
   return pts;
 }
 
-const SHAPE_N = 7;   // only a few particles snap into cursor shape
+const SHAPE_N = 22;   // More particles for a clearer shape
 const SHAPE_PTS = sampleOutline(CURSOR_VERTS, SHAPE_N);
-const IDLE_MS = 1400;
-const N = 45;
+const IDLE_MS = 60;    // Faster response
+const N = 60;          // Slightly more particles overall
 const AVOID_PAD = 28; // px buffer around content elements
 
 // Selectors for elements particles should avoid
@@ -59,13 +59,17 @@ interface Particle {
   r: number; alpha: number;
   phase: number; freq: number;
   tx: number | null; ty: number | null;
+  shapeIdx: number | null;
 }
 
 export function MouseParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -9999, y: -9999 });
+  const mouseVel = useRef({ x: 0, y: 0 });
+  const lastMouse = useRef({ x: 0, y: 0 });
   const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const forming = useRef(false);
+  const shapeScale = useRef(1); // 1 = tight cursor, 4+ = dispersed
   const rectsRef = useRef<Rect[]>([]);
   const reduced = usePrefersReducedMotion();
 
@@ -122,23 +126,34 @@ export function MouseParticleField() {
       freq: 0.0003 + Math.random() * 0.0008,
       tx: null,
       ty: null,
+      shapeIdx: null,
     }));
 
     const clearTargets = () => {
-      for (const p of particles) { p.tx = null; p.ty = null; }
+      for (const p of particles) { 
+        if (p.shapeIdx !== null) {
+          // Give them a very gentle "disperse" kick
+          p.vx += (Math.random() - 0.5) * 0.4;
+          p.vy += (Math.random() - 0.5) * 0.4;
+        }
+        p.tx = null; p.ty = null; p.shapeIdx = null; 
+      }
       forming.current = false;
     };
 
     const assignShape = () => {
       const { x: mx, y: my } = mouseRef.current;
-      if (mx < 0) return;
+      if (mx < -1000) return;
+      
       const byDist = [...particles].sort((a, b) =>
         (a.x - mx) ** 2 + (a.y - my) ** 2 - ((b.x - mx) ** 2 + (b.y - my) ** 2)
       );
-      for (const p of particles) { p.tx = null; p.ty = null; }
+      
+      for (const p of particles) { p.tx = null; p.ty = null; p.shapeIdx = null; }
       for (let i = 0; i < SHAPE_N; i++) {
-        byDist[i].tx = mx + SHAPE_PTS[i][0];
-        byDist[i].ty = my + SHAPE_PTS[i][1];
+        byDist[i].tx = mx; 
+        byDist[i].ty = my;
+        byDist[i].shapeIdx = i;
       }
       forming.current = true;
     };
@@ -172,15 +187,50 @@ export function MouseParticleField() {
         }
       }
 
-      for (const p of particles) {
-        if (p.tx !== null && p.ty !== null) {
-          const dx = p.tx - p.x;
-          const dy = p.ty - p.y;
-          p.vx += dx * 0.012;
-          p.vy += dy * 0.012;
-          p.vx *= 0.91;
-          p.vy *= 0.91;
+      const isMoving = Math.abs(mouseVel.current.x) + Math.abs(mouseVel.current.y) > 0.8;
+      const { x: mx, y: my } = mouseRef.current;
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        if (p.tx !== null && p.ty !== null && p.shapeIdx !== null) {
+          // Stationary assembly targets
+          const tx = mx + SHAPE_PTS[p.shapeIdx][0];
+          const ty = my + SHAPE_PTS[p.shapeIdx][1];
+
+          const dx = tx - p.x;
+          const dy = ty - p.y;
+          
+          // Graceful, critically damped assembly
+          const strength = 0.006; // Dramatically lower tension for slower movement
+          const friction = 0.88;  // Adjusted damping for a smoother, heavier slide
+          
+          p.vx += dx * strength;
+          p.vy += dy * strength;
+          
+          // Subtle organic "itching" when settled
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 4) {
+            p.vx += (Math.random() - 0.5) * 0.08;
+            p.vy += (Math.random() - 0.5) * 0.08;
+            p.vx *= 0.5;
+            p.vy *= 0.5;
+          }
+
+          p.vx *= friction;
+          p.vy *= friction;
         } else {
+          // Normal background behavior (disperse state)
+          // Normal drifting particles also feel a slight pull to the mouse
+          if (mx > 0) {
+            const dx = mx - p.x;
+            const dy = my - p.y;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < 300 * 300) {
+              const pull = (1 - Math.sqrt(d2) / 300) * 0.001;
+              p.vx += dx * pull;
+              p.vy += dy * pull;
+            }
+          }
           // Sinusoidal drift
           p.vx += Math.sin(t * p.freq + p.phase) * 0.0008;
           p.vy += Math.cos(t * p.freq * 1.3 + p.phase) * 0.0008;
@@ -230,11 +280,37 @@ export function MouseParticleField() {
       raf = requestAnimationFrame(draw);
     };
 
+    let lastScrollY = window.scrollY;
+    const onScroll = () => {
+      const delta = window.scrollY - lastScrollY;
+      lastScrollY = window.scrollY;
+      const nudge = delta * 0.018;
+      for (const p of particles) {
+        p.vy -= nudge; // parallax: particles drift opposite to scroll
+      }
+    };
+
     const onMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-      if (forming.current) clearTargets();
+      const nx = e.clientX;
+      const ny = e.clientY;
+      
+      mouseVel.current = { 
+        x: nx - lastMouse.current.x, 
+        y: ny - lastMouse.current.y 
+      };
+      lastMouse.current = { x: nx, y: ny };
+      mouseRef.current = { x: nx, y: ny };
+
+      // Disperse the formation as soon as movement starts
+      if (forming.current) {
+        clearTargets();
+      }
+
       if (idleTimer.current) clearTimeout(idleTimer.current);
-      idleTimer.current = setTimeout(assignShape, IDLE_MS);
+      idleTimer.current = setTimeout(() => {
+        mouseVel.current = { x: 0, y: 0 };
+        assignShape(); 
+      }, IDLE_MS);
     };
     const onLeave = () => {
       mouseRef.current = { x: -9999, y: -9999 };
@@ -245,6 +321,7 @@ export function MouseParticleField() {
     window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("mouseleave", onLeave);
     window.addEventListener("resize", resize, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     raf = requestAnimationFrame(draw);
 
     return () => {
@@ -255,6 +332,7 @@ export function MouseParticleField() {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseleave", onLeave);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", onScroll);
     };
   }, [reduced]);
 

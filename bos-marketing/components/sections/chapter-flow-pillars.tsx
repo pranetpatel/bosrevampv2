@@ -26,8 +26,9 @@ const card =
 export function ChapterFlowPillarsSection() {
   return (
     <section
+      id="flow"
       aria-label="How execution, alignment, and momentum fit together"
-      className="relative z-[1] overflow-x-clip overflow-y-visible bg-black px-6 py-20 md:px-14 md:py-24"
+      className="min-h-screen overflow-x-clip overflow-y-visible bg-black px-6 py-20 md:px-14 md:py-24"
     >
       <div className="mx-auto max-w-6xl">
         <MotionStagger className="group/pillars grid gap-6 md:grid-cols-3 md:gap-4">

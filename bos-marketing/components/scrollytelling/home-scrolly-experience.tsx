@@ -18,9 +18,9 @@ import { HeroSection } from "@/components/sections/hero";
 import { HomeMidStrip } from "@/components/sections/home-mid-strip";
 
 /**
- * Homepage scroll is primarily vertical: chapters stack in document order.
- * The audience chapter (`ChapterAudienceSection`) is the lone exception — it pins
- * itself and translates vertical scroll into horizontal pan of its card track.
+ * Homepage scroll experience.
+ * Chapters 1–4 (Tension → System) form a sticky card deck.
+ * FlowPillars, Audience, and beyond resume normal flow.
  */
 export function HomeScrollyExperience() {
   return (
@@ -33,10 +33,32 @@ export function HomeScrollyExperience() {
         <HeroSection />
         <HomeMidStrip />
         <ChaosIntroSection />
-        <ChapterTensionSection />
-        <ChapterManifestoSection />
-        <ChapterIntroduceSection />
-        <ChapterSystemSection />
+
+        {/* Sticky stacked chapter deck — Tension through System */}
+        <div className="relative" data-chapter-stack>
+          <div className="sticky top-0 z-[10]" data-chapter-stack-item="tension">
+            <div className="sticky-chapter-card">
+              <ChapterTensionSection />
+            </div>
+          </div>
+          <div className="sticky top-0 z-[11]" data-chapter-stack-item="manifesto">
+            <div className="sticky-chapter-card">
+              <ChapterManifestoSection />
+            </div>
+          </div>
+          <div className="sticky top-0 z-[12]" data-chapter-stack-item="introduce">
+            <div className="sticky-chapter-card">
+              <ChapterIntroduceSection />
+            </div>
+          </div>
+          <div className="sticky top-0 z-[13]" data-chapter-stack-item="system">
+            <div className="sticky-chapter-card">
+              <ChapterSystemSection />
+            </div>
+          </div>
+        </div>
+
+        {/* Normal flow resumes here */}
         <ChapterFlowPillarsSection />
         <ChapterAudienceSection />
         <BosMbaSection videoSrc="/video/BOSMBAHERO.mp4" />

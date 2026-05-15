@@ -87,7 +87,7 @@ export function BosMbaSection({ videoSrc }: BosMbaSectionProps) {
     <section
       ref={sectionRef}
       id="bos-mba"
-      className="chapter-rule-top relative flex min-h-screen flex-col overflow-hidden"
+      className="chapter-rule-top sticky top-0 z-[1] flex min-h-screen flex-col overflow-hidden"
     >
       {/* Video background */}
       {videoSrc ? (

@@ -29,7 +29,7 @@ export function ChapterTensionSection() {
   return (
     <section
       id="tension"
-      className="chapter-rule-top section-grain relative z-[1] -mt-px flex min-h-0 flex-1 flex-col bg-[var(--surface-dark)] px-6 pb-12 pt-[calc(2rem+1px)] md:px-14 md:pb-16 md:pt-[calc(2.5rem+1px)]"
+      className="chapter-rule-top section-grain sticky top-0 z-[1] flex min-h-screen flex-col bg-[var(--surface-dark)] px-6 pb-12 pt-[calc(2rem+1px)] md:px-14 md:pb-16 md:pt-[calc(2.5rem+1px)]"
     >
       <div className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col space-y-10 md:space-y-12">
         <MotionReveal>

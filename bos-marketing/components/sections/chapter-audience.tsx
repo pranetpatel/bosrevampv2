@@ -89,6 +89,7 @@ export function ChapterAudienceSection() {
       {/* Horizontally draggable card track */}
       <div
         ref={trackRef}
+        data-cursor="drag"
         className="relative mt-12 flex cursor-grab select-none gap-4 overflow-x-auto px-6 pb-4 md:px-14"
         style={{ scrollbarWidth: "none" }}
       >

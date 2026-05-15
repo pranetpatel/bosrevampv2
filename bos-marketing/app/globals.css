@@ -94,17 +94,39 @@ body.custom-cursor-root .bos-cursor-dot {
   z-index: 9999;
   mix-blend-mode: difference;
   background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition:
-    width 0.35s var(--ease),
-    height 0.35s var(--ease),
-    margin 0.35s var(--ease);
+    width 0.3s var(--ease),
+    height 0.3s var(--ease),
+    margin 0.3s var(--ease),
+    transform 0.15s var(--ease),
+    opacity 0.3s var(--ease),
+    background-color 0.3s var(--ease);
+  will-change: transform, width, height;
 }
 
 body.custom-cursor-root .bos-cursor-dot.bos-cursor-big {
-  width: 52px;
-  height: 52px;
-  margin-left: -26px;
-  margin-top: -26px;
+  width: 64px;
+  height: 64px;
+  margin-left: -32px;
+  margin-top: -32px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.bos-cursor-label {
+  font-family: var(--ui);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 @keyframes fade-up {
@@ -153,34 +175,13 @@ body.custom-cursor-root .bos-cursor-dot.bos-cursor-big {
   pointer-events: none;
 }
 
-/**
- * Long vertical ramps — hero → white mid / chaos; ends on `--surface-dark`.
- */
-.section-feather-hero-to-light {
-  background: linear-gradient(
-    to bottom,
-    rgb(10 10 10 / 0) 0%,
-    rgb(10 10 10 / 0) 20%,
-    rgb(255 255 255 / 0.05) 40%,
-    rgb(255 255 255 / 0.2) 56%,
-    rgb(255 255 255 / 0.62) 78%,
-    rgb(255 255 255 / 0.97) 94%,
-    #ffffff 100%
-  );
-}
 
-.section-feather-light-to-dark {
-  background: linear-gradient(
-    to bottom,
-    #ffffff 0%,
-    #f7f7f5 12%,
-    #e4e4e1 28%,
-    #b9b9b4 44%,
-    #6f6f6b 60%,
-    #2a2a28 76%,
-    #121211 90%,
-    #0a0a0a 100%
-  );
+/* Chapter card face: rounded top + depth shadow for the stacked deck look */
+.sticky-chapter-card {
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  box-shadow: 0 -8px 48px rgba(0, 0, 0, 0.55);
+  will-change: transform;
 }
 
 .audience-scroll {

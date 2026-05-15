@@ -16,7 +16,7 @@ export function ChapterSystemSection() {
   return (
     <section
       id="system"
-      className="chapter-rule-top section-grain relative z-[1] border-t border-white/8 bg-[var(--surface-dark)] px-6 py-28 md:px-14"
+      className="chapter-rule-top section-grain sticky top-0 z-[1] min-h-screen border-t border-white/8 bg-[var(--surface-dark)] px-6 py-28 md:px-14"
     >
       <div className="mx-auto max-w-6xl space-y-14">
         <MotionReveal>

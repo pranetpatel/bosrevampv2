@@ -57,7 +57,7 @@ export function ChapterManifestoSection() {
   return (
     <section
       id="manifesto"
-      className="chapter-rule-top section-grain relative z-[1] bg-[var(--surface-raised)] px-6 py-28 md:px-14"
+      className="chapter-rule-top section-grain sticky top-0 z-[1] min-h-screen bg-[var(--surface-raised)] px-6 py-28 md:px-14"
     >
       <div className="mx-auto grid max-w-6xl gap-16 lg:grid-cols-2 lg:gap-24 lg:items-start">
         <MotionReveal className="lg:sticky lg:top-28">

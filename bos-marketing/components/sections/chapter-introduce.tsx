@@ -4,7 +4,7 @@ import { MotionReveal } from "@/components/motion-reveal";
 
 export function ChapterIntroduceSection() {
   return (
-    <section id="introduce" className="relative z-[1] overflow-hidden bg-[var(--surface-dark)] px-6 py-20 md:px-14 md:py-28">
+    <section id="introduce" className="min-h-screen overflow-hidden bg-[var(--surface-dark)] px-6 py-20 md:px-14 md:py-28">
       {/* Section Background Image */}
       <div className="pointer-events-none absolute inset-0 z-[-1]">
         <Image
@@ -39,7 +39,7 @@ export function ChapterIntroduceSection() {
 
         {/* Replaced with new banner image as requested */}
         <MotionReveal delay={0.14} className="relative mt-14 overflow-hidden rounded-2xl border border-white/10">
-          <Link href="/get-started" className="block cursor-pointer transition-transform duration-300 hover:scale-[1.01]">
+          <Link href="/get-started" data-cursor="get access" className="block cursor-pointer transition-transform duration-300 hover:scale-[1.01]">
             <Image
               src="/media/BOSChatxbanner.png"
               alt="Request a Trial"
