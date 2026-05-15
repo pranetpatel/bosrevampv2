@@ -40,22 +40,22 @@ export function SiteFooter() {
             <Link href="/mba" className="text-white/60 hover:text-white">
               BOS MBA
             </Link>
-            <Link href="/" className="text-white/60 hover:text-white">
+            <Link href="/community/resources" className="text-white/60 hover:text-white">
               Resources
             </Link>
           </div>
           <div className="flex flex-col gap-2 text-sm">
             <span className="font-semibold text-white">Company</span>
-            <Link href="/" className="text-white/60 hover:text-white">
+            <Link href="/manifesto" className="text-white/60 hover:text-white">
               Manifesto
             </Link>
-            <Link href="/" className="text-white/60 hover:text-white">
+            <Link href="/story" className="text-white/60 hover:text-white">
               Story
             </Link>
-            <Link href="/" className="text-white/60 hover:text-white">
+            <Link href="/investors" className="text-white/60 hover:text-white">
               Investors
             </Link>
-            <Link href="/" className="text-white/60 hover:text-white">
+            <Link href="/partners" className="text-white/60 hover:text-white">
               Partners
             </Link>
           </div>
@@ -64,13 +64,13 @@ export function SiteFooter() {
             <Link href="/projects" className="text-white/60 hover:text-white">
               Projects
             </Link>
-            <Link href="/" className="text-white/60 hover:text-white">
+            <Link href="/compare" className="text-white/60 hover:text-white">
               Compare
             </Link>
-            <Link href="/" className="text-white/60 hover:text-white">
+            <Link href="/technology" className="text-white/60 hover:text-white">
               Technology
             </Link>
-            <Link href="/" className="text-white/60 hover:text-white">
+            <Link href="/industry" className="text-white/60 hover:text-white">
               Industry
             </Link>
           </div>

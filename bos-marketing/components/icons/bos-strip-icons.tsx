@@ -1,6 +1,23 @@
 import type { ComponentType, SVGProps } from "react";
 
 import {
+  LegacyIconVibeDesign,
+  LegacyIconCommunicate,
+  LegacyIconBrainstorm,
+  LegacyIconResearch,
+  LegacyIconBuild,
+  LegacyIconAiAgents,
+  LegacyIconAvatars,
+  LegacyIconAnalytics,
+  LegacyIconIntegrations,
+  LegacyIconWorkflows,
+  LegacyIconPeople,
+  LegacyIconCompliance,
+  LegacyIconAutomation,
+  LegacyIconGoals,
+} from "@/components/icons/legacy-capability-icons";
+
+import {
   BrandBosChat,
   BrandConnectorAgent,
   BrandConnectorBridge,
@@ -519,34 +536,22 @@ export const stripIconsHomeConnectorTicker: StripIconEntry[] = [
   stripIconsBosApps[0]!,
 ];
 
-/** Homepage capability strip — copy matches marketing checklist. */
+/** Homepage capability strip — legacy-exact icon designs. */
 export const stripIconsHomeCapabilityMarquee: StripIconEntry[] = [
-  { key: "vibe-design", label: "Vibe design", word: "Vibe Design", accent: "magenta", Icon: IconSmiley },
-  { key: "communicate", label: "Communicate", word: "Communicate", accent: "cyan", Icon: IconChat },
-  { key: "brainstorm", label: "Brainstorm", word: "Brainstorm", accent: "hot", Icon: IconLightbulb },
-  { key: "research", label: "Research", word: "Research", accent: "orchid", Icon: IconSearch },
-  { key: "build", label: "Build", word: "Build", accent: "orchid", Icon: IconProjects },
-  { key: "ai-agents", label: "AI agents", word: "AI Agents", accent: "magenta", Icon: IconAgents },
-  { key: "avatars", label: "Avatars", word: "Avatars", accent: "cyan", Icon: IconUser },
-  { key: "analytics", label: "Analytics", word: "Analytics", accent: "orchid", Icon: IconAnalytics },
-  {
-    key: "integrations",
-    label: "Integrations",
-    word: "Integrations",
-    accent: "orchid",
-    Icon: IconIntegrations,
-  },
-  { key: "workflows", label: "Workflows", word: "Workflows", accent: "cyan", Icon: IconWorkflow },
-  { key: "people", label: "People", word: "People", accent: "magenta", Icon: IconUsers },
-  { key: "compliance", label: "Compliance", word: "Compliance", accent: "hot", Icon: IconShield },
-  {
-    key: "automation",
-    label: "Automation",
-    word: "Automation",
-    accent: "orchid",
-    Icon: IconAutomations,
-  },
-  { key: "goals", label: "Goals", word: "Goals", accent: "cyan", Icon: IconTarget },
+  { key: "vibe-design", label: "Vibe design", word: "Vibe Design", accent: "magenta", Icon: LegacyIconVibeDesign },
+  { key: "communicate", label: "Communicate", word: "Communicate", accent: "cyan", Icon: LegacyIconCommunicate },
+  { key: "brainstorm", label: "Brainstorm", word: "Brainstorm", accent: "hot", Icon: LegacyIconBrainstorm },
+  { key: "research", label: "Research", word: "Research", accent: "orchid", Icon: LegacyIconResearch },
+  { key: "build", label: "Build", word: "Build", accent: "orchid", Icon: LegacyIconBuild },
+  { key: "ai-agents", label: "AI agents", word: "AI Agents", accent: "magenta", Icon: LegacyIconAiAgents },
+  { key: "avatars", label: "Avatars", word: "Avatars", accent: "cyan", Icon: LegacyIconAvatars },
+  { key: "analytics", label: "Analytics", word: "Analytics", accent: "orchid", Icon: LegacyIconAnalytics },
+  { key: "integrations", label: "Integrations", word: "Integrations", accent: "orchid", Icon: LegacyIconIntegrations },
+  { key: "workflows", label: "Workflows", word: "Workflows", accent: "cyan", Icon: LegacyIconWorkflows },
+  { key: "people", label: "People", word: "People", accent: "magenta", Icon: LegacyIconPeople },
+  { key: "compliance", label: "Compliance", word: "Compliance", accent: "hot", Icon: LegacyIconCompliance },
+  { key: "automation", label: "Automation", word: "Automation", accent: "orchid", Icon: LegacyIconAutomation },
+  { key: "goals", label: "Goals", word: "Goals", accent: "cyan", Icon: LegacyIconGoals },
 ];
 
 /** One scrolling row after Welcome: product surfaces + work tools + connectors. */

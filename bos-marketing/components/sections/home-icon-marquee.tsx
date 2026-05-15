@@ -6,22 +6,22 @@ import {
 } from "@/components/icons/bos-strip-icons";
 import { usePrefersReducedMotion } from "@/components/use-prefers-reduced-motion";
 
-/** Tile fills — vivid squircles on white (same rhythm as earlier mockup). */
+/** Tile fills — gradient backgrounds matching legacy icon strip. */
 const TILE_BG_BY_KEY: Record<string, string> = {
-  "vibe-design": "#7C3AED",
-  communicate: "#16A34A",
-  brainstorm: "#CA8A04",
-  research: "#2563EB",
-  build: "#3F3F46",
-  "ai-agents": "#2563EB",
-  avatars: "#DB2777",
-  analytics: "#0D9488",
-  integrations: "#EA580C",
-  workflows: "#65A30D",
-  people: "#0EA5E9",
-  compliance: "#22C55E",
-  automation: "#EAB308",
-  goals: "#DC2626",
+  "vibe-design": "linear-gradient(160deg, #A78BFA 0%, #7C3AED 100%)",
+  communicate: "linear-gradient(160deg, #34D399 0%, #059669 100%)",
+  brainstorm: "linear-gradient(160deg, #F59E0B 0%, #D97706 100%)",
+  research: "linear-gradient(160deg, #60A5FA 0%, #2563EB 100%)",
+  build: "linear-gradient(160deg, #6B7280 0%, #374151 100%)",
+  "ai-agents": "linear-gradient(160deg, #818CF8 0%, #4F46E5 100%)",
+  avatars: "linear-gradient(160deg, #F472B6 0%, #DB2777 100%)",
+  analytics: "linear-gradient(160deg, #2DD4BF 0%, #0D9488 100%)",
+  integrations: "linear-gradient(160deg, #FB923C 0%, #EA580C 100%)",
+  workflows: "linear-gradient(160deg, #A3E635 0%, #65A30D 100%)",
+  people: "linear-gradient(160deg, #38BDF8 0%, #0284C7 100%)",
+  compliance: "linear-gradient(160deg, #C084FC 0%, #9333EA 100%)",
+  automation: "linear-gradient(160deg, #6EE7B7 0%, #047857 100%)",
+  goals: "linear-gradient(160deg, #FCD34D 0%, #F59E0B 100%)",
 };
 
 function tileBg(entry: StripIconEntry) {
@@ -42,7 +42,7 @@ function MarqueeIconItem({
     <div className="flex w-[5.25rem] shrink-0 flex-col items-center gap-2 text-center md:w-[6rem]">
       <div
         className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-[0_4px_14px_rgba(0,0,0,0.1)] md:h-14 md:w-14"
-        style={{ backgroundColor: tileBg(entry) }}
+        style={{ background: tileBg(entry) }}
         {...(showTitle ? { title: entry.label } : {})}
       >
         {useBrand ? (

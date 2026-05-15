@@ -5,12 +5,23 @@ import Link from "next/link";
 import { useLenis } from "lenis/react";
 import { useCallback, useEffect, useState } from "react";
 
-const links = [
+type NavLink = {
+  href: string;
+  label: string;
+  subLinks?: { href: string; label: string }[];
+};
+
+const links: NavLink[] = [
   { href: "/product", label: "Product" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/mba", label: "MBA" },
   { href: "/pricing", label: "Pricing" },
-] as const;
+  {
+    href: "/community",
+    label: "Community",
+    subLinks: [{ href: "/community/resources", label: "Resources" }],
+  },
+];
 
 /**
  * Home: glass bar appears after scrolling past hero. Inner pages: use alwaysSolid.
@@ -111,13 +122,27 @@ export function SiteNav({ alwaysSolid = false, noLogo = false }: { alwaysSolid?:
           </button>
         )}
         {links.map((l) => (
-          <Link
-            key={l.label}
-            href={l.href}
-            className="pointer-events-auto font-[family-name:var(--font-ui)] text-[11px] font-semibold uppercase tracking-[0.14em] text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] md:text-[12px]"
-          >
-            {l.label}
-          </Link>
+          <div key={l.label} className="group relative pointer-events-auto">
+            <Link
+              href={l.href}
+              className="font-[family-name:var(--font-ui)] text-[11px] font-semibold uppercase tracking-[0.14em] text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)] transition-colors hover:text-[var(--cyan)] md:text-[12px] inline-block py-2"
+            >
+              {l.label}
+            </Link>
+            {l.subLinks && (
+              <div className="absolute left-1/2 top-[calc(100%-8px)] hidden -translate-x-1/2 flex-col gap-2 rounded-lg border border-white/10 bg-[var(--surface-dark)]/95 p-3 shadow-xl backdrop-blur-md group-hover:flex">
+                {l.subLinks.map((sub) => (
+                  <Link
+                    key={sub.label}
+                    href={sub.href}
+                    className="whitespace-nowrap font-[family-name:var(--font-ui)] text-[11px] font-semibold uppercase tracking-[0.1em] text-white/80 transition-colors hover:text-[var(--cyan)]"
+                  >
+                    {sub.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         ))}
       </nav>
 
@@ -166,14 +191,29 @@ export function SiteNav({ alwaysSolid = false, noLogo = false }: { alwaysSolid?:
               Home
             </Link>
             {links.map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                className="rounded-md px-3 py-3 font-[family-name:var(--font-ui)] text-sm font-semibold uppercase tracking-[0.12em] text-white/90 hover:bg-white/[0.06] hover:text-[var(--cyan)]"
-                onClick={() => setMenuOpen(false)}
-              >
-                {l.label}
-              </Link>
+              <div key={l.label} className="flex flex-col">
+                <Link
+                  href={l.href}
+                  className="rounded-md px-3 py-3 font-[family-name:var(--font-ui)] text-sm font-semibold uppercase tracking-[0.12em] text-white/90 hover:bg-white/[0.06] hover:text-[var(--cyan)]"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {l.label}
+                </Link>
+                {l.subLinks && (
+                  <div className="ml-4 flex flex-col border-l border-white/10 pl-2">
+                    {l.subLinks.map((sub) => (
+                      <Link
+                        key={sub.label}
+                        href={sub.href}
+                        className="rounded-md px-3 py-2 font-[family-name:var(--font-ui)] text-[12px] font-semibold uppercase tracking-[0.1em] text-white/60 hover:text-[var(--cyan)]"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {sub.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
             <Link
               href="/get-started"
