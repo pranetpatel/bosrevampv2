@@ -57,7 +57,7 @@ export function AsteroidOrb({
       const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
       camera.position.z = 2.8;
 
-      // Rough asteroid geometry — IcosahedronGeometry detail=2 keeps visible facets
+      // Rough asteroid geometry  -  IcosahedronGeometry detail=2 keeps visible facets
       const geo = new THREE.IcosahedronGeometry(1, 2);
       const pos = geo.attributes.position as import("three").BufferAttribute;
       for (let i = 0; i < pos.count; i++) {
@@ -131,7 +131,7 @@ export function AsteroidOrb({
         // Lerp material colors based on energyLevel + silver mode
         const e = Math.max(0, Math.min(1, energyRef.current));
         if (silverRef.current) {
-          // Gray body, near-white lines — dark slate → medium gray
+          // Gray body, near-white lines  -  dark slate → medium gray
           mat.color.setRGB(lerpN(0x14 / 255, 0x70 / 255, e), lerpN(0x14 / 255, 0x72 / 255, e), lerpN(0x1c / 255, 0x7e / 255, e));
           mat.emissive.setRGB(lerpN(0x20 / 255, 0x50 / 255, e), lerpN(0x20 / 255, 0x50 / 255, e), lerpN(0x28 / 255, 0x60 / 255, e));
           mat.emissiveIntensity = lerpN(0.5, 0.9, e);

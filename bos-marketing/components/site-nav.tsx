@@ -91,7 +91,7 @@ export function SiteNav({ alwaysSolid = false, noLogo = false }: { alwaysSolid?:
         )}
       </div>
 
-      {/* Center: nav links — absolutely centered across full header width */}
+      {/* Center: nav links  -  absolutely centered across full header width */}
       <nav
         className="pointer-events-none absolute inset-x-0 hidden items-center justify-center gap-10 md:flex"
         aria-label="Main"

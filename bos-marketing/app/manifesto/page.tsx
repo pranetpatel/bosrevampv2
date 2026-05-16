@@ -102,7 +102,7 @@ export default function ManifestoPage() {
               Everyone is pitching power. We’re backing the people who never had it.
             </h2>
             <p>
-              For years, software was sold as leverage. In reality, it became dependency. The more tools you added, the more control you lost. The more you scaled, the more you paid.
+              For years, software was sold as use. In reality, it became dependency. The more tools you added, the more control you lost. The more you scaled, the more you paid.
             </p>
             <p>
               And somehow, the smallest teams carried the heaviest burden.

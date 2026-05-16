@@ -8,8 +8,8 @@ type ChapterMediaPanelProps = {
   className?: string;
   priority?: boolean;
   /**
-   * "contained" (default) — rounded card with border.
-   * "edge-fade" — no border/radius; vignette dissolves into dark shell.
+   * "contained" (default)  -  rounded card with border.
+   * "edge-fade"  -  no border/radius; vignette dissolves into dark shell.
    */
   variant?: "contained" | "edge-fade";
 };
@@ -48,7 +48,7 @@ export function ChapterMediaPanel({
           quality={92}
           priority={priority}
         />
-        {/* Edge vignette — fades image into the dark shell (#0a0a0a) */}
+        {/* Edge vignette  -  fades image into the dark shell (#0a0a0a) */}
         <div className="panel-vignette pointer-events-none absolute inset-0 z-[2]" aria-hidden />
       </div>
     </div>

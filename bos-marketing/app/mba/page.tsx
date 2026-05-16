@@ -6,7 +6,7 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 
 export const metadata: Metadata = {
-  title: "BOS MBA — The New Playbook",
+  title: "BOS MBA  -  The New Playbook",
   description:
     "Build and run a company in real time. Not a course. Not a certification. A community where you operate using the exact tools the best operators use today.",
 };
@@ -139,7 +139,7 @@ export default function MbaPage() {
         </div>
       </section>
 
-      {/* ─── SECTION 2: PROBLEM — video plays to 6s → black interstitial → loops ─── */}
+      {/* ─── SECTION 2: PROBLEM  -  video plays to 6s → black interstitial → loops ─── */}
       <section className="relative min-h-screen overflow-hidden border-t border-[rgba(244,240,232,0.12)]">
         <MbaProblemVideo />
 
@@ -179,11 +179,11 @@ export default function MbaPage() {
         </div>
       </section>
 
-      {/* ─── SECTION 3: OPERATORS — fragmented tools ─── */}
+      {/* ─── SECTION 3: OPERATORS  -  fragmented tools ─── */}
       <section className="border-t border-[rgba(244,240,232,0.12)] py-16 sm:py-24 md:py-36">
         <div className="mx-auto max-w-[1072px] px-4 sm:px-8 md:px-16">
           <p className="font-[family-name:var(--font-dm-mono)] text-[10px] tracking-[0.3em] uppercase text-[#C9A84C] mb-10">
-            01 — Operators
+            01  -  Operators
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 lg:gap-24 items-end">
             <h2

@@ -8,7 +8,7 @@ const TEXT_SEL = 'input, textarea, select, [contenteditable="true"]';
 
 // Map of selectors → cursor state class
 const STATE_RULES: Array<{ sel: string; cls: string; label?: true }> = [
-  // Text inputs — hide custom cursor
+  // Text inputs  -  hide custom cursor
   { sel: TEXT_SEL, cls: "bos-cursor-hidden" },
   // Explicit data-cursor attr (checked first for specificity)
   { sel: "[data-cursor]", cls: "bos-cursor-hover", label: true },
@@ -50,7 +50,7 @@ export function OptionalCursor() {
 
     document.body.appendChild(dot);
 
-    // RAF-based position — batches DOM writes to paint boundary
+    // RAF-based position  -  batches DOM writes to paint boundary
     let mouseX = -999;
     let mouseY = -999;
     let rafId = 0;
@@ -70,7 +70,7 @@ export function OptionalCursor() {
         if (!match) continue;
 
         if (rule.cls === currentStateClass) {
-          // Same state — only update label if needed
+          // Same state  -  only update label if needed
           if (rule.label) {
             const text = match.getAttribute("data-cursor") ?? "";
             if (labelEl.textContent !== text) {
@@ -97,7 +97,7 @@ export function OptionalCursor() {
         return;
       }
 
-      // No match — default state
+      // No match  -  default state
       if (currentStateClass !== "") {
         dot.classList.remove(...ALL_STATE_CLASSES);
         currentStateClass = "";

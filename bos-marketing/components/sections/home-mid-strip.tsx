@@ -12,7 +12,7 @@ const partnerLogos = [
   { src: "/logos/tinder.svg", alt: "Tinder", w: 72, h: 22 },
 ] as const;
 
-/** Connector marquee + partner strip — light band between hero and chaos. */
+/** Connector marquee + partner strip  -  light band between hero and chaos. */
 export function HomeMidStrip() {
   return (
     <section

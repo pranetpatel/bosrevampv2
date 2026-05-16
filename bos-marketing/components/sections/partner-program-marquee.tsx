@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-/* ─── Logo definitions — mirrored from genieai-revamp Vision.tsx ──────── */
+/* ─── Logo definitions  -  mirrored from genieai-revamp Vision.tsx ──────── */
 
 const SPONSORS = [
   {

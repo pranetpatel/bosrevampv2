@@ -21,7 +21,7 @@ function W({
   );
 }
 
-/** Vibe Design — smiley with one white eye, one dark-tinted eye */
+/** Vibe Design  -  smiley with one white eye, one dark-tinted eye */
 export function LegacyIconVibeDesign(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -33,7 +33,7 @@ export function LegacyIconVibeDesign(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Communicate — chat bubble with 3 accent dots */
+/** Communicate  -  chat bubble with 3 accent dots */
 export function LegacyIconCommunicate(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -50,7 +50,7 @@ export function LegacyIconCommunicate(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Brainstorm — lightbulb with rays */
+/** Brainstorm  -  lightbulb with rays */
 export function LegacyIconBrainstorm(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -66,7 +66,7 @@ export function LegacyIconBrainstorm(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Research — magnifying glass with crosshair inside */
+/** Research  -  magnifying glass with crosshair inside */
 export function LegacyIconResearch(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -77,7 +77,7 @@ export function LegacyIconResearch(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Build — browser window + pencil */
+/** Build  -  browser window + pencil */
 export function LegacyIconBuild(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -92,7 +92,7 @@ export function LegacyIconBuild(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** AI Agents — face with radial orbit dots */
+/** AI Agents  -  face with radial orbit dots */
 export function LegacyIconAiAgents(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -110,7 +110,7 @@ export function LegacyIconAiAgents(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Avatars — person head + body silhouette */
+/** Avatars  -  person head + body silhouette */
 export function LegacyIconAvatars(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -120,7 +120,7 @@ export function LegacyIconAvatars(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Analytics — rising line chart with data-point dots */
+/** Analytics  -  rising line chart with data-point dots */
 export function LegacyIconAnalytics(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -134,7 +134,7 @@ export function LegacyIconAnalytics(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Integrations — two circles connected by line with colored endpoint dots */
+/** Integrations  -  two circles connected by line with colored endpoint dots */
 export function LegacyIconIntegrations(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -147,7 +147,7 @@ export function LegacyIconIntegrations(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Workflows — three cascading step blocks */
+/** Workflows  -  three cascading step blocks */
 export function LegacyIconWorkflows(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -158,7 +158,7 @@ export function LegacyIconWorkflows(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** People — two person silhouettes */
+/** People  -  two person silhouettes */
 export function LegacyIconPeople(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -170,7 +170,7 @@ export function LegacyIconPeople(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Compliance — document with text lines + badge with checkmark */
+/** Compliance  -  document with text lines + badge with checkmark */
 export function LegacyIconCompliance(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -183,7 +183,7 @@ export function LegacyIconCompliance(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Automation — shield with checkmark */
+/** Automation  -  shield with checkmark */
 export function LegacyIconAutomation(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>
@@ -193,7 +193,7 @@ export function LegacyIconAutomation(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Goals — five-pointed star */
+/** Goals  -  five-pointed star */
 export function LegacyIconGoals(props: SVGProps<SVGSVGElement>) {
   return (
     <W {...props}>

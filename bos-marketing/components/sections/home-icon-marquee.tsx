@@ -6,7 +6,7 @@ import {
 } from "@/components/icons/bos-strip-icons";
 import { usePrefersReducedMotion } from "@/components/use-prefers-reduced-motion";
 
-/** Tile fills — gradient backgrounds matching legacy icon strip. */
+/** Tile fills  -  gradient backgrounds matching legacy icon strip. */
 const TILE_BG_BY_KEY: Record<string, string> = {
   "vibe-design": "linear-gradient(160deg, #A78BFA 0%, #7C3AED 100%)",
   communicate: "linear-gradient(160deg, #34D399 0%, #059669 100%)",

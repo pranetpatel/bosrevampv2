@@ -13,7 +13,7 @@ import { AmbientSiteCanvas } from "@/components/ambient-site-canvas";
 import { OptionalCursor } from "@/components/optional-cursor";
 import { SITE_MEDIA } from "@/lib/site-media";
 
-/** Large marketing headlines — matches legacy `index.html` `--display`. */
+/** Large marketing headlines  -  matches legacy `index.html` `--display`. */
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
@@ -65,15 +65,15 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "BOS — Work Made Simple | GenieAI",
+    default: "BOS  -  Work Made Simple | GenieAI",
     template: "%s | BOS",
   },
   description:
-    "Business Orchestration System — work made simple by connecting work, data, teams, and agents in an execution layer.",
+    "Business Orchestration System  -  work made simple by connecting work, data, teams, and agents in an execution layer.",
   openGraph: {
-    title: "BOS — Work Made Simple",
+    title: "BOS  -  Work Made Simple",
     description:
-      "Work made simple for outcomes — not dashboards, workflows, or tool sprawl.",
+      "Work made simple for outcomes  -  not dashboards, workflows, or tool sprawl.",
     url: siteUrl,
     siteName: "BOS",
     locale: "en_US",
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BOS — Work Made Simple",
+    title: "BOS  -  Work Made Simple",
     description:
       "Business Orchestration System by GenieAI. Execution, not overhead.",
     images: [SITE_MEDIA.og],

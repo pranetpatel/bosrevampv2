@@ -35,10 +35,10 @@ export default function TechnologyPage() {
               Why was this invention created?
             </h2>
             <p>
-              For decades, building and running a business has required navigating an increasingly complex stack of software controlled by large platforms. What was meant to enable progress has instead created dependence — forcing teams to rent their operations across tools they don’t control.
+              For decades, building and running a business has required navigating an increasingly complex stack of software controlled by large platforms. What was meant to enable progress has instead created dependence  -  forcing teams to rent their operations across tools they don’t control.
             </p>
             <p>
-              Small teams have paid the highest price. They are expected to compete with enterprise-level capabilities, while managing fragmented systems, rising costs, and constant operational overhead. Most of their time is not spent building — it is spent coordinating.
+              Small teams have paid the highest price. They are expected to compete with enterprise-level capabilities, while managing fragmented systems, rising costs, and constant operational overhead. Most of their time is not spent building  -  it is spent coordinating.
             </p>
             <p className="font-bold text-white">
               AI was supposed to simplify this. Instead, it added another layer of complexity.
@@ -48,7 +48,7 @@ export default function TechnologyPage() {
             </p>
             <div className="border-l-2 border-[var(--orchid)] pl-6 mt-8">
               <p className="font-bold text-white/90">
-                This shifts power away from platforms and back to operators — enabling anyone to build and run sophisticated organizations without engineering teams, technical setup, or dependence on fragmented systems.
+                This shifts power away from platforms and back to operators  -  enabling anyone to build and run sophisticated organizations without engineering teams, technical setup, or dependence on fragmented systems.
               </p>
             </div>
           </div>
@@ -65,10 +65,10 @@ export default function TechnologyPage() {
               Traditional software requires users to adapt to tools. BOS reverses this. The system adapts to the user, executing outcomes instead of requiring manual coordination.
             </p>
             <p>
-              What makes BOS fundamentally different is not just automation — it is independence. Through its orchestration layer, BOS reduces reliance on multiple platforms by coordinating execution across them, while abstracting away their complexity. Businesses no longer need to manage the tools themselves — only the outcomes they want to achieve.
+              What makes BOS fundamentally different is not just automation  -  it is independence. Through its orchestration layer, BOS reduces reliance on multiple platforms by coordinating execution across them, while abstracting away their complexity. Businesses no longer need to manage the tools themselves  -  only the outcomes they want to achieve.
             </p>
             <p>
-              At its core, BOS enables humans and AI agents to function as a unified workforce. Its <span className="font-bold text-white">Twin-to-Twin (T2T)</span> communication protocol allows systems, organizations, and digital workers to interact across boundaries in real time — without requiring centralized control.
+              At its core, BOS enables humans and AI agents to function as a unified workforce. Its <span className="font-bold text-white">Twin-to-Twin (T2T)</span> communication protocol allows systems, organizations, and digital workers to interact across boundaries in real time  -  without requiring centralized control.
             </p>
             <p className="font-bold text-white text-2xl pt-6">
               As cloud computing removed the need to manage infrastructure, BOS removes the need to manage operations.
@@ -85,16 +85,16 @@ export default function TechnologyPage() {
               Who is this built for?
             </h2>
             <p>
-              BOS is built for operators — the builders, founders, and teams who are closest to execution but farthest from technical resources.
+              BOS is built for operators  -  the builders, founders, and teams who are closest to execution but farthest from technical resources.
             </p>
             <p>
               It is especially impactful for small and mid-sized businesses, which make up tens of millions of organizations globally. These businesses are often locked into fragmented tools and platform dependencies that limit their ability to scale efficiently.
             </p>
             <p>
-              BOS gives these teams access to capabilities traditionally reserved for large enterprises — without requiring engineering teams, custom development, or complex integrations.
+              BOS gives these teams access to capabilities traditionally reserved for large enterprises  -  without requiring engineering teams, custom development, or complex integrations.
             </p>
             <p>
-              Through BOS MBA, the platform also empowers non-technical users — enabling a new generation of operators to build and run companies using AI-assisted execution.
+              Through BOS MBA, the platform also enables non-technical users  -  enabling a new generation of operators to build and run companies using AI-assisted execution.
             </p>
             <p className="font-bold text-white">
               BOS is designed for those who build, not just those who configure.

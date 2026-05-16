@@ -27,7 +27,7 @@ export default function ComparePage() {
               BOS vs The Stack
             </h1>
             <p className="mx-auto mt-6 max-w-2xl font-[family-name:var(--font-sans)] text-[clamp(1.1rem,2vw,1.25rem)] text-white/60">
-              Every company today uses 3–6 fragmented tools combined. BOS replaces the need to stitch them together.
+              Every company today uses 3 - 6 fragmented tools combined. BOS replaces the need to stitch them together.
             </p>
           </div>
         </section>

@@ -40,7 +40,7 @@ export function HeroProductCard() {
           <div className="relative overflow-hidden rounded-xl sm:rounded-2xl">
             <Image
               src="/media/BOSTrial.png"
-              alt="BOS product interface — GENIE AI workspace"
+              alt="BOS product interface  -  GENIE AI workspace"
               width={1920}
               height={1080}
               className="h-auto w-full"

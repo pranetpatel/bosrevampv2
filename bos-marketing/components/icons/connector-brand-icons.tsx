@@ -5,7 +5,7 @@ import { useId } from "react";
 
 const box = "h-7 w-7 shrink-0";
 
-/** Team messages — generic multi-bubble (not Slack). */
+/** Team messages  -  generic multi-bubble (not Slack). */
 export function BrandConnectorMsg(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={box} aria-hidden {...props}>
@@ -45,7 +45,7 @@ export function BrandConnectorWorkspace(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** BOS chat — abstract spiral knot (ChatGPT-adjacent palette, not a logo trace). */
+/** BOS chat  -  abstract spiral knot (ChatGPT-adjacent palette, not a logo trace). */
 export function BrandBosChat(props: SVGProps<SVGSVGElement>) {
   const uid = useId().replace(/:/g, "");
   const g = `${uid}-bc`;
@@ -81,7 +81,7 @@ export function BrandBosChat(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Agent / bot chip — filled, product-like (distinct from line “Agents” tile). */
+/** Agent / bot chip  -  filled, product-like (distinct from line “Agents” tile). */
 export function BrandConnectorAgent(props: SVGProps<SVGSVGElement>) {
   const uid = useId().replace(/:/g, "");
   const gf = `${uid}-agf`;
@@ -101,7 +101,7 @@ export function BrandConnectorAgent(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** CRM / pipeline — warm “deals” accent. */
+/** CRM / pipeline  -  warm “deals” accent. */
 export function BrandConnectorDeals(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={box} aria-hidden {...props}>
@@ -189,7 +189,7 @@ export function BrandConnectorZoom(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Envelope flap strokes — Google-style palette (not a logo trace). */
+/** Envelope flap strokes  -  Google-style palette (not a logo trace). */
 export function BrandConnectorEmail(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={box} aria-hidden {...props}>

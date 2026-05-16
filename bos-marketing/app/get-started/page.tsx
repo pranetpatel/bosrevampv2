@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Get started",
   description:
-    "Pick how you want to start with BOS — explore plans, watch the product, or talk to the team.",
+    "Pick how you want to start with BOS  -  explore plans, watch the product, or talk to the team.",
 };
 
 type StartPath = {
@@ -30,7 +30,7 @@ const paths: StartPath[] = [
   {
     eyebrow: "Demo",
     title: "Watch BOS run.",
-    desc: "Full product walkthrough — intent in, execution out. Same flow your team will use in week one.",
+    desc: "Full product walkthrough  -  intent in, execution out. Same flow your team will use in week one.",
     href: "/demo",
     cta: "Watch the demo",
     tone: "secondary",
@@ -46,7 +46,7 @@ const paths: StartPath[] = [
   {
     eyebrow: "Operators",
     title: "Train on BOS MBA.",
-    desc: "An operator-grade curriculum for teams adopting BOS — orchestration, agents, and execution patterns.",
+    desc: "An operator-grade curriculum for teams adopting BOS  -  orchestration, agents, and execution patterns.",
     href: "/mba",
     cta: "Explore BOS MBA",
     tone: "secondary",
@@ -57,7 +57,7 @@ const steps = [
   {
     n: "01",
     label: "Pick a path",
-    desc: "Plans, demo, or a call — start where it makes sense.",
+    desc: "Plans, demo, or a call  -  start where it makes sense.",
   },
   {
     n: "02",
@@ -67,7 +67,7 @@ const steps = [
   {
     n: "03",
     label: "Operate from Day 1",
-    desc: "Work moves through one layer — humans and agents in the same lane.",
+    desc: "Work moves through one layer  -  humans and agents in the same lane.",
   },
 ];
 

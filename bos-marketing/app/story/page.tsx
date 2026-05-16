@@ -70,7 +70,7 @@ export default function StoryPage() {
               And if you stop for a second? Everything slows down.
             </p>
             <p>
-              That’s not leverage. That’s a bottleneck disguised as productivity.
+              That’s not use. That’s a bottleneck disguised as productivity.
             </p>
           </div>
 

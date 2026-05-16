@@ -9,13 +9,13 @@ type Props = {
   compact?: boolean;
 };
 
-/** Friction cards in a wrapped grid — connected to the operational weight canvas above. */
+/** Friction cards in a wrapped grid  -  connected to the operational weight canvas above. */
 export function GapFrictionInteractive({ cleared, onToggle, compact = false }: Props) {
   return (
     <div
       className="relative w-full"
       role="region"
-      aria-label="Friction cards — click to mark each source of drag as resolved"
+      aria-label="Friction cards  -  click to mark each source of drag as resolved"
     >
       <MotionStagger className="grid w-full grid-cols-2 gap-2 sm:gap-2.5 md:grid-cols-3 md:gap-3 pb-2 pt-1">
         {frictionLabels.map((f) => {

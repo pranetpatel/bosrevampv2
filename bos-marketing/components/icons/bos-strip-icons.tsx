@@ -50,7 +50,7 @@ function IconBox({ className = "", children, ...rest }: SVGProps<SVGSVGElement>)
   );
 }
 
-/** BOS Chat — message bubble */
+/** BOS Chat  -  message bubble */
 export function IconChat(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -59,7 +59,7 @@ export function IconChat(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Project fx — board + columns */
+/** Project fx  -  board + columns */
 export function IconProjects(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -70,7 +70,7 @@ export function IconProjects(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Data Drive — cylinder / stack */
+/** Data Drive  -  cylinder / stack */
 export function IconData(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -81,7 +81,7 @@ export function IconData(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Agent Builder — sliders + spark */
+/** Agent Builder  -  sliders + spark */
 export function IconAgentBuilder(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -91,7 +91,7 @@ export function IconAgentBuilder(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Agents — chip / bot head */
+/** Agents  -  chip / bot head */
 export function IconAgents(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -103,7 +103,7 @@ export function IconAgents(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Execution engine — play in circle */
+/** Execution engine  -  play in circle */
 export function IconExecution(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -113,7 +113,7 @@ export function IconExecution(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Integrations — plug */
+/** Integrations  -  plug */
 export function IconIntegrations(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -123,7 +123,7 @@ export function IconIntegrations(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Sync — circular arrows */
+/** Sync  -  circular arrows */
 export function IconSync(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -134,7 +134,7 @@ export function IconSync(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Signals — pulse / activity */
+/** Signals  -  pulse / activity */
 export function IconSignals(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -143,7 +143,7 @@ export function IconSignals(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** CRM — people + tie */
+/** CRM  -  people + tie */
 export function IconCrm(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -176,7 +176,7 @@ export function IconDocs(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Automations — workflow */
+/** Automations  -  workflow */
 export function IconAutomations(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -315,7 +315,7 @@ export function IconRooms(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Vibe / mood — smile */
+/** Vibe / mood  -  smile */
 export function IconSmiley(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -341,7 +341,7 @@ export function IconLightbulb(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Single user — avatars / profile */
+/** Single user  -  avatars / profile */
 export function IconUser(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -351,7 +351,7 @@ export function IconUser(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Workflows — branching steps */
+/** Workflows  -  branching steps */
 export function IconWorkflow(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -363,7 +363,7 @@ export function IconWorkflow(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/** Goals — target */
+/** Goals  -  target */
 export function IconTarget(props: SVGProps<SVGSVGElement>) {
   return (
     <IconBox {...props}>
@@ -388,7 +388,7 @@ export type StripIconEntry = {
   brandIcon?: ComponentType<SVGProps<SVGSVGElement>>;
 };
 
-/** Row 1 — BOS product surfaces (orchestration story). */
+/** Row 1  -  BOS product surfaces (orchestration story). */
 export const stripIconsBosApps: StripIconEntry[] = [
   { key: "layers", label: "Orchestration layer", word: "Stack", accent: "orchid", Icon: IconLayers },
   { key: "execution", label: "Execution engine", word: "Run", accent: "cyan", Icon: IconExecution },
@@ -406,7 +406,7 @@ export const stripIconsBosApps: StripIconEntry[] = [
   { key: "bell", label: "Notifications", word: "Alerts", accent: "magenta", Icon: IconBell },
 ];
 
-/** Row 2 — Work & data surfaces inside BOS. */
+/** Row 2  -  Work & data surfaces inside BOS. */
 export const stripIconsWorkSurfaces: StripIconEntry[] = [
   { key: "crm", label: "CRM", word: "CRM", accent: "orchid", Icon: IconCrm },
   { key: "calendar", label: "Calendar", word: "Calendar", accent: "cyan", Icon: IconCalendar },
@@ -430,7 +430,7 @@ export const stripIconsHomeMarquee: StripIconEntry[] = [
   ...stripIconsWorkSurfaces,
 ];
 
-/** Row 3 — How BOS connects + tools you already use (brand-colored tiles where set). */
+/** Row 3  -  How BOS connects + tools you already use (brand-colored tiles where set). */
 export const stripIconsConnectors: StripIconEntry[] = [
   {
     key: "msg",
@@ -530,13 +530,13 @@ export const stripIconsConnectors: StripIconEntry[] = [
   },
 ];
 
-/** Homepage connector ticker: same order as marketing mockup, then Stack for a seamless loop seam. */
+/** Homepage connector ticker: same order as marketing mockup, then Stack for a smooth loop seam. */
 export const stripIconsHomeConnectorTicker: StripIconEntry[] = [
   ...stripIconsConnectors,
   stripIconsBosApps[0]!,
 ];
 
-/** Homepage capability strip — legacy-exact icon designs. */
+/** Homepage capability strip  -  legacy-exact icon designs. */
 export const stripIconsHomeCapabilityMarquee: StripIconEntry[] = [
   { key: "vibe-design", label: "Vibe design", word: "Vibe Design", accent: "magenta", Icon: LegacyIconVibeDesign },
   { key: "communicate", label: "Communicate", word: "Communicate", accent: "cyan", Icon: LegacyIconCommunicate },

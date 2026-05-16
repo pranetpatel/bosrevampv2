@@ -10,7 +10,7 @@ type Props = {
 };
 
 /**
- * Line-by-line reveal (SplitType) scrubbed to scroll — premium, minimal motion.
+ * Line-by-line reveal (SplitType) scrubbed to scroll  -  premium, minimal motion.
  */
 export function SplitRevealHeading({ text, className }: Props) {
   const ref = useRef<HTMLParagraphElement>(null);

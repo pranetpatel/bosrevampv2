@@ -7,24 +7,24 @@ import { SiteFooter } from "@/components/site-footer";
 export default function PartnersPage() {
   const options = [
     {
-      title: "Option 1 — Referral Partner",
+      title: "Option 1  -  Referral Partner",
       involvement: "Low involvement",
       whatYouDo: "Introduce BOS to clients",
       earnings: "20% recurring (12 months)",
       bestFor: "Passive income, simple referrals",
     },
     {
-      title: "Option 2 — Co-Sell Partner",
+      title: "Option 2  -  Co-Sell Partner",
       involvement: "Moderate involvement",
       whatYouDo: "Position BOS in your program, join calls if needed",
-      earnings: "30% recurring (12–18 months)",
+      earnings: "30% recurring (12 - 18 months)",
       bestFor: "Trainers and consultants integrating BOS",
     },
     {
-      title: "Option 3 — Program Partner",
+      title: "Option 3  -  Program Partner",
       involvement: "High involvement",
       whatYouDo: "Embed BOS into your program or offer",
-      earnings: "30–40% recurring or wholesale pricing + your margin",
+      earnings: "30 - 40% recurring or wholesale pricing + your margin",
       bestFor: "Full program integration and highest upside",
     },
   ];
@@ -46,7 +46,7 @@ export default function PartnersPage() {
             </h1>
             <p className="mx-auto mt-6 max-w-2xl font-[family-name:var(--font-sans)] text-[clamp(1.1rem,2vw,1.25rem)] text-white/60">
               Most trainers and consultants teach strategy. BOS allows you to implement it.
-              Don't just tell clients what to do — run execution inside their business and share in the revenue.
+              Don't just tell clients what to do  -  run execution inside their business and share in the revenue.
             </p>
             <div className="mt-10">
               <Link

@@ -84,7 +84,7 @@ export function ChapterAudienceSection() {
     };
     initMiddle();
 
-    // Seamlessly wrap scroll position when approaching either edge
+    // Easily wrap scroll position when approaching either edge
     function wrapScroll() {
       const oneSet = track!.scrollWidth / 3;
       if (track!.scrollLeft < oneSet * 0.15) {

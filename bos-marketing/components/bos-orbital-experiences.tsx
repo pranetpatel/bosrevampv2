@@ -1,9 +1,9 @@
 "use client";
 
 /**
- * Legacy “Work Made Simple” use-case card motion (see `legacy/BOS — Work Made Simple.htm`:
+ * Legacy “Work Made Simple” use-case card motion (see `legacy/BOS  -  Work Made Simple.htm`:
  * `.uc-canvas`, `.mini-term`, `.mini-bar`, `.metric-row`, gold tokens). Visuals aim for 1:1
- * parity with those cards — static fallbacks when `prefers-reduced-motion`.
+ * parity with those cards  -  static fallbacks when `prefers-reduced-motion`.
  */
 
 import { usePrefersReducedMotion } from "@/components/use-prefers-reduced-motion";
@@ -64,7 +64,7 @@ export function BosOrbitalExperience({
   }
 }
 
-/** Matches `.uc-canvas` — full-bleed feel, dimmed like legacy (opacity ~0.45 behind copy). */
+/** Matches `.uc-canvas`  -  full-bleed feel, dimmed like legacy (opacity ~0.45 behind copy). */
 function VizPanel({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <div
@@ -123,7 +123,7 @@ function MiniTerm({
   );
 }
 
-/** AI Execution — static friction-style layout: hub + scattered nodes, faint spokes (no orbit ring). */
+/** AI Execution  -  static friction-style layout: hub + scattered nodes, faint spokes (no orbit ring). */
 const AI_ORBS = [
   { hex: "#B47AEA" }, // purple
   { hex: "#5B9CF8" }, // blue
@@ -134,7 +134,7 @@ const AI_ORBS = [
 
 const AI_EXEC_HUB = [160, 52] as const;
 
-/** Fixed scatter, viewBox 320×104 — asymmetric like the friction hero panel. */
+/** Fixed scatter, viewBox 320×104  -  asymmetric like the friction hero panel. */
 const AI_EXEC_NODE_XY: readonly [number, number][] = [
   [42, 28],
   [86, 78],
@@ -432,7 +432,7 @@ function ExperienceWorkflow({ reduced }: { reduced: boolean }) {
   );
 }
 
-// ─── Team OPS — tilted elliptical orbit, z-sorted moons, calm central hub ──────
+// ─── Team OPS  -  tilted elliptical orbit, z-sorted moons, calm central hub ──────
 const TEAM_ORBIT_OMEGA = 0.52;
 const TEAM_ORBIT_ROT = 0.4;
 const TEAM_ORBIT_A_FR = 0.33;
@@ -528,7 +528,7 @@ function ExperienceTeamOps({ reduced }: { reduced: boolean }) {
         zd.push(Math.sin(th));
       }
 
-      // Ring chords (follow orbit order — morphs as bodies move)
+      // Ring chords (follow orbit order  -  morphs as bodies move)
       ctx.lineWidth = 0.7;
       for (let i = 0; i < n; i++) {
         const j = (i + 1) % n;
@@ -570,7 +570,7 @@ function ExperienceTeamOps({ reduced }: { reduced: boolean }) {
         ctx.globalAlpha = 1;
       }
 
-      // Calm central hub (fixed — team anchor)
+      // Calm central hub (fixed  -  team anchor)
       const hg = ctx.createRadialGradient(cx, cy, 0, cx, cy, 26);
       hg.addColorStop(0, "rgba(255,255,255,0.95)");
       hg.addColorStop(0.2, "rgba(255,255,255,0.45)");
@@ -1059,7 +1059,7 @@ function ExperienceCommunication({ reduced }: { reduced: boolean }) {
   );
 }
 
-// ─── Command View — centered orbital + sonar-style blips on gold sweep ───────
+// ─── Command View  -  centered orbital + sonar-style blips on gold sweep ───────
 const CV_RING_COUNT = 5;
 /** Faster sweep (full rotations per minute). */
 const CV_SWEEP_RPM = 6.2;
@@ -1142,7 +1142,7 @@ function ExperienceCommandView({
       const cy = h * 0.5;
       const R = Math.min(w, h) * 0.4;
 
-      // Atmosphere — slightly lighter at center (legacy card)
+      // Atmosphere  -  slightly lighter at center (legacy card)
       const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.25);
       bg.addColorStop(0, "rgba(28,26,24,0.95)");
       bg.addColorStop(0.45, "#0e0e0e");
@@ -1206,7 +1206,7 @@ function ExperienceCommandView({
         }
       }
 
-      // Constellation — only visible while endpoints are “lit”
+      // Constellation  -  only visible while endpoints are “lit”
       ctx.lineWidth = 0.65;
       for (const [ia, ib] of CV_CONST_EDGES) {
         const edgeVis = Math.min(blipHit[ia], blipHit[ib]);
@@ -1218,7 +1218,7 @@ function ExperienceCommandView({
         ctx.stroke();
       }
 
-      // Coloured blips — skip when fully faded
+      // Coloured blips  -  skip when fully faded
       for (let i = 0; i < CV_ORBITALS.length; i++) {
         const o = CV_ORBITALS[i];
         const x = xs[i];
@@ -1297,7 +1297,7 @@ function ExperienceCommandView({
   );
 }
 
-// ─── Integrations — hub & spokes + outward pulses (legacy card 1) ─────────────
+// ─── Integrations  -  hub & spokes + outward pulses (legacy card 1) ─────────────
 const INT_NODE_COUNT = 18;
 /** Normalized ring radius (× scale): one shared circle so spokes read as a wheel, not a starburst. */
 const INT_RING_NORM = 0.74;

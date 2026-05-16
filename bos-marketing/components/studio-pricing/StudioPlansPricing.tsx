@@ -206,7 +206,7 @@ function LayerVisual({ num }: { num: string }) {
 function Cell({ cell }: { cell: CompareCell }) {
   if (cell.kind === "yes")
     return <span className="text-lg font-bold text-[var(--cyan)]">✓</span>;
-  if (cell.kind === "no") return <span className="text-white/25">—</span>;
+  if (cell.kind === "no") return <span className="text-white/25"> - </span>;
   if (cell.kind === "addon")
     return (
       <span className="inline-block rounded-full bg-[var(--orchid)]/25 px-2 py-0.5 text-[11px] font-bold text-[var(--orchid)]">
@@ -359,7 +359,7 @@ export default function StudioPlansPricing() {
               </div>
             </div>
             <p className="mt-6 max-w-xl font-[family-name:var(--font-sans)] text-sm leading-relaxed text-white/65">
-              The complete Business Orchestration System — overrule Slack, Notion, and fragmented AI
+              The complete Business Orchestration System  -  overrule Slack, Notion, and fragmented AI
               tools with simple execution across your business. Request beta access and get started immediately.
             </p>
             <Link
@@ -623,7 +623,7 @@ export default function StudioPlansPricing() {
               BOS ends it.
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/55">
-              A 25-person company pays $2,000–$4,000/month just to communicate and store files —
+              A 25-person company pays $2,000 - $4,000/month just to communicate and store files  - 
               before intelligence, automation, or workforce orchestration even exists. None of it
               actually thinks for them.
             </p>
@@ -685,7 +685,7 @@ export default function StudioPlansPricing() {
               That&apos;s not incremental improvement. That&apos;s structural disruption.
             </p>
             <p className="mt-2 text-sm text-white/50">
-              BOS overrules your entire stack under one unified license — pay for what you use,
+              BOS overrules your entire stack under one unified license  -  pay for what you use,
               nothing more.
             </p>
           </div>
@@ -707,7 +707,7 @@ export default function StudioPlansPricing() {
 
       <div className="bg-[#0a0a0a] px-6 py-20 text-center md:px-8">
         <h2 className="mx-auto max-w-lg font-[family-name:var(--font-display)] text-2xl font-bold leading-tight text-white md:text-3xl">
-          &quot;BOS costs less than one Slack seat — and overrules the entire fragmented stack.&quot;
+          &quot;BOS costs less than one Slack seat  -  and overrules the entire fragmented stack.&quot;
         </h2>
         <p className="mx-auto mt-4 max-w-md text-sm text-white/50">
           One license. One intelligence layer. Work made simple with BOS.

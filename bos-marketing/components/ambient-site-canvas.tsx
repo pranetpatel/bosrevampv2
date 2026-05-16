@@ -27,7 +27,7 @@ interface Node {
 
 // Generate SHAPE_N irregular polygon vertices around (cx, cy)
 function polygonTargets(cx: number, cy: number, count: number): [number, number][] {
-  const baseR = 28 + Math.random() * 36; // 28–64 px
+  const baseR = 28 + Math.random() * 36; // 28 - 64 px
   const pts: [number, number][] = [];
   for (let i = 0; i < count; i++) {
     const angle = (i / count) * Math.PI * 2 - Math.PI / 2
@@ -92,7 +92,7 @@ export function AmbientSiteCanvas() {
       if (mx < -1000) return;
       clearShape();
       const targets = polygonTargets(mx, my, SHAPE_N);
-      // Closest SHAPE_N nodes (even if off-screen — they'll float in)
+      // Closest SHAPE_N nodes (even if off-screen  -  they'll float in)
       const sorted = [...nodes].sort((a, b) =>
         (a.x-mx)**2+(a.y-my)**2 - ((b.x-mx)**2+(b.y-my)**2)
       );
@@ -155,7 +155,7 @@ export function AmbientSiteCanvas() {
         }
       }
 
-      // Dots — shape nodes slightly brighter
+      // Dots  -  shape nodes slightly brighter
       for (const n of visible) {
         const inShape = n.shapeIdx !== null;
         ctx.beginPath();

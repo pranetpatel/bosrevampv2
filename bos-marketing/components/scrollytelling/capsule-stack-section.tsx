@@ -8,7 +8,7 @@ const CAPSULES = [
   {
     kicker: "Signal",
     title: "What matters, surfaced",
-    body: "Next move in view — not another dashboard.",
+    body: "Next move in view  -  not another dashboard.",
   },
   {
     kicker: "Coordination",
@@ -50,7 +50,7 @@ export function CapsuleStackSection() {
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          // Shorter scrub range than 240% — the card timeline is short; excess scroll read as empty space before START.
+          // Shorter scrub range than 240%  -  the card timeline is short; excess scroll read as empty space before START.
           end: "+=125%",
           pin: true,
           scrub: 1,
@@ -118,7 +118,7 @@ export function CapsuleStackSection() {
       id="stack"
       className="chapter-rule-top section-grain relative bg-[var(--surface-dark)]"
     >
-      {/* Avoid position:sticky inside a ScrollTrigger-pinned parent — it collapses layout. */}
+      {/* Avoid position:sticky inside a ScrollTrigger-pinned parent  -  it collapses layout. */}
       <div className="flex min-h-[100dvh] w-full flex-col justify-center px-5 py-16 md:px-10">
         <div className="relative mx-auto w-full max-w-lg">
           <div
@@ -133,7 +133,7 @@ export function CapsuleStackSection() {
           />
 
           <p className="relative z-[1] mb-14 max-w-xl font-[family-name:var(--font-display)] text-[clamp(1.75rem,4.5vw,2.75rem)] font-semibold leading-[1.12] tracking-tight text-white">
-            Capsules of clarity — stacked, then released.
+            Capsules of clarity  -  stacked, then released.
           </p>
 
           <div className="relative z-[2] mx-auto mt-4 h-[380px] w-full max-w-md md:h-[420px]">

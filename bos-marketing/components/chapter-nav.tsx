@@ -55,7 +55,7 @@ function getActiveStackSection(): ChapterId | null {
     accumulated += h;
   }
 
-  // Fell off the end — last item
+  // Fell off the end  -  last item
   const last = items[items.length - 1];
   return last
     ? ((last.getAttribute("data-chapter-stack-item") as ChapterId) ?? null)
@@ -183,7 +183,7 @@ export function ChapterNav() {
       }
     }
 
-    // 2. Sticky stack — use scroll-zone detection
+    // 2. Sticky stack  -  use scroll-zone detection
     const stackActive = getActiveStackSection();
     if (stackActive !== null) {
       setActive((prev) => (prev === stackActive ? prev : stackActive));
@@ -270,7 +270,7 @@ export function ChapterNav() {
         return;
       }
 
-      // Sticky stack — scroll to the computed document offset, not the element's visual position
+      // Sticky stack  -  scroll to the computed document offset, not the element's visual position
       const stackY = getScrollYForStackSection(c.id);
       if (stackY !== null) {
         if (lenis) {

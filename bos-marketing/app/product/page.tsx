@@ -82,7 +82,7 @@ function OrbHeroSection() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_50%_55%,rgba(140,80,255,0.18),transparent_60%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_40%_at_20%_80%,rgba(30,20,100,0.5),transparent_60%)]" />
 
-      {/* Energy beam – shrinks into orb as user scrolls */}
+      {/* Energy beam  -  shrinks into orb as user scrolls */}
       <div
         className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 origin-top"
         style={{
@@ -218,7 +218,7 @@ function LegacyProductFooter() {
             />
           </Link>
           <p className="mt-4 font-[family-name:var(--font-sans)] text-sm text-white/60">
-            Business Orchestration System — the infrastructure layer for intent, execution, and
+            Business Orchestration System  -  the infrastructure layer for intent, execution, and
             continuous context across teams and agents.
           </p>
         </div>
@@ -250,7 +250,7 @@ function LegacyProductFooter() {
         </div>
       </div>
       <p className="mx-auto mt-14 max-w-6xl text-center text-xs text-white/45">
-        © 2023–{year} BOS. All rights reserved.
+        © 2023 - {year} BOS. All rights reserved.
       </p>
     </footer>
   );

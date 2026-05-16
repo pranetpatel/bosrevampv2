@@ -49,7 +49,7 @@ export function ChaosIntroSection() {
       <div className="relative -mt-10 pt-6 md:-mt-14 md:pt-10">
         <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-8 md:px-12 lg:px-16">
           <div className="mt-[clamp(1rem,3vw,2.5rem)] overflow-hidden rounded-t-[24px] shadow-[0_4px_24px_rgba(0,0,0,0.08),0_24px_80px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.06]">
-            {/* Purple glow frame — mockup product panel */}
+            {/* Purple glow frame  -  mockup product panel */}
             <div className="rounded-t-[20px] bg-gradient-to-br from-[var(--orchid)] via-[#9333ea] to-[var(--magenta)] p-[3px] shadow-[0_0_52px_rgba(124,58,237,0.42),0_0_100px_rgba(26,83,253,0.18)]">
               <div className="relative min-h-[min(64vh,680px)] w-full overflow-hidden rounded-[17px] bg-neutral-950">
                 <Image
@@ -116,7 +116,7 @@ export function ChaosIntroSection() {
           </div>
         </div>
 
-        {/* Clean 40px white buffer — dark chapter stack slides over from here */}
+        {/* Clean 40px white buffer  -  dark chapter stack slides over from here */}
         <div className="h-10 bg-white" aria-hidden />
       </div>
     </section>

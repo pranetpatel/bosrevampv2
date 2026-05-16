@@ -18,11 +18,11 @@ type FrictionNode = {
 };
 
 const NODES: FrictionNode[] = [
-  { id: "f1", label: "Fragmented tools", desc: "Every handoff loses fidelity — context dies at the boundary.", x: 11, y: 24, r: 15, rx: 1.05, ry: 0.88, phase: 0.2, tone: "hot" },
+  { id: "f1", label: "Fragmented tools", desc: "Every handoff loses fidelity  -  context dies at the boundary.", x: 11, y: 24, r: 15, rx: 1.05, ry: 0.88, phase: 0.2, tone: "hot" },
   { id: "f2", label: "Workflow drift", desc: "Builders and operators rebuild the same bridges weekly.", x: 84, y: 52, r: 10, rx: 1.0, ry: 1.0, phase: 3.0, tone: "hot" },
   { id: "f3", label: "Invisible work", desc: "The real effort never lands where leadership looks.", x: 48, y: 62, r: 12, rx: 1.2, ry: 0.95, phase: 2.4, tone: "cyan" },
   { id: "f4", label: "Agent sprawl", desc: "Clever demos without a spine become another inbox.", x: 72, y: 18, r: 13, rx: 0.92, ry: 1.1, phase: 1.1, tone: "magenta" },
-  { id: "f5", label: "Permission fog", desc: "Who can act — safely — is unclear when systems disagree.", x: 28, y: 48, r: 11, rx: 0.78, ry: 1.15, phase: 0.6, tone: "magenta" },
+  { id: "f5", label: "Permission fog", desc: "Who can act  -  safely  -  is unclear when systems disagree.", x: 28, y: 48, r: 11, rx: 0.78, ry: 1.15, phase: 0.6, tone: "magenta" },
   { id: "f6", label: "Metric theater", desc: "Dashboards celebrate activity while outcomes slip.", x: 58, y: 35, r: 10, rx: 1.1, ry: 0.9, phase: 1.8, tone: "magenta" },
 ];
 

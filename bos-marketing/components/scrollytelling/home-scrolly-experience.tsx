@@ -16,7 +16,7 @@ import { HomeMidStrip } from "@/components/sections/home-mid-strip";
 
 /**
  * Homepage scroll experience.
- * Chapters 1–4 (Tension → System) form a sticky card deck.
+ * Chapters 1 - 4 (Tension → System) form a sticky card deck.
  * FlowPillars, Audience, and beyond resume normal flow.
  */
 export function HomeScrollyExperience() {
@@ -28,7 +28,7 @@ export function HomeScrollyExperience() {
         <HomeMidStrip />
         <ChaosIntroSection />
 
-        {/* Sticky stacked chapter deck — Tension through System */}
+        {/* Sticky stacked chapter deck  -  Tension through System */}
         <div className="relative" data-chapter-stack>
           <div className="sticky top-0 z-[10]" data-chapter-stack-item="tension">
             <div className="sticky-chapter-card">

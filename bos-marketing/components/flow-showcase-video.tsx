@@ -39,7 +39,7 @@ export function FlowShowcaseVideo() {
         </video>
       </div>
       <figcaption className="mt-4 text-center font-[family-name:var(--font-ui)] text-xs font-medium text-white/45">
-        The web layer — intent in, execution out.
+        The web layer  -  intent in, execution out.
       </figcaption>
     </figure>
   );
